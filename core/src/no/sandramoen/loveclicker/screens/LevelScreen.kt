@@ -1,34 +1,52 @@
 package no.sandramoen.loveclicker.screens
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import no.sandramoen.loveclicker.actors.Heart
 import no.sandramoen.loveclicker.utils.BaseGame
 import no.sandramoen.loveclicker.utils.BaseScreen
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 
 class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
-    private var loves = 0
+    private var love = 0
 
     private lateinit var loveCountLabel: Label
 
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
-        loveCountLabel = Label("Loves: $loves", BaseGame.labelStyle)
+        loveCountLabel = Label("Love: $love", BaseGame.labelStyle)
 
-        uiTable.add(loveCountLabel).expand().top().pad(10f)
-        // uiTable.debug = true
+        val scrollableTable = Table()
+
+        val table = Table()
+        table.setFillParent(true)
+        table.add(heart).padBottom(50f).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+
+        val scroll = ScrollPane(table)
+        scrollableTable.add(scroll).growX()
+
+        uiTable.add(loveCountLabel)
+        uiTable.row()
+        uiTable.add(scrollableTable).growX()
+
+        /*uiTable.debug = true
+        table.debug = true
+        scrollableTable.debug = true*/
     }
 
     override fun update(dt: Float) {
-        loveCountLabel.setText("Loves: $loves")
-    }
-
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        if (heart.clicked(screenX, screenY)) {
-            loves++
-        }
-        loveCountLabel.setText("Loves: $loves")
-        return false
+        loveCountLabel.setText("Love: ${love + heart.love}")
     }
 }
