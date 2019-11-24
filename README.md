@@ -25,16 +25,16 @@
     The player will be able to choose between two kinds of love generations: clicking the big heart or managing the auto generative assets.
     
     * **What obstacles or difficulties will the character face?** 
-    Expensive autogenerative assets, unlocks, upgrades and ascention points will not be available until the player have earned enough love. Surpassing this obstacle requires the accumulation and wise generation of love. The game will also play by itself, meaning that it might be best not to play and wait a while love builds up by itself.
+    Expensive autogenerative assets, unlocks, upgrades and ascention points will not be available until the player have earned enough love. Surpassing this obstacle requires the accumulation and strategic generation of love. The game will also play by itself, meaning that it might be best not to play and wait while love builds up by itself.
     
     * **What items can the character obtain**
-    The player may buy various upgrades with the currencies available to be able to gain even more love. Timewarp is available to purchase with rainbow hearts, which will spawn randomly around the big heart and must be clicked upon, some will be falling others will have wings and move unpredictably. This will be a work in progress
+    The player may buy various upgrades with the currencies available to be able to gain even more love. Timewarp is available to purchase with rainbow hearts, which will spawn randomly around the big heart and must be clicked upon, some will be falling others will have wings and move unpredictably. _This will be a work in progress_
     
     * **What resources must be managed?**
-    The main currency is love, the goal of the game is to gain as much as possible. There will also be rainbow hearts that can buy timewarps. Lastly, acquiring ascension points may permanently give a percent love-gain bonus at the cost of beginning anew. Additional currencies are a work in progress.
+    The main currency is love, the goal of the game is to gain as much as possible. There will also be rainbow hearts that can buy timewarps. Lastly, acquiring ascension points may permanently give a percent love-gain bonus at the cost of beginning anew. _Additional currencies are a work in progress._
     
     * **Describe the game-world environment.**
-    The main region of the screen will feature a big clickable heart, when scrolling downwards auto generative assets will reveal themselves. The game also features a static burger menu button at the bottom center of the screen, which will show a menu. Statically on the top the players resources are displayed.
+    The main region of the screen will feature a big clickable heart, when scrolling downwards auto generative assets will reveal themselves. The game also features a static burger menu button at the bottom center of the screen, which will show a menu. Statically on the top of the screen the players resources are displayed.
     
 3. Dynamics: the interaction between the player and the game mechanics
     * **What hardware is required by the game?**
@@ -53,51 +53,55 @@
         * Upgrades: Which shows available purchasable upgrades for the auto generative assets.
         * Ascention: Shows available ascention points and current accumulation
 
-        Other UI choices and menu mechanics are a work in progress.
+        _Other UI choices and menu mechanics are a work in progress._
     
     * **How does the player interact with the game at the software level?**
+    There is no pause button. There will be a mute button for audio. The player may only quit the game by the operation system's controls.
     
 4. Aesthetics: the visual, audio, narrative, and psychological aspects of the game
-    * **Describe the style and feel of the game.**    
+    * **Describe the style and feel of the game.**
+    The game has a dark themed space look, with bright and colorful queer accent feel to it. The big heart will be shaped as a galaxy-heart, and the UI wilil feature space like graphics. Meanwhile the auto generative resources, unlocks and managers will feature queer people, flags and information.
     
-    * **Does the game use pixel art, line art, or realistic graphics?**    
+    * **Does the game use pixel art, line art, or realistic graphics?**
+    The graphics will be in a pixel art style.
     
-    * **What style of background music, ambient sounds will the game use?**    
+    * **What style of background music, ambient sounds will the game use?**
+    The game will feature a background music, ambient music, and various effects for different buttons.
         
-    * **What is the relevant backstory for the game?**    
+    * **What is the relevant backstory for the game?**
+    The background story is that the player is a love entity, who's goal is to love the whole universe. This will be prevelant with the intro video, the general theme, and the ascention points.
         
     * **What emotional state(s) does the game try to provoke?**
+    A sense of satisfaction by seeing the love number go up. A sense of compassion when managing the auto generative resources, as they are queer themed. And a sense of thankful, curious and optimistic feelings layed out by the overall composition.
         
-    * **What makes the game fun?**    
+    * **What makes the game fun?**
+    Exploring and optimising the core mechanics of generating big numbers, and achieving the highest score possible. Also the satisfaction of knowing when playing again the game has progressed.
     
 5. Development
     
     * **List the team members and their roles, responsibilities, and skills.**    
-    This project will be completed individually; graphics and audio will be obtained from third-party websites that make their assets available under the Creative Commons license, and so the main task will be programming.
+    This project will be completed individually; graphics and audio will be obtained from third-party websites that make their assets available under the Creative Commons license, and so the main task will be programming, and creating some graphics.
     
     * **What equipment is needed for this project?**    
-    A desktop computer (with keyboard, mouse, and speakers) and internet access will be necessary to complete this project.
+    A computer (with keyboard, mouse, and speakers) and internet access will be necessary to complete this project.
     
     * **What are the tasks that need to be accomplished to create this game?**    
     This project will use a simple Kanban board hosted on the project's GitHub page.
     The main sequence of steps to complete this project is as follows:    
         * Setting up a project scaffold
-        * Programming game mechanics within a level screen
-        * ...
-        * TODO
-        * ...
+        * **Programming game mechanics and UI**
+        * **Creating and obtaining graphical assets**
         * Obtaining audio assets
+        * **Polishing**
         * Deployment
 
     * **What points in the development process are suitable for playtesting?**    
     The main points for playtesting are when the basic game mechanics of the level screen are implemented, and when it is visualised. The questions that will be asked are: 
-        * Is the gameplay understandable?
+        * Is the gameplay and UI understandable?
         * Is the gameplay interesting?
-        * ...
-        * TODO
-        * ...
+        * How do the controls feel?
         * How is the pace of the game?
         * Are there any improvement suggestions?        
     
     * **What are the plans for publication?**
-    This game will be made available for free on desktop. It will be deployed on the Google Play store for 10-15 NOK and disseminated to various indie game-portal websites. Gameplay images and a video will be posted and marketed via social media.
+    This game will be made available for free on desktop or possibly available for purchase on Steam. It will be deployed on the Google Play store for 10-15 NOK and advertised to various indie game-portal websites (LibGDX, r/incremental_games). Gameplay images and a video will be posted and marketed via social media.
