@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="no.sandramoen.loveclicker" >
+    package="no.sandramoen.loveentity" >
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/GdxTheme" >
         <activity
-            android:name="no.sandramoen.loveclicker.AndroidLauncher"
+            android:name="no.sandramoen.loveentity.no.sandramoen.loveentity.AndroidLauncher"
             android:label="@string/app_name" 
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout">

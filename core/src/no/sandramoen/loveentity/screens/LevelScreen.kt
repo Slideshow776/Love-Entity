@@ -1,11 +1,11 @@
-package no.sandramoen.loveclicker.screens
+package no.sandramoen.loveentity.screens
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import no.sandramoen.loveclicker.actors.Heart
-import no.sandramoen.loveclicker.utils.BaseGame
-import no.sandramoen.loveclicker.utils.BaseScreen
+import no.sandramoen.loveentity.actors.Heart
+import no.sandramoen.loveentity.utils.BaseGame
+import no.sandramoen.loveentity.utils.BaseScreen
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 
 class LevelScreen : BaseScreen() {

@@ -1,4 +1,4 @@
-package no.sandramoen.loveclicker.utils
+package no.sandramoen.loveentity.utils
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation

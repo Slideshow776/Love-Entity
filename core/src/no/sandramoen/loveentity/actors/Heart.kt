@@ -1,4 +1,4 @@
-package no.sandramoen.loveclicker.actors
+package no.sandramoen.loveentity.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Align
-import no.sandramoen.loveclicker.utils.BaseActor
+import no.sandramoen.loveentity.utils.BaseActor
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
@@ -15,8 +15,8 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
     init {
         loadTexture("images/heart.png")
-        width *= 3
-        height *= 3
+        width *= 4
+        height *= 4
         centerAtPosition(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f)
         setOrigin(Align.center)
 

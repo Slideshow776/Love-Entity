@@ -1,4 +1,4 @@
-# Love Clicker (wip)
+# Love Entity (wip)
 
 ![screenshot](https://user-images.githubusercontent.com/4059636/68882557-aa393080-070f-11ea-8fef-ddb4589e86fb.png)
 
@@ -6,7 +6,7 @@
 
 1. Overall Vision
     * **Write a short paragraph explaining the game**
-    Love Clicker is a love-themed incremental game. The player manages the incremental gains of love by clicking and taking care of other various assets to earn as much love as possible. Ascension points give the player the option to begin anew with a bonus further increasing accumulation of love.
+    Love Entity is a love-themed incremental game. The player manages the incremental gains of love by clicking and taking care of other various assets to earn as much love as possible. Ascension points give the player the option to begin anew with a bonus further increasing accumulation of love.
         
     * **Describe the genre**
     This is a single-player incremental game.

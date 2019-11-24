@@ -1,4 +1,4 @@
-package no.sandramoen.loveclicker;
+package no.sandramoen.loveentity;
 
 import android.os.Bundle;
 
@@ -10,6 +10,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new LoveclickerGame(), config);
+		initialize(new LoveEntityGame(), config);
 	}
 }

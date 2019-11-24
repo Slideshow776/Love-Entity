@@ -1,4 +1,4 @@
-package no.sandramoen.loveclicker.utils
+package no.sandramoen.loveentity.utils
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer

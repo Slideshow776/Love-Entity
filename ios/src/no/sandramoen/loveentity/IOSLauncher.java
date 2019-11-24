@@ -1,4 +1,4 @@
-package no.sandramoen.loveclicker;
+package no.sandramoen.loveentity;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
@@ -10,7 +10,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new LoveclickerGame(), config);
+        return new IOSApplication(new LoveEntityGame(), config);
     }
 
     public static void main(String[] argv) {
