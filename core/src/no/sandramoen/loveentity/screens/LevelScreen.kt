@@ -7,39 +7,41 @@ import no.sandramoen.loveentity.actors.Heart
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.utils.Array
+import no.sandramoen.loveentity.actors.ResourceGenerator
 
 class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
+    private lateinit var resourceGenerators: Array<ResourceGenerator>
+
     private var love = 0
 
     private lateinit var loveCountLabel: Label
 
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
+
+        val labels = arrayOf("Ally", "Cisgender", "Bisexual", "Gay", "Lesbian", "Queer", "Transgender", "Intersex", "Pansexual", "Asexual")
+        resourceGenerators = Array()
+        for (label in labels) {
+            resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, label))
+        }
+
         loveCountLabel = Label("Love: $love", BaseGame.labelStyle)
 
         val scrollableTable = Table()
 
         val table = Table()
-        table.setFillParent(true)
-        table.add(heart).padBottom(50f).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
-        table.add<TextButton>(TextButton("WELCOME", BaseGame.textButtonStyle)).row()
+        // table.add(heart).padBottom(300f).padTop(300f).row()
+        for (generator in resourceGenerators)
+            table.add(generator).padBottom(50f).row()
 
         val scroll = ScrollPane(table)
-        scrollableTable.add(scroll).growX()
+        scrollableTable.add(scroll)
 
         uiTable.add(loveCountLabel)
         uiTable.row()
-        uiTable.add(scrollableTable).growX()
+        uiTable.add(scrollableTable)
 
         /*uiTable.debug = true
         table.debug = true

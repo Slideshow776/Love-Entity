@@ -17,7 +17,7 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         loadTexture("images/heart.png")
         width *= 4
         height *= 4
-        centerAtPosition(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f)
+        /*centerAtPosition(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f)*/
         setOrigin(Align.center)
 
         addListener(object : InputListener() {
