@@ -14,25 +14,31 @@ class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
     private lateinit var resourceGenerators: Array<ResourceGenerator>
 
-    private var love = 0
+    private var love = 0f
 
     private lateinit var loveCountLabel: Label
 
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
 
-        val labels = arrayOf("Ally", "Cisgender", "Bisexual", "Gay", "Lesbian", "Queer", "Transgender", "Intersex", "Pansexual", "Asexual")
         resourceGenerators = Array()
-        for (label in labels) {
-            resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, label))
-        }
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 15, 1.15f, .1f, 1f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 100, 1.15f, .5f, 2f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 500, 1.15f, 4f, 4f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 3000, 1.15f, 10f, 8f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 10000, 1.15f, 40f, 16f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 200000, 1.15f, 100f, 32f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 1666666, 1.15f, 6666f, 64f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 123456789, 1.15f, 98765f, 128f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 3999999999, 1.15f, 999999f, 256f))
+        resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
 
         loveCountLabel = Label("Love: $love", BaseGame.labelStyle)
 
         val scrollableTable = Table()
 
         val table = Table()
-        // table.add(heart).padBottom(300f).padTop(300f).row()
+        table.add(heart).padBottom(300f).padTop(300f).row()
         for (generator in resourceGenerators)
             table.add(generator).padBottom(50f).row()
 
@@ -49,6 +55,16 @@ class LevelScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveCountLabel.setText("Love: ${love + heart.love}")
+
+        var resourceGeneratorsLove = 0f
+        for (generator in resourceGenerators) {
+            generator.love = love
+            love -= generator.price()
+            if (generator.collectLove) {
+                resourceGeneratorsLove += generator.collectLove()
+            }
+        }
+        love += (heart.collectLove() + resourceGeneratorsLove)
+        loveCountLabel.setText("Love: ${love.toInt()}")
     }
 }

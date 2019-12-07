@@ -14,13 +14,35 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
+import kotlin.math.ceil
+import kotlin.math.pow
 
-class ResourceGenerator(x: Float, y: Float, s: Stage, name: String) : BaseActor(x, y, s) {
+class ResourceGenerator(x: Float, y: Float, s: Stage,
+                        name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
     private var table: Table
+    private var resourceName: String = name
     private var nameLabel: Label
 
     private var selfWidth = 600f
     private var selfHeight = 200f
+
+    var love = 0f
+    var collectLove = false
+    private var activated = false
+    private var purchased = false
+
+    private var owned: Int = 0
+    private var baseCost: Long = baseCost
+    private var multiplier: Float = multiplier
+    private var price: Float = baseCost * multiplier.pow(owned)
+    private var income: Float = income
+    private var incomeTime: Float = incomeTime
+    private var time: Float = 0f
+
+    private lateinit var activateButton: Button
+    private lateinit var ownedLabel: Label
+    private lateinit var timeLabel: Label
+    private lateinit var timeProgress: BaseActor
 
     init {
         loadTexture("images/whitePixel.png")
@@ -46,63 +68,129 @@ class ResourceGenerator(x: Float, y: Float, s: Stage, name: String) : BaseActor(
         this.debug*/
     }
 
+    override fun act(dt: Float) {
+        super.act(dt)
+
+        if (time >= incomeTime) {
+            collectLove = true
+            // activated = false
+            activated = true
+            time = 0f
+            timeLabel.setText("0")
+            timeProgress.width = 0f
+        }
+
+        if (activated) {
+            time += dt
+            timeLabel.setText("${incomeTime - time.toInt()}")
+            timeProgress.width = 410 * (time / incomeTime)
+        }
+        timeProgress.setPosition(0f, timeProgress.y) // solves some weird displacement bug...
+    }
+
+    fun collectLove(): Float {
+        if (collectLove) {
+            collectLove = false
+            return income * owned
+        }
+        return 0f
+    }
+
+    fun price(): Float {
+        if (purchased) {
+            purchased = false
+            return baseCost * multiplier.pow(owned - 1)
+        }
+        return 0f
+    }
+
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
         val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
         val buttonRegion = TextureRegion(buttonTex)
-        buttonRegion.regionWidth = 150
-        buttonRegion.regionHeight = 150
+        buttonRegion.regionWidth = 160
+        buttonRegion.regionHeight = 160
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
-        val button = Button(buttonStyle)
-        button.color = Color.PINK
+        activateButton = Button(buttonStyle)
+        activateButton.color = Color.PINK
 
-        val label = Label("23", BaseGame.labelStyle)
-        label.setFontScale(.5f)
-        label.color = Color.YELLOW
+        ownedLabel = Label("$owned", BaseGame.labelStyle)
+        ownedLabel.setFontScale(.5f)
+        ownedLabel.color = Color.YELLOW
 
-        val progress = BaseActor(0f, 0f, s)
-        progress.loadTexture("images/whitePixel.png")
-        progress.width = 150f
-        progress.height = 35f
-        progress.color = Color.FIREBRICK
+        val levelProgress = BaseActor(0f, 0f, s)
+        levelProgress.loadTexture("images/whitePixel.png")
+        levelProgress.width = 160f
+        levelProgress.height = 35f
+        levelProgress.color = Color.FIREBRICK
 
-        label.setPosition((progress.width / 2) - label.width / 3, -progress.height / 2) // weird offsets that just works...
-        progress.addActor(label)
+        ownedLabel.setPosition((levelProgress.width / 2) - ownedLabel.width / 3, -levelProgress.height / 2) // weird offsets that just works...
+        levelProgress.addActor(ownedLabel)
 
-        button.addActor(progress)
-        button.addListener { e: Event ->
-            if(GameUtils.isTouchDownEvent(e)) {
-                println("resource activated!")
+        activateButton.addActor(levelProgress)
+        activateButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (owned > 0) {
+                    activated = true
+                }
             }
             false
         }
-        return button
+        return activateButton
     }
 
     private fun rightTable(s: Stage): Table {
-        val progress = BaseActor(0f, 0f, s)
-        progress.loadTexture("images/whitePixel.png")
-        progress.width = 400f
-        progress.height = 75f
-        progress.color = Color.GREEN
 
-        val buy = BaseActor(0f, 0f, s)
-        buy.loadTexture("images/whitePixel.png")
-        buy.width = 200f
-        buy.height = 75f
+        // progress
+        timeProgress = BaseActor(0f, 0f, s)
+        timeProgress.loadTexture("images/whitePixel.png")
+        timeProgress.width = 0f
+        timeProgress.height = 75f
+        timeProgress.color = Color.GREEN
+
+        // buy
+        val buttonStyle = Button.ButtonStyle()
+        val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
+        val buttonRegion = TextureRegion(buttonTex)
+        buttonRegion.regionWidth = 300
+        buttonRegion.regionHeight = 75
+        buttonStyle.up = TextureRegionDrawable(buttonRegion)
+
+        val buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
+        buyLabel.setFontScale(.5f)
+        val buy = Button(buttonStyle)
+        buy.addActor(buyLabel)
         buy.color = Color.ORANGE
+        buy.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                timeProgress.setPosition(0f, timeProgress.y) // solves some weird displacement bug...
+                if (love >= price) {
+                    purchased = true
+                    love -= price
+                    owned++
+                    ownedLabel.setText("$owned")
+                    price = baseCost * multiplier.pow(owned)
+                    buyLabel.setText("Price: ${ceil(price).toInt()}")
+                }
+            }
+            false
+        }
 
+        // time
+        timeLabel = Label("00:00:00", BaseGame.labelStyle)
+        timeLabel.setFontScale(.5f)
         val time = BaseActor(0f, 0f, s)
+        time.addActor(timeLabel)
         time.loadTexture("images/whitePixel.png")
-        time.width = 200f
+        time.width = 100f
         time.height = 75f
         time.color = Color.LIGHT_GRAY
 
-        val subTable = Table()
-        subTable.add(progress).colspan(2).row()
-        subTable.add(buy)
-        subTable.add(time)
-        return subTable
+        val table = Table()
+        table.add(timeProgress).colspan(2).pad(5f).row()
+        table.add(buy).pad(5f)
+        table.add(time).pad(5f)
+        return table
     }
 }

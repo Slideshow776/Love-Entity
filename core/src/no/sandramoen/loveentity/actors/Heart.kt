@@ -1,6 +1,5 @@
 package no.sandramoen.loveentity.actors
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
@@ -11,7 +10,8 @@ import no.sandramoen.loveentity.utils.BaseActor
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
-    var love: Int = 0
+    var love = 0f
+    var collectLove = false
 
     init {
         loadTexture("images/heart.png")
@@ -26,8 +26,19 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                 addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
                 addAction(Actions.delay(.25f))
                 addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
+                collectLove = true
                 return true
             }
         })
+    }
+
+    fun collectLove(): Float {
+        if (collectLove) {
+            val loveToCollect = love
+            collectLove = false
+            love = 0f
+            return loveToCollect
+        }
+        return 0f
     }
 }
