@@ -1,6 +1,8 @@
 # Love Entity
 
-![screenshot](https://user-images.githubusercontent.com/4059636/68882557-aa393080-070f-11ea-8fef-ddb4589e86fb.png)
+My very own incremental game. Heavily Based on AdVenture Capitalist and Cookie Clicker.
+
+![image](https://user-images.githubusercontent.com/4059636/69899368-4f394780-1365-11ea-8d21-7030f7b2d500.png)
 
 # Game Design Document
 
