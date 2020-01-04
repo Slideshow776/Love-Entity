@@ -34,7 +34,8 @@ abstract class BaseGame : Game() {
 
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans.ttf"))
         val fontParameters = FreeTypeFontParameter()
-        fontParameters.size = 48
+        // fontParameters.size = 48
+        fontParameters.size = (.059f * Gdx.graphics.height).toInt() // If the resolutions height is 1440 then the font size becomes 86
         fontParameters.color = Color.WHITE
         fontParameters.borderWidth = 2f
         fontParameters.borderColor = Color.BLACK

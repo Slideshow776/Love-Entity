@@ -1,12 +1,12 @@
 package no.sandramoen.loveentity.screens
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import no.sandramoen.loveentity.actors.Heart
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.ResourceGenerator
 
@@ -38,20 +38,26 @@ class LevelScreen : BaseScreen() {
         val scrollableTable = Table()
 
         val table = Table()
-        table.add(heart).padBottom(300f).padTop(300f).row()
+        table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
         for (generator in resourceGenerators)
-            table.add(generator).padBottom(50f).row()
+            table.add(generator).padBottom(Gdx.graphics.height * .07f).row()
 
         val scroll = ScrollPane(table)
         scrollableTable.add(scroll)
 
-        uiTable.add(loveCountLabel)
-        uiTable.row()
-        uiTable.add(scrollableTable)
+        val mainTable = Table()
+        mainTable.setFillParent(true)
 
-        /*uiTable.debug = true
-        table.debug = true
-        scrollableTable.debug = true*/
+        mainTable.add(loveCountLabel)
+        mainTable.row()
+        mainTable.add(scrollableTable)
+
+        mainStage.addActor(mainTable)
+
+        mainTable.debug = true
+        // uiTable.debug = true
+        // table.debug = true
+        // scrollableTable.debug = true
     }
 
     override fun update(dt: Float) {

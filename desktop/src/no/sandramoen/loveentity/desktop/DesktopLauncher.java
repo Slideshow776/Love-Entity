@@ -8,9 +8,10 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Love Entity";
-		int scale = 2;
-		config.width = 1440 / scale;
-		config.height = 2560 / scale;
+		float scale = 2.0f;
+		config.width = (int) (1440 / scale);
+		config.height = (int) (2560 / scale);
+		config.resizable = false;
 		new LwjglApplication(new LoveEntityGame(), config);
 	}
 }

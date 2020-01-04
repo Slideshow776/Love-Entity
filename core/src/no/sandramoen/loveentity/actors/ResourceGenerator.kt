@@ -23,8 +23,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var resourceName: String = name
     private var nameLabel: Label
 
-    private var selfWidth = 600f
-    private var selfHeight = 200f
+    private var selfWidth = Gdx.graphics.width *.95f// 600f
+    private var selfHeight = 300f
 
     var love = 0f
     var collectLove = false
@@ -59,7 +59,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         table.height = selfHeight
 
         table.add(nameLabel).top().colspan(3).row()
-        table.add(leftTable(s)).pad(10f)
+        table.add(leftTable(s)).pad(selfWidth*.01f)
         table.add(rightTable(s))
 
         addActor(table)
@@ -83,7 +83,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (activated) {
             time += dt
             timeLabel.setText("${incomeTime - time.toInt()}")
-            timeProgress.width = 410 * (time / incomeTime)
+            timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
         }
         timeProgress.setPosition(0f, timeProgress.y) // solves some weird displacement bug...
     }
@@ -108,8 +108,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buttonStyle = Button.ButtonStyle()
         val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
         val buttonRegion = TextureRegion(buttonTex)
-        buttonRegion.regionWidth = 160
-        buttonRegion.regionHeight = 160
+        buttonRegion.regionWidth = (selfWidth * .25f).toInt()
+        buttonRegion.regionHeight = (selfHeight * .8f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         activateButton = Button(buttonStyle)
@@ -121,8 +121,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         val levelProgress = BaseActor(0f, 0f, s)
         levelProgress.loadTexture("images/whitePixel.png")
-        levelProgress.width = 160f
-        levelProgress.height = 35f
+        levelProgress.width = selfWidth * .25f
+        levelProgress.height = selfHeight * .175f
         levelProgress.color = Color.FIREBRICK
 
         ownedLabel.setPosition((levelProgress.width / 2) - ownedLabel.width / 3, -levelProgress.height / 2) // weird offsets that just works...
@@ -146,15 +146,15 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         timeProgress = BaseActor(0f, 0f, s)
         timeProgress.loadTexture("images/whitePixel.png")
         timeProgress.width = 0f
-        timeProgress.height = 75f
+        timeProgress.height = selfHeight * .375f
         timeProgress.color = Color.GREEN
 
         // buy
         val buttonStyle = Button.ButtonStyle()
         val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
         val buttonRegion = TextureRegion(buttonTex)
-        buttonRegion.regionWidth = 300
-        buttonRegion.regionHeight = 75
+        buttonRegion.regionWidth = (selfWidth * .5f).toInt()
+        buttonRegion.regionHeight = (selfHeight * .375f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         val buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
@@ -178,19 +178,19 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         }
 
         // time
-        timeLabel = Label("00:00:00", BaseGame.labelStyle)
+        timeLabel = Label("?", BaseGame.labelStyle)
         timeLabel.setFontScale(.5f)
         val time = BaseActor(0f, 0f, s)
         time.addActor(timeLabel)
         time.loadTexture("images/whitePixel.png")
-        time.width = 100f
-        time.height = 75f
+        time.width = selfWidth * .167f
+        time.height = selfHeight * .375f
         time.color = Color.LIGHT_GRAY
 
         val table = Table()
-        table.add(timeProgress).colspan(2).pad(5f).row()
-        table.add(buy).pad(5f)
-        table.add(time).pad(5f)
+        table.add(timeProgress).colspan(2).pad(selfWidth*.01f).row()
+        table.add(buy).pad(selfWidth*.01f)
+        table.add(time).pad(selfWidth*.01f)
         return table
     }
 }
