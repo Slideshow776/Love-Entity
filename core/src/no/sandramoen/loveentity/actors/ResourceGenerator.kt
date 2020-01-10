@@ -99,14 +99,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
-        val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
+        var buttonTex = Texture(Gdx.files.internal("images/pixelAvatarTest.png"))
         val buttonRegion = TextureRegion(buttonTex)
         buttonRegion.regionWidth = (selfWidth * .25f).toInt()
         buttonRegion.regionHeight = (selfHeight * .8f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         activateButton = Button(buttonStyle)
-        activateButton.color = Color.PINK
+        // activateButton.color = Color.PINK
 
         ownedLabel = Label("$owned", BaseGame.labelStyle)
         ownedLabel.setFontScale(.5f)
