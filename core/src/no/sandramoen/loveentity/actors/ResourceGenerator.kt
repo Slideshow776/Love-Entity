@@ -45,7 +45,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var timeProgress: BaseActor
 
     init {
-        loadTexture("images/whitePixel.png")
+        loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
         width = selfWidth
         height = selfHeight
         // color = Color(random(0, 255) / 255f, random(0, 255) / 255f, random(0, 255) / 255f, 1f)
@@ -66,7 +66,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         table.height = selfHeight
 
         table.add(nameLabel).top().colspan(3).row()
-        table.add(leftTable(s)).pad(selfWidth * .01f)
+        table.add(leftTable(s)).pad(selfWidth * .01f) // TODO: set height and width here
         table.add(rightTable(s))
 
         addActor(table)
@@ -99,21 +99,18 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
-        var buttonTex = Texture(Gdx.files.internal("images/pixelAvatarTest.png"))
+        var buttonTex = BaseGame.textureAtlas!!.findRegion("pixelAvatarTest")
         val buttonRegion = TextureRegion(buttonTex)
-        buttonRegion.regionWidth = (selfWidth * .25f).toInt()
-        buttonRegion.regionHeight = (selfHeight * .8f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         activateButton = Button(buttonStyle)
-        // activateButton.color = Color.PINK
 
         ownedLabel = Label("$owned", BaseGame.labelStyle)
         ownedLabel.setFontScale(.5f)
         ownedLabel.color = Color.YELLOW
 
         val levelProgress = BaseActor(0f, 0f, s)
-        levelProgress.loadTexture("images/whitePixel.png")
+        levelProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
         levelProgress.width = selfWidth * .25f
         levelProgress.height = selfHeight * .175f
         levelProgress.color = Color.FIREBRICK
@@ -138,17 +135,15 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         // progress
         timeProgress = BaseActor(0f, 0f, s)
-        timeProgress.loadTexture("images/whitePixel.png")
+        timeProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
         timeProgress.width = 0f
         timeProgress.height = selfHeight * .375f
         timeProgress.color = Color.GREEN
 
         // buy
         val buttonStyle = Button.ButtonStyle()
-        val buttonTex = Texture(Gdx.files.internal("images/whitePixel.png"))
+        var buttonTex = BaseGame.textureAtlas!!.findRegion("whitePixel")
         val buttonRegion = TextureRegion(buttonTex)
-        buttonRegion.regionWidth = (selfWidth * .5f).toInt()
-        buttonRegion.regionHeight = (selfHeight * .375f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
@@ -177,14 +172,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         timeLabel.setFontScale(.5f)
         val time = BaseActor(0f, 0f, s)
         time.addActor(timeLabel)
-        time.loadTexture("images/whitePixel.png")
+        time.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
         time.width = selfWidth * .167f
         time.height = selfHeight * .375f
         time.color = Color.LIGHT_GRAY
 
         val table = Table()
         table.add(timeProgress).colspan(2).pad(selfWidth * .01f).row()
-        table.add(buy).pad(selfWidth * .01f)
+        table.add(buy).pad(selfWidth * .01f).width(selfWidth * .5f).height(selfHeight * .375f)
         table.add(time).pad(selfWidth * .01f)
         return table
     }

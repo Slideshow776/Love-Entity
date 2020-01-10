@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.scenes.scene2d.Group
 
@@ -53,7 +54,7 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
     }
 
     // Graphics ---------------------------------------------------------------------------------------------------
-    fun setAnimation(anim: Animation<TextureRegion>) {
+    fun setAnimation(anim: Animation<TextureRegion>) { // TODO: might not need this
         animation = anim
         val tr: TextureRegion = animation!!.getKeyFrame(0.toFloat())
         val w: Float = tr.regionWidth.toFloat()
@@ -67,7 +68,7 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
     }
 
     fun loadAnimationFromFiles(fileNames: Array<String>, frameDuration: Float, loop: Boolean,
-                               textureFilter: TextureFilter = TextureFilter.Linear): Animation<TextureRegion> {
+                               textureFilter: TextureFilter = TextureFilter.Linear): Animation<TextureRegion> {  // TODO: might not need this
         val textureArray: Array<TextureRegion> = Array()
 
         for (i in 0 until fileNames.size) {
@@ -89,7 +90,7 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
         return anim
     }
 
-    fun loadAnimationFromSheet(fileName: String, rows: Int, cols: Int, frameDuration: Float, loop: Boolean, textureFilter: TextureFilter = TextureFilter.Linear): Animation<TextureRegion> {
+    fun loadAnimationFromSheet(fileName: String, rows: Int, cols: Int, frameDuration: Float, loop: Boolean, textureFilter: TextureFilter = TextureFilter.Linear): Animation<TextureRegion> { // TODO: might not need this
         val texture = Texture(Gdx.files.internal(fileName), true)
         texture.setFilter(textureFilter, textureFilter)
         val frameWidth: Int = texture.width / cols
@@ -117,10 +118,9 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
         return anim
     }
 
-    fun loadTexture(fileName: String): Animation<TextureRegion> {
-        val fileNames: Array<String> = Array(1)
-        fileNames.add(fileName)
-        return loadAnimationFromFiles(fileNames, 1f, true)
+    fun loadAnimation(region: TextureAtlas.AtlasRegion): Animation<TextureRegion> {
+        setAnimation(Animation(1f, region))
+        return Animation(1f, region)
     }
 
     fun isAnimationFinished(): Boolean {

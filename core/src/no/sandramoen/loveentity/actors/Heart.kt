@@ -14,7 +14,7 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     var collectLove = false
 
     init {
-        loadTexture("images/heart.png")
+        loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
         width *= Gdx.graphics.width * .0065f
         height *= Gdx.graphics.width * .0065f
         setOrigin(Align.center)
