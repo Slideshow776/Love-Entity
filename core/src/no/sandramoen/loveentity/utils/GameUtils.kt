@@ -5,8 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 
 class GameUtils {
     companion object {
-        // Custom type checker
-        fun isTouchDownEvent(e: Event): Boolean {
+        fun isTouchDownEvent(e: Event): Boolean { // Custom type checker
             return e is InputEvent && e.type == InputEvent.Type.touchDown
         }
     }

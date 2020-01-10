@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
+
 import kotlin.math.ceil
 import kotlin.math.pow
 
@@ -23,11 +24,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var resourceName: String = name
     private var nameLabel: Label
 
-    private var selfWidth = Gdx.graphics.width *.95f// 600f
+    private var selfWidth = Gdx.graphics.width * .95f // 600f
     private var selfHeight = 300f
 
-    var love = 0f
-    var collectLove = false
     private var activated = false
     private var purchased = false
 
@@ -42,6 +41,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var activateButton: Button
     private lateinit var ownedLabel: Label
     private lateinit var timeLabel: Label
+    private lateinit var buyLabel: Label
     private lateinit var timeProgress: BaseActor
 
     init {
@@ -54,12 +54,19 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         nameLabel = Label(name, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
 
+        // load game state
+        owned = BaseGame.prefs!!.getInteger(name + "Owned")
+        time = BaseGame.prefs!!.getFloat(name + "Time")
+        activated = BaseGame.prefs!!.getBoolean(name + "Activated")
+        price = baseCost * multiplier.pow(owned)
+
+        // table
         table = Table()
         table.width = selfWidth
         table.height = selfHeight
 
         table.add(nameLabel).top().colspan(3).row()
-        table.add(leftTable(s)).pad(selfWidth*.01f)
+        table.add(leftTable(s)).pad(selfWidth * .01f)
         table.add(rightTable(s))
 
         addActor(table)
@@ -72,36 +79,22 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         super.act(dt)
 
         if (time >= incomeTime) {
-            collectLove = true
+            BaseGame.love += income * owned
+
             // activated = false
             activated = true
             time = 0f
-            timeLabel.setText("0")
+            timeLabel.setText("0s")
             timeProgress.width = 0f
         }
 
         if (activated) {
             time += dt
-            timeLabel.setText("${incomeTime - time.toInt()}")
+            BaseGame.prefs!!.putFloat(resourceName + "Time", time)
+            timeLabel.setText("${incomeTime - time.toInt()}s")
             timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
         }
-        timeProgress.setPosition(0f, timeProgress.y) // solves some weird displacement bug...
-    }
-
-    fun collectLove(): Float {
-        if (collectLove) {
-            collectLove = false
-            return income * owned
-        }
-        return 0f
-    }
-
-    fun price(): Float {
-        if (purchased) {
-            purchased = false
-            return baseCost * multiplier.pow(owned - 1)
-        }
-        return 0f
+        timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
     }
 
     private fun leftTable(s: Stage): Table {
@@ -125,7 +118,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         levelProgress.height = selfHeight * .175f
         levelProgress.color = Color.FIREBRICK
 
-        ownedLabel.setPosition((levelProgress.width / 2) - ownedLabel.width / 3, -levelProgress.height / 2) // weird offsets that just works...
+        ownedLabel.setPosition((levelProgress.width / 2) - ownedLabel.width / 3, -levelProgress.height / 2) // TODO: weird offsets that just works...
         levelProgress.addActor(ownedLabel)
 
         activateButton.addActor(levelProgress)
@@ -133,6 +126,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             if (GameUtils.isTouchDownEvent(e)) {
                 if (owned > 0) {
                     activated = true
+                    BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
                 }
             }
             false
@@ -157,18 +151,19 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buttonRegion.regionHeight = (selfHeight * .375f).toInt()
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
-        val buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
+        buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
         buyLabel.setFontScale(.5f)
         val buy = Button(buttonStyle)
         buy.addActor(buyLabel)
         buy.color = Color.ORANGE
         buy.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                timeProgress.setPosition(0f, timeProgress.y) // solves some weird displacement bug...
-                if (love >= price) {
+                timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
+                if (BaseGame.love >= price) {
                     purchased = true
-                    love -= price
+                    BaseGame.love -= price
                     owned++
+                    BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
                     ownedLabel.setText("$owned")
                     price = baseCost * multiplier.pow(owned)
                     buyLabel.setText("Price: ${ceil(price).toInt()}")
@@ -188,9 +183,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         time.color = Color.LIGHT_GRAY
 
         val table = Table()
-        table.add(timeProgress).colspan(2).pad(selfWidth*.01f).row()
-        table.add(buy).pad(selfWidth*.01f)
-        table.add(time).pad(selfWidth*.01f)
+        table.add(timeProgress).colspan(2).pad(selfWidth * .01f).row()
+        table.add(buy).pad(selfWidth * .01f)
+        table.add(time).pad(selfWidth * .01f)
         return table
     }
 }

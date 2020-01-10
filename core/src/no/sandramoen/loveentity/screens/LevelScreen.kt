@@ -4,17 +4,16 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Array
+
 import no.sandramoen.loveentity.actors.Heart
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
-import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.ResourceGenerator
 
 class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
     private lateinit var resourceGenerators: Array<ResourceGenerator>
-
-    private var love = 0f
 
     private lateinit var loveCountLabel: Label
 
@@ -33,14 +32,15 @@ class LevelScreen : BaseScreen() {
         resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 3999999999, 1.15f, 999999f, 256f))
         resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
 
-        loveCountLabel = Label("Love: $love", BaseGame.labelStyle)
+        loveCountLabel = Label("Love: ${BaseGame.love}", BaseGame.labelStyle)
 
         val scrollableTable = Table()
 
         val table = Table()
         table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
-        for (generator in resourceGenerators)
+        for (generator in resourceGenerators) {
             table.add(generator).padBottom(Gdx.graphics.height * .07f).row()
+        }
 
         val scroll = ScrollPane(table)
         scrollableTable.add(scroll)
@@ -54,23 +54,21 @@ class LevelScreen : BaseScreen() {
 
         mainStage.addActor(mainTable)
 
-        mainTable.debug = true
+        // mainTable.debug = true
         // uiTable.debug = true
         // table.debug = true
         // scrollableTable.debug = true
     }
 
     override fun update(dt: Float) {
+        loveCountLabel.setText("Love: ${BaseGame.love.toInt()}")
+    }
 
-        var resourceGeneratorsLove = 0f
-        for (generator in resourceGenerators) {
-            generator.love = love
-            love -= generator.price()
-            if (generator.collectLove) {
-                resourceGeneratorsLove += generator.collectLove()
-            }
-        }
-        love += (heart.collectLove() + resourceGeneratorsLove)
-        loveCountLabel.setText("Love: ${love.toInt()}")
+    override fun pause() {
+        super.pause()
+
+        // save game state
+        BaseGame.prefs!!.putFloat("love", BaseGame.love)
+        BaseGame.prefs!!.flush()
     }
 }
