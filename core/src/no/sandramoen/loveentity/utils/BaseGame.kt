@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
+import java.util.Date
 
 abstract class BaseGame : Game(), AssetErrorListener {
 
@@ -39,6 +40,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         // game state
         var prefs: Preferences? = null
         var love = 0f
+        var lastTimePlayed = 0L
+        var secondsSinceLastPlayed = 0L
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
@@ -50,8 +53,9 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         prefs = Gdx.app.getPreferences("loveEntityGameState")
         love = prefs!!.getFloat("love")
+        lastTimePlayed = prefs!!.getLong("lastTimePlayed")
+        if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
 
-        /* --------------------------------------------------------------------------------------------------- */
         // asset manager
         val assetManager = AssetManager()
         assetManager.setErrorListener(this)
@@ -62,7 +66,6 @@ abstract class BaseGame : Game(), AssetErrorListener {
         assetManager.setLoader(BitmapFont::class.java, ".ttf", FreetypeFontLoader(resolver))
         assetManager.finishLoading();
         textureAtlas = assetManager.get("images/packed/loveEntity.pack.atlas") // all images are found in this global static variable
-        /* --------------------------------------------------------------------------------------------------- */
 
         // fonts
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans.ttf"))
@@ -88,14 +91,16 @@ abstract class BaseGame : Game(), AssetErrorListener {
         textButtonStyle!!.fontColor = Color.PINK
     }
 
+    override fun pause() {
+        super.pause()
+        GameUtils.saveGameState()
+    }
+
     override fun dispose() {
+        GameUtils.saveGameState()
         super.dispose()
         assetManager.dispose()
         fontGenerator.dispose()
-
-        // save game state
-        prefs!!.putFloat("love", love)
-        prefs!!.flush()
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {

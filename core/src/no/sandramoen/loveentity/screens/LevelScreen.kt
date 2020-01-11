@@ -10,6 +10,7 @@ import no.sandramoen.loveentity.actors.Heart
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.actors.ResourceGenerator
+import java.util.Date
 
 class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
@@ -64,11 +65,13 @@ class LevelScreen : BaseScreen() {
         loveCountLabel.setText("Love: ${BaseGame.love.toInt()}")
     }
 
-    override fun pause() {
-        super.pause()
+    override fun resume() { // TODO: This may cause a bug if game is paused in another screen? further testing required
+        super.resume()
 
-        // save game state
-        BaseGame.prefs!!.putFloat("love", BaseGame.love)
-        BaseGame.prefs!!.flush()
+        // add love generated since pausing
+        BaseGame.lastTimePlayed = BaseGame.prefs!!.getLong("lastTimePlayed")
+        if (BaseGame.lastTimePlayed != 0L) BaseGame.secondsSinceLastPlayed = (Date().time - BaseGame.lastTimePlayed) / 1000
+        for (generator in resourceGenerators)
+            generator.addLoveSinceLastTimedPlayed()
     }
 }

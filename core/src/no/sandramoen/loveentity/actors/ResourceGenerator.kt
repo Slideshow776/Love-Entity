@@ -1,15 +1,18 @@
 package no.sandramoen.loveentity.actors
 
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.compression.lzma.Base
 
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
@@ -59,6 +62,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         time = BaseGame.prefs!!.getFloat(name + "Time")
         activated = BaseGame.prefs!!.getBoolean(name + "Activated")
         price = baseCost * multiplier.pow(owned)
+        addLoveSinceLastTimedPlayed()
 
         // table
         table = Table()
@@ -182,5 +186,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         table.add(buy).pad(selfWidth * .01f).width(selfWidth * .5f).height(selfHeight * .375f)
         table.add(time).pad(selfWidth * .01f)
         return table
+    }
+
+    fun addLoveSinceLastTimedPlayed() {
+        if (time > 0) {
+            BaseGame.love += (income / incomeTime) * BaseGame.secondsSinceLastPlayed
+            time += BaseGame.secondsSinceLastPlayed % time
+        }
     }
 }
