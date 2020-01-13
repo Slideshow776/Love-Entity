@@ -2,8 +2,7 @@ package no.sandramoen.loveentity.utils
 
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.Date
 
 
 class GameUtils {

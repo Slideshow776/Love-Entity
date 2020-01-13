@@ -11,8 +11,6 @@ import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
-    var collectLove = false
-
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
         width *= Gdx.graphics.width * .0065f
@@ -25,7 +23,6 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                 addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
                 addAction(Actions.delay(.25f))
                 addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
-                collectLove = true
                 return true
             }
         })

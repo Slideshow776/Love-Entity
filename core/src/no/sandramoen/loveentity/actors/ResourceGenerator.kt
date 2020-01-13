@@ -1,18 +1,14 @@
 package no.sandramoen.loveentity.actors
 
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.badlogic.gdx.utils.compression.lzma.Base
 
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
@@ -95,7 +91,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (activated) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-            timeLabel.setText("${incomeTime - time.toInt()}s")
+            timeLabel.setText("${(incomeTime - time).toInt()}s")
             timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
         }
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
@@ -193,5 +189,23 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             BaseGame.love += (income / incomeTime) * BaseGame.secondsSinceLastPlayed
             time += BaseGame.secondsSinceLastPlayed % time
         }
+    }
+
+    fun reset() {
+        owned = 0
+        ownedLabel.setText("$owned")
+
+        price = baseCost * multiplier.pow(owned)
+        buyLabel.setText("Price: ${ceil(price).toInt()}")
+
+        time = 0f
+        timeLabel.setText("?")
+        activated = false
+
+        timeProgress.width = 0f
+
+        BaseGame.prefs!!.putFloat(resourceName + "Time", time)
+        BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
+        BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
     }
 }
