@@ -78,6 +78,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     override fun act(dt: Float) {
         super.act(dt)
+        labelTime(time)
 
         if (time >= incomeTime) {
             BaseGame.love += income * owned
@@ -85,14 +86,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             // activated = false
             activated = true
             time = 0f
-            timeLabel.setText("0s")
             timeProgress.width = 0f
         }
 
         if (activated) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-            timeLabel.setText("${(incomeTime - time).toInt()}s")
+            labelTime(time)
             timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
         }
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
@@ -207,5 +207,17 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
         BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
         BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
+    }
+
+    private fun labelTime(timeInSeconds: Float) { // labels time, e.g. "1h 23m 17s"
+        var timeLeftInSeconds = incomeTime - timeInSeconds
+        val hours = (timeLeftInSeconds / 3600).toInt()
+        val minutes = (timeLeftInSeconds / 60).toInt()
+        val seconds = (timeLeftInSeconds - (hours * 3600) - (minutes * 60)).toInt()
+        when {
+            minutes == 0 -> timeLabel.setText("${seconds}s")
+            hours == 0 -> timeLabel.setText("${minutes}m ${seconds}s")
+            else -> timeLabel.setText("${hours}h ${minutes}m ${seconds}s")
+        }
     }
 }
