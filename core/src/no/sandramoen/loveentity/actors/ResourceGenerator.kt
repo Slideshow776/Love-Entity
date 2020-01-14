@@ -4,18 +4,19 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
-
 import kotlin.math.ceil
 import kotlin.math.pow
+
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
                         name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
@@ -151,8 +152,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buy = Button(buttonStyle)
         buy.addActor(buyLabel)
         buy.color = Color.ORANGE
-        buy.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+        buy.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love >= price) {
                     purchased = true
@@ -164,8 +165,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     buyLabel.setText("Price: ${ceil(price).toInt()}")
                 }
             }
-            false
-        }
+        })
 
         // time
         timeLabel = Label("?", BaseGame.labelStyle)
