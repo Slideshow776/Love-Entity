@@ -13,6 +13,7 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.actors.ResourceGenerator
 import no.sandramoen.loveentity.utils.GameUtils
+import no.sandramoen.loveentity.utils.BigNumber
 import java.util.Date
 
 class LevelScreen : BaseScreen() {
@@ -39,6 +40,7 @@ class LevelScreen : BaseScreen() {
         resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
 
         loveCountLabel = Label("Love: ${BaseGame.love}", BaseGame.labelStyle)
+        loveCountLabel.setFontScale(.5f)
 
         val burgerButtonStyle = Button.ButtonStyle()
         burgerButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("burger")))
@@ -53,24 +55,33 @@ class LevelScreen : BaseScreen() {
         val debugButton5 = TextButton("Restart", BaseGame.textButtonStyle)
 
         debugButton1.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {BaseGame.love += 1_000}
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000))
+            }
             false
         }
         debugButton2.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {BaseGame.love += 100_000}
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000))
+            }
             false
         }
         debugButton3.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {BaseGame.love += 1_000_000}
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000_000))
+            }
             false
         }
         debugButton4.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {BaseGame.love += 100_000_000}
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000_000))
+                // BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(999_999_999_999_999_999))
+            }
             false
         }
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.love = 0f
+                BaseGame.love = BigNumber(0)
                 for (generator in resourceGenerators)
                     generator.reset()
             }
@@ -136,7 +147,7 @@ class LevelScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveCountLabel.setText("Love: ${BaseGame.love.toInt()}")
+        loveCountLabel.setText("${BaseGame.love.presentLongScale()} love")
     }
 
     override fun resume() { // TODO: This may cause a bug if game is paused in another screen? further testing required

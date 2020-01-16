@@ -39,7 +39,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         // game state
         var prefs: Preferences? = null
-        var love = 0f
+        var love = BigNumber(0)
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
 
@@ -52,7 +52,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
         prefs = Gdx.app.getPreferences("loveEntityGameState")
-        love = prefs!!.getFloat("love")
+        love = GameUtils.getBigNumber("love")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
 

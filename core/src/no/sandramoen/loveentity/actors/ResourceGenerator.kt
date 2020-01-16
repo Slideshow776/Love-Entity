@@ -13,10 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
+import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
-import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.pow
-
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
                         name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
@@ -33,10 +33,11 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var owned: Int = 0
     private var baseCost: Long = baseCost
     private var multiplier: Float = multiplier
-    private var price: Float = baseCost * multiplier.pow(owned)
-    private var income: Float = income
+    private var price: Long = baseCost * multiplier.pow(owned).toLong()
+    private var income: Float = income.toFloat()
     private var incomeTime: Float = incomeTime
     private var time: Float = 0f
+    private var fraction: Float = 0f
 
     private lateinit var activateButton: Button
     private lateinit var ownedLabel: Label
@@ -58,7 +59,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         owned = BaseGame.prefs!!.getInteger(name + "Owned")
         time = BaseGame.prefs!!.getFloat(name + "Time")
         activated = BaseGame.prefs!!.getBoolean(name + "Activated")
-        price = baseCost * multiplier.pow(owned)
+        price = baseCost * multiplier.pow(owned).toLong()
         addLoveSinceLastTimedPlayed()
 
         // table
@@ -81,7 +82,18 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         labelTime(time)
 
         if (time >= incomeTime) {
-            BaseGame.love += income * owned
+            val product = income * owned
+            if (product >= 1) {
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber((income * owned).toLong()))
+            }
+            else { // hack to support BigNumber fractions
+                fraction += (product - floor(product))
+                println(fraction)
+                if (fraction >= 1) {
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(fraction.toLong()))
+                    fraction -= 1
+                }
+            }
 
             // activated = false
             activated = true
@@ -147,22 +159,22 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buttonRegion = TextureRegion(buttonTex)
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
-        buyLabel = Label("Price: ${ceil(price).toInt()}", BaseGame.labelStyle)
-        buyLabel.setFontScale(.5f)
+        buyLabel = Label("  Buy 1x     ${BigNumber(price).presentLongScale()}", BaseGame.labelStyle)
+        buyLabel.setFontScale(.4f)
         val buy = Button(buttonStyle)
         buy.addActor(buyLabel)
         buy.color = Color.ORANGE
         buy.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
-                if (BaseGame.love >= price) {
+                if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(price))) {
                     purchased = true
-                    BaseGame.love -= price
+                    BaseGame.love = BaseGame.love.subtract(BaseGame.love, BigNumber(price))
                     owned++
                     BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
                     ownedLabel.setText("$owned")
-                    price = baseCost * multiplier.pow(owned)
-                    buyLabel.setText("Price: ${ceil(price).toInt()}")
+                    price = (baseCost * multiplier.pow(owned)).toLong()
+                    buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
                 }
             }
         })
@@ -186,7 +198,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     fun addLoveSinceLastTimedPlayed() {
         if (time > 0) {
-            BaseGame.love += (income / incomeTime) * BaseGame.secondsSinceLastPlayed
+            BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(((income / incomeTime) * BaseGame.secondsSinceLastPlayed).toLong()))
             time += BaseGame.secondsSinceLastPlayed % time
         }
     }
@@ -195,8 +207,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         owned = 0
         ownedLabel.setText("$owned")
 
-        price = baseCost * multiplier.pow(owned)
-        buyLabel.setText("Price: ${ceil(price).toInt()}")
+        price = (baseCost * multiplier.pow(owned)).toLong()
+        fraction = 0f
+        buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
 
         time = 0f
         timeLabel.setText("?")
