@@ -3,14 +3,17 @@ package no.sandramoen.loveentity.actors
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BigNumber
@@ -28,7 +31,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var selfHeight = 300f
 
     private var activated = false
-    private var purchased = false
+    private var activatedAnimation = false
 
     private var owned: Int = 0
     private var baseCost: Long = baseCost
@@ -85,10 +88,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             val product = income * owned
             if (product >= 1) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber((income * owned).toLong()))
-            }
-            else { // hack to support BigNumber fractions
+            } else { // hack to support BigNumber fractions
                 fraction += (product - floor(product))
-                println(fraction)
                 if (fraction >= 1) {
                     BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(fraction.toLong()))
                     fraction -= 1
@@ -97,6 +98,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
             // activated = false
             activated = true
+            if (!activated)
+                activatedAnimation = true
             time = 0f
             timeProgress.width = 0f
         }
@@ -106,6 +109,17 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
             labelTime(time)
             timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
+            activateButton.clearActions()
+            activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
+        } else {
+            if (activatedAnimation) {
+                activateButton.addAction(Actions.forever(Actions.sequence(
+                        Actions.scaleTo(1.05f, 1.05f, .25f),
+                        Actions.delay(.125f),
+                        Actions.scaleTo(1.0f, 1.0f, .25f)
+                )))
+                activatedAnimation = false
+            }
         }
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
     }
@@ -132,10 +146,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         levelProgress.addActor(ownedLabel)
 
         activateButton.addActor(levelProgress)
+        activateButton.isTransform = true
+        activateButton.setOrigin(Align.center)
         activateButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 if (owned > 0) {
                     activated = true
+                    activatedAnimation = false
                     BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
                 }
             }
@@ -168,13 +185,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(price))) {
-                    purchased = true
                     BaseGame.love = BaseGame.love.subtract(BaseGame.love, BigNumber(price))
                     owned++
                     BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
                     ownedLabel.setText("$owned")
                     price = (baseCost * multiplier.pow(owned)).toLong()
                     buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
+                    if (owned == 1)
+                        activatedAnimation = true
                 }
             }
         })
@@ -216,6 +234,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         activated = false
 
         timeProgress.width = 0f
+
+        activateButton.actions.clear()
+        activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
 
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
         BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
