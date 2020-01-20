@@ -3,13 +3,13 @@ package no.sandramoen.loveentity.actors
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -55,8 +55,42 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // color = Color(random(0, 255) / 255f, random(0, 255) / 255f, random(0, 255) / 255f, 1f)
         color = Color.DARK_GRAY
 
-        nameLabel = Label(name, BaseGame.labelStyle)
+        nameLabel = Label(resourceName, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
+
+        // info table
+        val infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
+        infoLabel.color = Color.PURPLE
+        infoLabel.setWrap(true)
+        infoLabel.setFontScale(.3f)
+
+        val infoTable = Table()
+        infoTable.add(infoLabel).expand().fill()//.padTop(70f)
+        infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
+        infoTable.isVisible = false
+        infoTable.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                infoTable.isVisible = !infoTable.isVisible
+            }
+        })
+        // infoTable.debug = true
+
+        val buttonStyle = Button.ButtonStyle()
+        val buttonTex = BaseGame.textureAtlas!!.findRegion("info")
+        val buttonRegion = TextureRegion(buttonTex)
+        buttonStyle.up = TextureRegionDrawable(buttonRegion)
+        val infoButton = Button(buttonStyle)
+
+        val nameAndInfoTable = Table()
+        nameAndInfoTable.add(nameLabel)
+        nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height*.02f).padLeft(10f)
+        nameAndInfoTable.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                infoTable.isVisible = !infoTable.isVisible
+            }
+        })
+
+        // nameAndInfoTable.debug = true
 
         // load game state
         owned = BaseGame.prefs!!.getInteger(name + "Owned")
@@ -70,11 +104,17 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         table.width = selfWidth
         table.height = selfHeight
 
-        table.add(nameLabel).top().colspan(3).row()
+        table.add(nameAndInfoTable).top().colspan(2).row()
         table.add(leftTable(s)).pad(selfWidth * .01f) // TODO: set height and width here
         table.add(rightTable(s))
+        table.align(Align.center)
 
-        addActor(table)
+        val stack = Stack() // stack allows for scene2d elements to overlap each other
+        stack.add(table)
+        stack.add(infoTable)
+        stack.width = selfWidth // fill x
+        stack.height = selfHeight // fill y
+        addActor(stack)
 
         /*table.debug()
         this.debug*/
