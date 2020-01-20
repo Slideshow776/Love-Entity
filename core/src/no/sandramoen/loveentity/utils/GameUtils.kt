@@ -13,6 +13,7 @@ class GameUtils {
         fun saveGameState() {
             putBigNumber("love", BaseGame.love)
             BaseGame.prefs!!.putLong("lastTimePlayed", Date().time)
+            BaseGame.prefs!!.putInteger("revealNextGeneratorIndex", BaseGame.revealNextGeneratorIndex)
             BaseGame.prefs!!.flush()
         }
 

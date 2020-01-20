@@ -26,6 +26,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
     private lateinit var assetManager: AssetManager
     private lateinit var fontGenerator: FreeTypeFontGenerator
+
     init {
         game = this
     }
@@ -39,7 +40,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         // game state
         var prefs: Preferences? = null
-        var love = BigNumber(0)
+        lateinit var love: BigNumber
+        var revealNextGeneratorIndex = 0
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
 
@@ -53,6 +55,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         prefs = Gdx.app.getPreferences("loveEntityGameState")
         love = GameUtils.getBigNumber("love")
+        if (love.maxNumber.size == 0) love = BigNumber(0)
+        revealNextGeneratorIndex = BaseGame.prefs!!.getInteger("revealNextGeneratorIndex")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
 

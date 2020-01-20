@@ -24,6 +24,10 @@ class LevelScreen : BaseScreen() {
     private lateinit var burgerButton: Button
     private var burgerMenuActive = false
 
+    private var revealNextGenerator = false
+
+    private lateinit var table: Table
+
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
 
@@ -47,7 +51,7 @@ class LevelScreen : BaseScreen() {
 
         val burgerTable = Table()
 
-        // debug options
+        /* debug options------------------------------------------------------------------------------------------ */
         val debugButton1 = TextButton("Add 1k love", BaseGame.textButtonStyle)
         val debugButton2 = TextButton("Add 100k love", BaseGame.textButtonStyle)
         val debugButton3 = TextButton("Add 1M love", BaseGame.textButtonStyle)
@@ -82,11 +86,20 @@ class LevelScreen : BaseScreen() {
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BigNumber(0)
+                BaseGame.revealNextGeneratorIndex = 0
                 for (generator in resourceGenerators)
                     generator.reset()
+
+                table.reset()
+                table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
+                for (i in 0 until 2) {
+                    table.add(resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                    resourceGenerators[i].isVisible = true // solves a visibility bug
+                }
             }
             false
         }
+        /* ------------------------------------------------------------------------------------------------------- */
 
         burgerTable.add(debugButton1).row()
         burgerTable.add(debugButton2).row()
@@ -122,10 +135,20 @@ class LevelScreen : BaseScreen() {
 
         val scrollableTable = Table()
 
-        val table = Table()
+        table = Table()
         table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
-        for (generator in resourceGenerators) {
-            table.add(generator).padBottom(Gdx.graphics.height * .07f).row()
+        if (BaseGame.revealNextGeneratorIndex < 1) {
+            for (i in 0 until 2) {
+                table.add(resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                resourceGenerators[i].isVisible = true // solves a visibility bug
+            }
+        } else {
+            for (i in 0 until BaseGame.revealNextGeneratorIndex) {
+                table.add(resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                resourceGenerators[i].isVisible = true // solves a visibility bug
+                resourceGenerators[i].hideTable.isVisible = false
+            }
+            revealTwoNextGenerators()
         }
 
         val scroll = ScrollPane(table)
@@ -143,12 +166,19 @@ class LevelScreen : BaseScreen() {
         // mainTable.debug = true
         // uiTable.debug = true
         // table.debug = true
-        // scrollableTable.debug = true
     }
 
     override fun update(dt: Float) {
         loveCountLabel.setText("${BaseGame.love.presentLongScale()} love")
+
+        if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size &&
+                BaseGame.love.isGreaterThanOrEqualTo(BigNumber(resourceGenerators[BaseGame.revealNextGeneratorIndex].baseCost)))
+            revealNextGenerator = true
+
+        if (revealNextGenerator)
+            revealNextGenerator()
     }
+
 
     override fun resume() { // TODO: This may cause a bug if game is paused in another screen? further testing required
         super.resume()
@@ -158,5 +188,32 @@ class LevelScreen : BaseScreen() {
         if (BaseGame.lastTimePlayed != 0L) BaseGame.secondsSinceLastPlayed = (Date().time - BaseGame.lastTimePlayed) / 1000
         for (generator in resourceGenerators)
             generator.addLoveSinceLastTimedPlayed()
+    }
+
+    private fun revealNextGenerator() {
+        if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size) {
+            resourceGenerators[BaseGame.revealNextGeneratorIndex].exposeResourceGenerator()
+
+            if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size)
+                BaseGame.revealNextGeneratorIndex++
+            if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size - 1) {
+                table.add(resourceGenerators[BaseGame.revealNextGeneratorIndex + 1]).padBottom(Gdx.graphics.height * .07f).row()
+                resourceGenerators[BaseGame.revealNextGeneratorIndex + 1].isVisible = true
+            }
+
+            BaseGame.prefs!!.putInteger("revealNextGenerator", BaseGame.revealNextGeneratorIndex)
+            revealNextGenerator = false
+        }
+    }
+
+    private fun revealTwoNextGenerators() {
+        for (i in 0 until 2) {
+            if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size) {
+                if (BaseGame.revealNextGeneratorIndex < resourceGenerators.size - 1) {
+                    table.add(resourceGenerators[BaseGame.revealNextGeneratorIndex + i]).padBottom(Gdx.graphics.height * .07f).row()
+                    resourceGenerators[BaseGame.revealNextGeneratorIndex + i].isVisible = true
+                }
+            }
+        }
     }
 }

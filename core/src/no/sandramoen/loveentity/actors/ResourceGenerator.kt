@@ -3,6 +3,8 @@ package no.sandramoen.loveentity.actors
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -23,6 +25,9 @@ import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
                         name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
+    var hideTable: Table
+    private var heartIcon: BaseActor
+
     private var table: Table
     private var resourceName: String = name
     private var nameLabel: Label
@@ -33,11 +38,11 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var activated = false
     private var activatedAnimation = false
 
-    private var owned: Int = 0
-    private var baseCost: Long = baseCost
+    var owned: Int = 0
+    var baseCost: Long = baseCost
     private var multiplier: Float = multiplier
     private var price: Long = baseCost * multiplier.pow(owned).toLong()
-    private var income: Float = income.toFloat()
+    private var income: Float = income
     private var incomeTime: Float = incomeTime
     private var time: Float = 0f
     private var fraction: Float = 0f
@@ -49,6 +54,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var timeProgress: BaseActor
 
     init {
+        this.isVisible = false // solves a visibility bug
         loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
         width = selfWidth
         height = selfHeight
@@ -58,6 +64,36 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         nameLabel = Label(resourceName, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
 
+        // load game state
+        owned = BaseGame.prefs!!.getInteger(name + "Owned")
+        time = BaseGame.prefs!!.getFloat(name + "Time")
+        activated = BaseGame.prefs!!.getBoolean(name + "Activated")
+        activatedAnimation = owned >= 1 && !activated
+        price = baseCost * multiplier.pow(owned).toLong()
+        addLoveSinceLastTimedPlayed()
+
+        // hide table
+        val hideLabel = Label("???", BaseGame.labelStyle)
+        hideLabel.color = Color.PURPLE
+        heartIcon = BaseActor(0f, 0f, s)
+        heartIcon.loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
+        heartIcon.width = 40f
+        heartIcon.height = 40f
+        val baseCostLabel = Label("${BigNumber(baseCost).presentLongScale()}", BaseGame.labelStyle)
+        baseCostLabel.setFontScale(.5f)
+
+        hideTable = Table()
+        hideTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), 1f))
+        hideTable.isVisible = owned <= 0
+        hideTable.isTransform = true
+        hideTable.setOrigin(0f, Gdx.graphics.height*.058f)
+        hideTable.scaleBy(0f, .355f) // TODO
+
+        hideTable.add(hideLabel).colspan(2).row()
+        hideTable.add(heartIcon).padRight(10f)
+        hideTable.add(baseCostLabel)
+        // hideTable.debug = true
+
         // info table
         val infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
         infoLabel.color = Color.PURPLE
@@ -65,7 +101,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         infoLabel.setFontScale(.3f)
 
         val infoTable = Table()
-        infoTable.add(infoLabel).expand().fill()//.padTop(70f)
+        infoTable.add(infoLabel).expand().fill()
         infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
         infoTable.isVisible = false
         infoTable.addListener(object : ActorGestureListener() {
@@ -83,27 +119,16 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         val nameAndInfoTable = Table()
         nameAndInfoTable.add(nameLabel)
-        nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height*.02f).padLeft(10f)
+        nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height * .02f).padLeft(10f)
         nameAndInfoTable.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 infoTable.isVisible = !infoTable.isVisible
             }
         })
-
         // nameAndInfoTable.debug = true
-
-        // load game state
-        owned = BaseGame.prefs!!.getInteger(name + "Owned")
-        time = BaseGame.prefs!!.getFloat(name + "Time")
-        activated = BaseGame.prefs!!.getBoolean(name + "Activated")
-        price = baseCost * multiplier.pow(owned).toLong()
-        addLoveSinceLastTimedPlayed()
 
         // table
         table = Table()
-        table.width = selfWidth
-        table.height = selfHeight
-
         table.add(nameAndInfoTable).top().colspan(2).row()
         table.add(leftTable(s)).pad(selfWidth * .01f) // TODO: set height and width here
         table.add(rightTable(s))
@@ -112,6 +137,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val stack = Stack() // stack allows for scene2d elements to overlap each other
         stack.add(table)
         stack.add(infoTable)
+        stack.add(hideTable)
         stack.width = selfWidth // fill x
         stack.height = selfHeight // fill y
         addActor(stack)
@@ -281,6 +307,21 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
         BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
         BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
+
+        isVisible = false
+        hideTable.isVisible = true
+        heartIcon.isVisible = true
+        hideTable.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
+        heartIcon.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
+    }
+
+    fun exposeResourceGenerator() {
+        hideTable.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
+        heartIcon.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
+        hideTable.addAction(Actions.sequence(
+                Actions.delay(1f),
+                Actions.run { hideTable.isVisible = false }
+        ))
     }
 
     private fun labelTime(timeInSeconds: Float) { // labels time, e.g. "1h 23m 17s"
