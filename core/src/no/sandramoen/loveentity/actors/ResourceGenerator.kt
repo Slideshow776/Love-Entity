@@ -29,12 +29,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var heartIcon: BaseActor
 
     private var table: Table
-    private var resourceName: String = name
+    var resourceName: String = name
     private var nameLabel: Label
 
     private var selfWidth = Gdx.graphics.width * .95f // 600f
     private var selfHeight = 300f
 
+    var hasCommunityLeader = false
     private var activated = false
     private var activatedAnimation = false
 
@@ -67,7 +68,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // load game state
         owned = BaseGame.prefs!!.getInteger(name + "Owned")
         time = BaseGame.prefs!!.getFloat(name + "Time")
-        activated = BaseGame.prefs!!.getBoolean(name + "Activated")
+        hasCommunityLeader = BaseGame.prefs!!.getBoolean(name + "HasCommunityLeader")
         activatedAnimation = owned >= 1 && !activated
         price = baseCost * multiplier.pow(owned).toLong()
         addLoveSinceLastTimedPlayed()
@@ -77,8 +78,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         hideLabel.color = Color.PURPLE
         heartIcon = BaseActor(0f, 0f, s)
         heartIcon.loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
-        heartIcon.width = 40f
-        heartIcon.height = 40f
+        heartIcon.width = 60f
+        heartIcon.height = 60f
         val baseCostLabel = Label("${BigNumber(baseCost).presentLongScale()}", BaseGame.labelStyle)
         baseCostLabel.setFontScale(.5f)
 
@@ -86,7 +87,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         hideTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), 1f))
         hideTable.isVisible = owned <= 0
         hideTable.isTransform = true
-        hideTable.setOrigin(0f, Gdx.graphics.height*.058f)
+        hideTable.setOrigin(0f, Gdx.graphics.height * .058f)
         hideTable.scaleBy(0f, .355f) // TODO
 
         hideTable.add(hideLabel).colspan(2).row()
@@ -132,7 +133,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         table.add(nameAndInfoTable).top().colspan(2).row()
         table.add(leftTable(s)).pad(selfWidth * .01f) // TODO: set height and width here
         table.add(rightTable(s))
-        table.align(Align.center)
+        // table.align(Align.center)
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
         stack.add(table)
@@ -162,15 +163,18 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 }
             }
 
-            // activated = false
-            activated = true
+            if (hasCommunityLeader)
+                activated = true
+            else
+                activated = false
+
             if (!activated)
                 activatedAnimation = true
             time = 0f
             timeProgress.width = 0f
         }
 
-        if (activated) {
+        if (activated || (hasCommunityLeader && owned > 0)) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
             labelTime(time)
@@ -219,7 +223,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 if (owned > 0) {
                     activated = true
                     activatedAnimation = false
-                    BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
+                    BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", true)
                 }
             }
             false
@@ -298,6 +302,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         time = 0f
         timeLabel.setText("?")
         activated = false
+        hasCommunityLeader = false
 
         timeProgress.width = 0f
 
@@ -305,7 +310,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
 
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-        BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
+        BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
         BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
 
         isVisible = false

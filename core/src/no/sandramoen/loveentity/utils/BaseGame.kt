@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
+import com.badlogic.gdx.utils.Array
+import no.sandramoen.loveentity.actors.ResourceGenerator
 import java.util.Date
 
 abstract class BaseGame : Game(), AssetErrorListener {
@@ -44,6 +46,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var revealNextGeneratorIndex = 0
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
+        lateinit var resourceGenerators: Array<ResourceGenerator>
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
@@ -53,15 +56,17 @@ abstract class BaseGame : Game(), AssetErrorListener {
     override fun create() {
         Gdx.input.inputProcessor = InputMultiplexer() // discrete input
 
+        // global variables
         prefs = Gdx.app.getPreferences("loveEntityGameState")
         love = GameUtils.getBigNumber("love")
         if (love.maxNumber.size == 0) love = BigNumber(0)
         revealNextGeneratorIndex = BaseGame.prefs!!.getInteger("revealNextGeneratorIndex")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
+        resourceGenerators = Array()
 
         // asset manager
-        val assetManager = AssetManager()
+        assetManager = AssetManager()
         assetManager.setErrorListener(this)
 
         assetManager.load("images/packed/loveEntity.pack.atlas", TextureAtlas::class.java)
@@ -95,6 +100,16 @@ abstract class BaseGame : Game(), AssetErrorListener {
         textButtonStyle!!.fontColor = Color.PINK
     }
 
+    override fun resume() {
+        super.resume()
+
+        // add love generated since pausing
+        lastTimePlayed = prefs!!.getLong("lastTimePlayed")
+        if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
+        for (generator in BaseGame.resourceGenerators)
+            generator.addLoveSinceLastTimedPlayed()
+    }
+
     override fun pause() {
         super.pause()
         GameUtils.saveGameState()
@@ -103,8 +118,12 @@ abstract class BaseGame : Game(), AssetErrorListener {
     override fun dispose() {
         GameUtils.saveGameState()
         super.dispose()
-        assetManager.dispose()
-        fontGenerator.dispose()
+        try {
+            assetManager.dispose()
+            fontGenerator.dispose()
+        } catch (error: UninitializedPropertyAccessException) {
+            Gdx.app.error("BaseGame", "Error $error")
+        }
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {
