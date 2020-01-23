@@ -1,6 +1,7 @@
 package no.sandramoen.loveentity.screens.gameplay
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
@@ -31,16 +32,18 @@ class LevelScreen : BaseScreen() {
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
 
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 15, 1.15f, .1f, 1f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 100, 1.15f, .5f, 2f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 500, 1.15f, 4f, 4f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 3000, 1.15f, 10f, 8f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 10000, 1.15f, 40f, 16f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 200000, 1.15f, 100f, 32f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 1666666, 1.15f, 6666f, 64f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 123456789, 1.15f, 98765f, 128f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 3999999999, 1.15f, 999999f, 256f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
+        if (BaseGame.resourceGenerators.size != 10) {
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 15, 1.15f, .1f, 1f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 100, 1.15f, .5f, 2f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 500, 1.15f, 4f, 4f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 3000, 1.15f, 10f, 8f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 10000, 1.15f, 40f, 16f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 200000, 1.15f, 100f, 32f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 1666666, 1.15f, 6666f, 64f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 123456789, 1.15f, 98765f, 128f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 3999999999, 1.15f, 999999f, 256f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
+        }
 
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
@@ -82,7 +85,7 @@ class LevelScreen : BaseScreen() {
             }
             false
         }
-        debugButton5.addListener { e: Event ->
+        debugButton5.addListener { e: Event -> // the restart button
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BigNumber(0)
                 BaseGame.revealNextGeneratorIndex = 0
@@ -95,6 +98,7 @@ class LevelScreen : BaseScreen() {
                     table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
                     BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
                 }
+                update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
         }
@@ -107,9 +111,6 @@ class LevelScreen : BaseScreen() {
         /* ------------------------------------------------------------------------------------------------------- */
 
         val communityLeadersButton = TextButton("Community Leaders", BaseGame.textButtonStyle)
-        communityLeadersButton.isTransform = true
-        communityLeadersButton.scaleBy(-.5f)
-        communityLeadersButton.setOrigin(Align.center)
         communityLeadersButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.setActiveScreen(CommunityLeadersScreen())
@@ -117,6 +118,15 @@ class LevelScreen : BaseScreen() {
             false
         }
         burgerTable.add(communityLeadersButton).row()
+
+        val upgradesButton = TextButton("Upgrades", BaseGame.textButtonStyle)
+        upgradesButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.setActiveScreen(UpgradesScreen())
+            }
+            false
+        }
+        burgerTable.add(upgradesButton).row()
 
         burgerTable.isVisible = false
 

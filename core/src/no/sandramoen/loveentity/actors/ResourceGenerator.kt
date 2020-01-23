@@ -26,6 +26,7 @@ import kotlin.math.pow
 class ResourceGenerator(x: Float, y: Float, s: Stage,
                         name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
     var hideTable: Table
+    var infoTable: Table
     private var heartIcon: BaseActor
 
     private var table: Table
@@ -36,6 +37,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var selfHeight = 300f
 
     var hasCommunityLeader = false
+    var upgrade: Int = 1
     private var activated = false
     private var activatedAnimation = false
 
@@ -66,9 +68,11 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         nameLabel.setFontScale(.75f)
 
         // load game state
-        owned = BaseGame.prefs!!.getInteger(name + "Owned")
-        time = BaseGame.prefs!!.getFloat(name + "Time")
-        hasCommunityLeader = BaseGame.prefs!!.getBoolean(name + "HasCommunityLeader")
+        owned = BaseGame.prefs!!.getInteger(resourceName + "Owned")
+        time = BaseGame.prefs!!.getFloat(resourceName + "Time")
+        hasCommunityLeader = BaseGame.prefs!!.getBoolean(resourceName + "HasCommunityLeader")
+        if (BaseGame.prefs!!.getInteger(resourceName + "Upgrade") > 0)
+            upgrade = BaseGame.prefs!!.getInteger(resourceName + "Upgrade")
         activatedAnimation = owned >= 1 && !activated
         price = baseCost * multiplier.pow(owned).toLong()
         addLoveSinceLastTimedPlayed()
@@ -88,7 +92,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         hideTable.isVisible = owned <= 0
         hideTable.isTransform = true
         hideTable.setOrigin(0f, Gdx.graphics.height * .058f)
-        hideTable.scaleBy(0f, .355f) // TODO
+        hideTable.scaleBy(0f, .355f)
 
         hideTable.add(hideLabel).colspan(2).row()
         hideTable.add(heartIcon).padRight(10f)
@@ -101,7 +105,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
 
-        val infoTable = Table()
+        infoTable = Table()
         infoTable.add(infoLabel).expand().fill()
         infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
         infoTable.isVisible = false
@@ -154,19 +158,16 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (time >= incomeTime) {
             val product = income * owned
             if (product >= 1) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber((income * owned).toLong()))
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber((income * owned).toLong() * upgrade))
             } else { // hack to support BigNumber fractions
-                fraction += (product - floor(product))
+                fraction += (product - floor(product)) * upgrade
                 if (fraction >= 1) {
                     BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(fraction.toLong()))
                     fraction -= 1
                 }
             }
 
-            if (hasCommunityLeader)
-                activated = true
-            else
-                activated = false
+            activated = hasCommunityLeader
 
             if (!activated)
                 activatedAnimation = true
@@ -223,7 +224,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 if (owned > 0) {
                     activated = true
                     activatedAnimation = false
-                    BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", true)
                 }
             }
             false
@@ -303,6 +303,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         timeLabel.setText("?")
         activated = false
         hasCommunityLeader = false
+        upgrade = 1
 
         timeProgress.width = 0f
 
@@ -311,11 +312,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
         BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
+        BaseGame.prefs!!.putInteger(resourceName + "Upgrade", 1)
         BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
 
         isVisible = false
         hideTable.isVisible = true
         heartIcon.isVisible = true
+        infoTable.isVisible = false
         hideTable.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
         heartIcon.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
     }

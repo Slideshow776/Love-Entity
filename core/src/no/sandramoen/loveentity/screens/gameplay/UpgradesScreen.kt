@@ -10,23 +10,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
-import no.sandramoen.loveentity.actors.CommunityLeader
+import no.sandramoen.loveentity.actors.Upgrade
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
 
-class CommunityLeadersScreen : BaseScreen() {
+class UpgradesScreen : BaseScreen() {
     private lateinit var titleLabel: Label
     private lateinit var loveLabel: Label
     private lateinit var subtitleLabel: Label
     private lateinit var descriptionLabel: Label
 
-    private lateinit var communityLeaders: Array<CommunityLeader>
-    private lateinit var communityLeadersTable: Table
+    private lateinit var upgrades: Array<Upgrade>
+    private lateinit var upgradesTable: Table
 
     override fun initialize() {
-        titleLabel = Label("Community Leaders", BaseGame.labelStyle)
+        titleLabel = Label("Upgrades", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
 
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
@@ -73,17 +73,16 @@ class CommunityLeadersScreen : BaseScreen() {
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
         infoButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) { // TODO
-                println("infoButton touch down!")
+            if (GameUtils.isTouchDownEvent(e)) {
                 infoTable.isVisible = !infoTable.isVisible
             }
             false
         }
 
         // upper table
-        subtitleLabel = Label("Community Leaders Make Compassion Easier!", BaseGame.labelStyle)
+        subtitleLabel = Label("Upgrade your compassion capabilities!", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.3f)
-        descriptionLabel = Label("Recruit one to act as a continuous love hub for you when you're away!", BaseGame.labelStyle)
+        descriptionLabel = Label("Invest in these skills to give your compassion a boost", BaseGame.labelStyle)
         descriptionLabel.setFontScale(.25f)
 
         val upperTable = Table()
@@ -92,30 +91,43 @@ class CommunityLeadersScreen : BaseScreen() {
         upperTable.add(loveLabel)
         upperTable.add(infoButton).row()
         upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+        // upperTable.debug = true
 
-        // community leaders table
-        communityLeadersTable = Table()
-        communityLeaders = Array()
-        communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(10_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigNumber(1_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigNumber(10_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigNumber(100_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigNumber(1_000_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigNumber(10_000_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigNumber(100_000_000_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigNumber(1_000_000_000_000)))
-        initializeCommunityLeaders()
+        // upgrades table
+        upgradesTable = Table()
+        upgrades = Array()
+        // this systems assumes all upgrades are multiplicable of 3's
+        if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
+            upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(1_000)))
+        if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(10_000)))
+        if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(100_000)))
+        if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(1_000_000)))
+        if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
+        if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(100_000_000)))
+        if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(1_000_000_000)))
+        if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
+        if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(100_000_000_000)))
+        if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
+            upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(1_000_000_000_000)))
+        initializeUpgrades()
 
-        val scroll = ScrollPane(communityLeadersTable)
+        val scroll = ScrollPane(upgradesTable)
         val scrollableTable = Table()
         scrollableTable.add(scroll)
 
         // table layout
         val mainTable = Table()
+        mainTable.setFillParent(true)
 
-        mainTable.add(upperTable)
+        mainTable.add(upperTable).fillX()
         mainTable.row()
         mainTable.add(scrollableTable)
 
@@ -126,18 +138,15 @@ class CommunityLeadersScreen : BaseScreen() {
         mainTable.align(Align.top)
 
         mainStage.addActor(stack)
-
-        /*stack.debug = true
-        mainTable.debug = true*/
     }
 
     override fun update(dt: Float) {
         loveLabel.setText("${BaseGame.love.presentLongScale()} love")
 
-        for (i in 0 until communityLeaders.size) {
-            if (communityLeaders[i].remove) {
-                communityLeaders[i].remove()
-                initializeCommunityLeaders()
+        for (i in 0 until upgrades.size) {
+            if (upgrades[i].remove) {
+                upgrades[i].remove()
+                initializeUpgrades()
                 break
             }
         }
@@ -146,23 +155,22 @@ class CommunityLeadersScreen : BaseScreen() {
             generator.act(Gdx.graphics.deltaTime)
     }
 
-    private fun initializeCommunityLeaders() {
-        communityLeadersTable.reset()
-        communityLeadersTable.add(subtitleLabel).padTop(25f).row()
-        communityLeadersTable.add(descriptionLabel).padBottom(25f).row()
-        communityLeadersTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
+    private fun initializeUpgrades() {
+        upgradesTable.reset()
+        upgradesTable.add(subtitleLabel).padTop(25f).row()
+        upgradesTable.add(descriptionLabel).padBottom(25f).row()
+        upgradesTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
-        for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == communityLeaders.size
+        for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == upgrades.size
             if (BaseGame.resourceGenerators[i].isVisible &&
-                    !communityLeaders[i].remove &&
-                    !BaseGame.resourceGenerators[i].hasCommunityLeader) {
+                    !upgrades[i].remove) {
 
-                communityLeaders[i].isVisible = true
-                communityLeaders[i].checkAffordable()
-                communityLeadersTable.add(communityLeaders[i]).padBottom(Gdx.graphics.height * .07f).row()
+                upgrades[i].isVisible = true
+                upgrades[i].checkAffordable()
+                upgradesTable.add(upgrades[i]).padBottom(Gdx.graphics.height * .07f).row()
 
                 if (!BaseGame.resourceGenerators[i].hideTable.isVisible)
-                    communityLeaders[i].hideTable.isVisible = false
+                    upgrades[i].hideTable.isVisible = false
             }
         }
     }

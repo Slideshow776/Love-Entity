@@ -19,21 +19,21 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
 
-class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, description: String, price: BigNumber) : BaseActor(0f, 0f, s) {
+class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description: String, price: BigNumber) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
-
-    private var price = price
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
 
-    private var avatar: BaseActor
+    private var image: BaseActor
     private var nameLabel: Label
     private var descriptionLabel: Label
     private var heartIcon: BaseActor
     private var costLabel: Label
     private var button: TextButton
+
+    private var price = price
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -42,11 +42,11 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         width = selfWidth
         height = selfHeight
 
-        // avatar image
-        avatar = BaseActor(0f, 0f, s)
-        avatar.loadAnimation(BaseGame.textureAtlas!!.findRegion(avatarImage))
-        avatar.width = avatar.width * (selfHeight / avatar.height) // ensure aspect ratio
-        avatar.height = selfHeight
+        // image
+        image = BaseActor(0f, 0f, s)
+        image.loadAnimation(BaseGame.textureAtlas!!.findRegion(upgradeImage))
+        image.width = image.width * (selfHeight / image.height) // ensure aspect ratio
+        image.height = selfHeight
 
         // name
         nameLabel = Label(name, BaseGame.labelStyle)
@@ -68,7 +68,6 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         costLabel = Label("${price.presentLongScale()}", BaseGame.labelStyle)
         costLabel.setFontScale(.5f)
 
-
         val infoTable = Table()
         infoTable.width = selfWidth // fill x
         infoTable.height = selfHeight // fill y
@@ -79,9 +78,10 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         // infoTable.debug = true
 
         // button
-        button = TextButton("Recruit!", BaseGame.textButtonStyle)
+        button = TextButton("Invest!", BaseGame.textButtonStyle)
         button.isTransform = true
-        if (!BaseGame.love.isGreaterThanOrEqualTo(price)) button.color = Color.DARK_GRAY
+        if (!BaseGame.love.isGreaterThanOrEqualTo(price))
+            button.color = Color.DARK_GRAY
         button.scaleBy(-.2f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
@@ -89,13 +89,13 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
                 if (BaseGame.love.isGreaterThanOrEqualTo(price)) {
                     BaseGame.love = BaseGame.love.subtract(BaseGame.love, price)
                     GameUtils.saveGameState()
-                    BaseGame.resourceGenerators[id].hasCommunityLeader = true
-                    BaseGame.prefs!!.putBoolean(BaseGame.resourceGenerators[id].resourceName + "HasCommunityLeader", true)
+                    BaseGame.resourceGenerators[id].upgrade *= 3 // this systems assumes all upgrades are multiplicable of 3's
+                    BaseGame.prefs!!.putInteger(BaseGame.resourceGenerators[id].resourceName + "Upgrade", BaseGame.resourceGenerators[id].upgrade)
 
                     addAction(Actions.sequence(
                             Actions.parallel(
                                     Actions.alpha(0f, .5f, Interpolation.linear),
-                                    Actions.run { avatar.addAction(Actions.alpha(0f, .5f, Interpolation.linear)) },
+                                    Actions.run { image.addAction(Actions.alpha(0f, .5f, Interpolation.linear)) },
                                     Actions.run { heartIcon.addAction(Actions.alpha(0f, .5f, Interpolation.linear)) }
                             ),
                             Actions.run { remove = true }
@@ -124,7 +124,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         table.width = Gdx.graphics.width.toFloat() * 1.0f
         table.height = selfHeight
 
-        table.add(avatar).padRight(20f)
+        table.add(image).padRight(20f)
         table.add(infoTable)
         table.add(button).padLeft(-40f)
         // table.debug = true
@@ -139,7 +139,9 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     }
 
     fun checkAffordable() {
-        if (!BaseGame.love.isGreaterThanOrEqualTo(price))
+        if (BaseGame.love.isGreaterThanOrEqualTo(price))
+            button.color = Color.WHITE
+        else
             button.color = Color.DARK_GRAY
     }
 

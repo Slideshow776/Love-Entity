@@ -86,8 +86,17 @@ abstract class BaseGame : Game(), AssetErrorListener {
         fontParameters.borderStraight = true
         fontParameters.minFilter = Texture.TextureFilter.Linear
         fontParameters.magFilter = Texture.TextureFilter.Linear
-
         val customFont = fontGenerator.generateFont(fontParameters)
+
+        val buttonFontParameters = FreeTypeFontParameter()
+        buttonFontParameters.size = (.04f * Gdx.graphics.height).toInt() // If the resolutions height is 1440 then the font size becomes 86
+        buttonFontParameters.color = Color.WHITE
+        buttonFontParameters.borderWidth = 2f
+        buttonFontParameters.borderColor = Color.BLACK
+        buttonFontParameters.borderStraight = true
+        buttonFontParameters.minFilter = Texture.TextureFilter.Linear
+        buttonFontParameters.magFilter = Texture.TextureFilter.Linear
+        val buttonCustomFont = fontGenerator.generateFont(buttonFontParameters)
 
         labelStyle = LabelStyle()
         labelStyle!!.font = customFont
@@ -96,7 +105,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         val buttonTex = textureAtlas!!.findRegion("button")
         val buttonPatch = NinePatch(buttonTex, 24, 24, 24, 24)
         textButtonStyle!!.up = NinePatchDrawable(buttonPatch)
-        textButtonStyle!!.font = customFont
+        textButtonStyle!!.font = buttonCustomFont
         textButtonStyle!!.fontColor = Color.PINK
     }
 
@@ -118,12 +127,15 @@ abstract class BaseGame : Game(), AssetErrorListener {
     override fun dispose() {
         GameUtils.saveGameState()
         super.dispose()
-        try {
+
+        assetManager.dispose()
+        fontGenerator.dispose()
+        /*try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()
         } catch (error: UninitializedPropertyAccessException) {
             Gdx.app.error("BaseGame", "Error $error")
-        }
+        }*/
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {
