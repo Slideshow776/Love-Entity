@@ -20,7 +20,14 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
         addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1))
+                if (BaseGame.currentAscensionPoints > 0) {
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1 * (BaseGame.currentAscensionPoints * 2)))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1 * (BaseGame.currentAscensionPoints * 2)))
+                } else {
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1))
+                }
+
                 addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
                 addAction(Actions.delay(.25f))
                 addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))

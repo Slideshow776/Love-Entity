@@ -33,15 +33,14 @@ class CommunityLeadersScreen : BaseScreen() {
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
-        exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross")))
+        exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
         val exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(LevelScreen())
-            }
             false
         }
 
@@ -73,10 +72,8 @@ class CommunityLeadersScreen : BaseScreen() {
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
         infoButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) { // TODO
-                println("infoButton touch down!")
+            if (GameUtils.isTouchDownEvent(e))
                 infoTable.isVisible = !infoTable.isVisible
-            }
             false
         }
 

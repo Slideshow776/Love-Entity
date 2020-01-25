@@ -29,6 +29,8 @@ class LevelScreen : BaseScreen() {
 
     private lateinit var table: Table
 
+    private var time = 0f
+
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
 
@@ -57,37 +59,48 @@ class LevelScreen : BaseScreen() {
         val debugButton1 = TextButton("Add 1k love", BaseGame.textButtonStyle)
         val debugButton2 = TextButton("Add 100k love", BaseGame.textButtonStyle)
         val debugButton3 = TextButton("Add 1M love", BaseGame.textButtonStyle)
-        val debugButton4 = TextButton("Add 100M love", BaseGame.textButtonStyle)
+        val debugButton4 = TextButton("Add 1T love", BaseGame.textButtonStyle)
         val debugButton5 = TextButton("Restart", BaseGame.textButtonStyle)
 
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1_000))
+                update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
         }
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(100_000))
+                update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
         }
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000_000))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1_000_000))
+                update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
         }
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000_000))
-                // BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(999_999_999_999_999_999))
+                /*BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000_000))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(100_000_000))*/
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(999_999_999_999_999_999))
+                BaseGame.lifeTimeLove = BaseGame.love.add(BaseGame.lifeTimeLove, BigNumber(999_999_999_999_999_999))
+                update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
         }
-        debugButton5.addListener { e: Event -> // the restart button
+        debugButton5.addListener { e: Event ->
+            // the restart button
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BigNumber(0)
+                BaseGame.lifeTimeLove = BigNumber(0)
                 BaseGame.revealNextGeneratorIndex = 0
                 for (generator in BaseGame.resourceGenerators)
                     generator.reset()
@@ -112,21 +125,27 @@ class LevelScreen : BaseScreen() {
 
         val communityLeadersButton = TextButton("Community Leaders", BaseGame.textButtonStyle)
         communityLeadersButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(CommunityLeadersScreen())
-            }
             false
         }
         burgerTable.add(communityLeadersButton).row()
 
         val upgradesButton = TextButton("Upgrades", BaseGame.textButtonStyle)
         upgradesButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(UpgradesScreen())
-            }
             false
         }
         burgerTable.add(upgradesButton).row()
+
+        val ascensionButton = TextButton("Ascension", BaseGame.textButtonStyle)
+        ascensionButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e))
+                BaseGame.setActiveScreen(AscensionScreen())
+            false
+        }
+        burgerTable.add(ascensionButton).row()
 
         burgerTable.isVisible = false
 
@@ -138,7 +157,7 @@ class LevelScreen : BaseScreen() {
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .0f))
                     burgerTable.isVisible = false
                 } else {
-                    burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("cross"))
+                    burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("cross-white"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
                     burgerTable.isVisible = true
                 }
@@ -199,6 +218,12 @@ class LevelScreen : BaseScreen() {
 
         if (revealNextGenerator)
             revealNextGenerator()
+
+        time += dt
+        if (time > 1) { // calculate every second
+            time = 0f
+            GameUtils.calculateAscension()
+        }
     }
 
     private fun revealNextGenerator() {

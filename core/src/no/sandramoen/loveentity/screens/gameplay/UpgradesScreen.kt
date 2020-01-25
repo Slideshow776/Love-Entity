@@ -33,15 +33,14 @@ class UpgradesScreen : BaseScreen() {
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
-        exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross")))
+        exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
         val exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(LevelScreen())
-            }
             false
         }
 
@@ -73,9 +72,8 @@ class UpgradesScreen : BaseScreen() {
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
         infoButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e))
                 infoTable.isVisible = !infoTable.isVisible
-            }
             false
         }
 
@@ -162,8 +160,8 @@ class UpgradesScreen : BaseScreen() {
         upgradesTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
         for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == upgrades.size
-            if (BaseGame.resourceGenerators[i].isVisible &&
-                    !upgrades[i].remove) {
+            if (BaseGame.resourceGenerators.size == upgrades.size &&
+                    BaseGame.resourceGenerators[i].isVisible && !upgrades[i].remove) {
 
                 upgrades[i].isVisible = true
                 upgrades[i].checkAffordable()

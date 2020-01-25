@@ -43,10 +43,13 @@ abstract class BaseGame : Game(), AssetErrorListener {
         // game state
         var prefs: Preferences? = null
         lateinit var love: BigNumber
+        lateinit var lifeTimeLove: BigNumber
         var revealNextGeneratorIndex = 0
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
         lateinit var resourceGenerators: Array<ResourceGenerator>
+        var currentAscensionPoints: Long = 1L
+        var claimAscensionPoints: Long = 0L
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
@@ -59,16 +62,18 @@ abstract class BaseGame : Game(), AssetErrorListener {
         // global variables
         prefs = Gdx.app.getPreferences("loveEntityGameState")
         love = GameUtils.getBigNumber("love")
+        lifeTimeLove = GameUtils.getBigNumber("lifeTimeLove")
         if (love.maxNumber.size == 0) love = BigNumber(0)
+        if (lifeTimeLove.maxNumber.size == 0) lifeTimeLove = BigNumber(0)
         revealNextGeneratorIndex = BaseGame.prefs!!.getInteger("revealNextGeneratorIndex")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
         resourceGenerators = Array()
+        currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
 
         // asset manager
         assetManager = AssetManager()
         assetManager.setErrorListener(this)
-
         assetManager.load("images/packed/loveEntity.pack.atlas", TextureAtlas::class.java)
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))

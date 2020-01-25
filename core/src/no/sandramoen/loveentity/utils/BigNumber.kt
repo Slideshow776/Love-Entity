@@ -17,25 +17,6 @@ class BigNumber(number: Long) {
         maxNumber = convertNumberToArray(number)
     }
 
-    private fun labelBigNumber(name: String, current: Int): String {
-        var number = ""
-
-        // integers
-        for (i in current until maxNumber.size)
-            number += maxNumber[i - current]
-
-        // decimals
-        when {
-            maxNumber[maxNumber.size - current + 2] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}${maxNumber[maxNumber.size - current + 1]}${maxNumber[maxNumber.size - current + 2]}"
-            maxNumber[maxNumber.size - current + 1] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}${maxNumber[maxNumber.size - current + 1]}"
-            maxNumber[maxNumber.size - current + 0] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}"
-        }
-
-        // add name
-        number += " $name"
-        return number
-    }
-
     fun presentLongScale(): String {
         removeLeadingZeroes()
         var number = ""
@@ -163,21 +144,10 @@ class BigNumber(number: Long) {
         }
 
         // initialize empty difference array
-        /*val difference = BigNumber(0)
-        for (i in 0 until minuend.size() - 1)
-            difference.maxNumber.add(0)*/
         var difference = BigNumber(0)
-        for (number in minuend.maxNumber) {
+        for (number in minuend.maxNumber)
             difference.maxNumber.add(number)
-        }
         difference.maxNumber.removeIndex(0)
-
-        // TODO: finish and test this algorithm
-        // perform the subtraction
-        /*for (i in 0 until minuend.maxNumber.size)
-            difference.maxNumber[i] = minuend.maxNumber[i]*/
-        /*for (i in 0 until subtrahend.maxNumber.size)
-            difference.maxNumber[i] -= subtrahend.maxNumber[i]*/
 
         for (i in (difference.size() - 1) downTo 0) {
             if (i > 0 && (difference.maxNumber[i] < subtrahend.maxNumber[i])) { // if we can borrow
@@ -224,6 +194,39 @@ class BigNumber(number: Long) {
                 return false
         }
         return true // numbers are of equal size
+    }
+
+    fun divideByExponent(number: Long): BigNumber {
+        for (i in 0 until number.toString().length - 1)
+            maxNumber.removeIndex(maxNumber.size - 1)
+        return this
+    }
+
+    fun convertBigNumberToString(): String {
+        removeLeadingZeroes()
+        var number = ""
+        for (i in 0 until maxNumber.size)
+            number += maxNumber[i]
+        return number
+    }
+
+    private fun labelBigNumber(name: String, current: Int): String {
+        var number = ""
+
+        // integers
+        for (i in current until maxNumber.size)
+            number += maxNumber[i - current]
+
+        // decimals
+        when {
+            maxNumber[maxNumber.size - current + 2] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}${maxNumber[maxNumber.size - current + 1]}${maxNumber[maxNumber.size - current + 2]}"
+            maxNumber[maxNumber.size - current + 1] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}${maxNumber[maxNumber.size - current + 1]}"
+            maxNumber[maxNumber.size - current + 0] > 0 -> number += ".${maxNumber[maxNumber.size - current + 0]}"
+        }
+
+        // add name
+        number += " $name"
+        return number
     }
 
     private fun size() = maxNumber.size

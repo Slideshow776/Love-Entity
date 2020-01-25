@@ -158,11 +158,21 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (time >= incomeTime) {
             val product = income * owned
             if (product >= 1) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber((income * owned).toLong() * upgrade))
+                val totalIncome = if (BaseGame.currentAscensionPoints > 0)
+                    (income * owned).toLong() * upgrade * (BaseGame.currentAscensionPoints * 2)
+                else
+                    (income * owned).toLong() * upgrade
+                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(totalIncome))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(totalIncome))
+                /* -------------------------------------- */
             } else { // hack to support BigNumber fractions
-                fraction += (product - floor(product)) * upgrade
+                if (BaseGame.currentAscensionPoints > 0)
+                    fraction += (product - floor(product)) * upgrade * (BaseGame.currentAscensionPoints * 2)
+                else
+                    fraction += (product - floor(product)) * upgrade
                 if (fraction >= 1) {
                     BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(fraction.toLong()))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(fraction.toLong()))
                     fraction -= 1
                 }
             }

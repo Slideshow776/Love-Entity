@@ -3,6 +3,7 @@ package no.sandramoen.loveentity.utils
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import java.util.Date
+import kotlin.math.sqrt
 
 class GameUtils {
     companion object {
@@ -12,8 +13,10 @@ class GameUtils {
 
         fun saveGameState() {
             putBigNumber("love", BaseGame.love)
+            putBigNumber("lifeTimeLove", BaseGame.love)
             BaseGame.prefs!!.putLong("lastTimePlayed", Date().time)
             BaseGame.prefs!!.putInteger("revealNextGeneratorIndex", BaseGame.revealNextGeneratorIndex)
+            BaseGame.prefs!!.putLong("currentAscensionPoints", BaseGame.currentAscensionPoints)
             BaseGame.prefs!!.flush()
         }
 
@@ -38,10 +41,34 @@ class GameUtils {
                 "Queer" -> return "Queer is an umbrella term for sexual and gender minorities who are not heterosexual or are not cisgender."
                 "Transgender" -> return "Transgender people have a gender identity or gender expression that differs from their sex assigned at birth."
                 "Intersex" -> return "Intersex people are individuals born with any of several variations in sex characteristics including chromosomes, gonads, sex hormones, or genitals that, according to the UN Office of the High Commissioner for Human Rights, \"do not fit the typical definitions for male or female bodies\"."
-                "Pansexual" -> return "Pansexuality, or omnisexuality,[1] is the sexual, romantic or emotional attraction towards people regardless of their sex or gender identity."
+                "Pansexual" -> return "Pansexuality, or omnisexuality,is the sexual, romantic or emotional attraction towards people regardless of their sex or gender identity."
                 "Asexual" -> return "Asexuality is the lack of sexual attraction to others, or low or absent interest in or desire for sexual activity."
                 else -> "GameUtils: Error: Could not get information for name: $name"
             }
+        }
+
+        fun calculateAscension() {
+            var quotient = 0.0
+            try {
+                try { // most precise
+                    quotient = BaseGame.lifeTimeLove.convertBigNumberToString().toDouble() / 1_000_000_000_000_000 // 10^15
+                } catch (error: ArithmeticException) { // second most precise
+                    quotient = BaseGame.lifeTimeLove.divideByExponent(15).maxNumber.toString().toDouble()
+                }
+            } catch (error: ArithmeticException) { // not precise, but works
+                quotient = (BaseGame.lifeTimeLove.maxNumber.size / 15).toDouble()
+            }
+            BaseGame.claimAscensionPoints = (150 * sqrt(quotient)).toLong()
+        }
+
+        fun reset() {
+            BaseGame.love = BigNumber(0)
+            BaseGame.revealNextGeneratorIndex = 0
+            BaseGame.lifeTimeLove = BigNumber(0)
+            BaseGame.revealNextGeneratorIndex = 0
+            for (generator in BaseGame.resourceGenerators)
+                generator.reset()
+            saveGameState()
         }
 
         private fun putBigNumber(value: String, bigNumber: BigNumber) {
