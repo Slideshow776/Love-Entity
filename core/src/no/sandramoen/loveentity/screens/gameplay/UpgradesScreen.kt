@@ -94,7 +94,7 @@ class UpgradesScreen : BaseScreen() {
         // upgrades table
         upgradesTable = Table()
         upgrades = Array()
-        // this systems assumes all upgrades are multiplicable of 3's
+        // this system assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
             upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
         if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
@@ -143,7 +143,6 @@ class UpgradesScreen : BaseScreen() {
 
         for (i in 0 until upgrades.size) {
             if (upgrades[i].remove) {
-                upgrades[i].remove()
                 initializeUpgrades()
                 break
             }
@@ -159,15 +158,13 @@ class UpgradesScreen : BaseScreen() {
         upgradesTable.add(descriptionLabel).padBottom(25f).row()
         upgradesTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
-        for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == upgrades.size
-            if (BaseGame.resourceGenerators.size == upgrades.size &&
-                    BaseGame.resourceGenerators[i].isVisible && !upgrades[i].remove) {
-
+        for (i in 0 until upgrades.size) {
+            if (BaseGame.resourceGenerators[upgrades[i].id].isVisible && !upgrades[i].remove) {
                 upgrades[i].isVisible = true
                 upgrades[i].checkAffordable()
                 upgradesTable.add(upgrades[i]).padBottom(Gdx.graphics.height * .07f).row()
 
-                if (!BaseGame.resourceGenerators[i].hideTable.isVisible)
+                if (!BaseGame.resourceGenerators[upgrades[i].id].hideTable.isVisible)
                     upgrades[i].hideTable.isVisible = false
             }
         }

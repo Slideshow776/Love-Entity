@@ -22,6 +22,7 @@ import no.sandramoen.loveentity.utils.GameUtils
 class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description: String, price: BigNumber) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
+    var id = id
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
