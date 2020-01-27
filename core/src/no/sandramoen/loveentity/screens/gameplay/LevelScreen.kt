@@ -35,16 +35,16 @@ class LevelScreen : BaseScreen() {
         heart = Heart(0f, 0f, mainStage)
 
         if (BaseGame.resourceGenerators.size != 10) {
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 15, 1.15f, .1f, 1f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 100, 1.15f, .5f, 2f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 500, 1.15f, 4f, 4f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 3000, 1.15f, 10f, 8f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 10000, 1.15f, 40f, 16f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 200000, 1.15f, 100f, 32f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 1666666, 1.15f, 6666f, 64f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 123456789, 1.15f, 98765f, 128f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 3999999999, 1.15f, 999999f, 256f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 75000000000, 1.15f, 10000000f, 512f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 4, 1.07f, 1f, .5f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 60, 1.15f, 60f, 3f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 720, 1.14f, 540f, 6f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 8640, 1.13f, 4320f, 12f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 103680, 1.12f, 51840f, 24f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 1244160, 1.11f, 622080f, 96f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 14929920, 1.1f, 7464960f, 384f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 179159040, 1.09f, 89579520f, 1536f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 2149908480, 1.08f, 1074954240f, 6144f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 25798901760, 1.07f, 29668737024f, 36864f))
         }
 
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
@@ -102,6 +102,7 @@ class LevelScreen : BaseScreen() {
                 BaseGame.love = BigNumber(0)
                 BaseGame.lifeTimeLove = BigNumber(0)
                 BaseGame.revealNextGeneratorIndex = 0
+                BaseGame.currentAscensionPoints = 0
                 for (generator in BaseGame.resourceGenerators)
                     generator.reset()
 
@@ -112,6 +113,7 @@ class LevelScreen : BaseScreen() {
                     BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
                 }
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
+                GameUtils.saveGameState()
             }
             false
         }

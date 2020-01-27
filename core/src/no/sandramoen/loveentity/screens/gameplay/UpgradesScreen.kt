@@ -96,25 +96,25 @@ class UpgradesScreen : BaseScreen() {
         upgrades = Array()
         // this systems assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-            upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(1_000)))
+            upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
         if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(10_000)))
+            upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(500)))
         if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(100_000)))
+            upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(1000000)))
         if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(1_000_000)))
+            upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(5000000)))
         if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
             upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
         if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(100_000_000)))
+            upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(25000000)))
         if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(1_000_000_000)))
+            upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(500000000)))
         if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
             upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
         if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(100_000_000_000)))
+            upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(250_000_000_000)))
         if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(1_000_000_000_000)))
+            upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(999999999999999999)))
         initializeUpgrades()
 
         val scroll = ScrollPane(upgradesTable)

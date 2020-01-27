@@ -12,6 +12,9 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BigNumber
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
+
+    val income = 4L
+
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
         width *= Gdx.graphics.width * .0065f
@@ -21,11 +24,11 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
                 if (BaseGame.currentAscensionPoints > 0) {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1 * (BaseGame.currentAscensionPoints * 2)))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1 * (BaseGame.currentAscensionPoints * 2)))
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * 2)))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * 2)))
                 } else {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1))
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income))
                 }
 
                 addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
