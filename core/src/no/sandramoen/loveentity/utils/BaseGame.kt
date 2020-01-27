@@ -82,6 +82,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         textureAtlas = assetManager.get("images/packed/loveEntity.pack.atlas") // all images are found in this global static variable
 
         // fonts
+        FreeTypeFontGenerator.setMaxTextureSize(2048) // solves font bug that won't show some characters like "." and "," in android
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans.ttf"))
         val fontParameters = FreeTypeFontParameter()
         fontParameters.size = (.059f * Gdx.graphics.height).toInt() // If the resolutions height is 1440 then the font size becomes 86
@@ -133,14 +134,14 @@ abstract class BaseGame : Game(), AssetErrorListener {
         GameUtils.saveGameState()
         super.dispose()
 
-        /*assetManager.dispose()
-        fontGenerator.dispose()*/
-        try { // TODO: uncomment this when development is done
+        assetManager.dispose()
+        fontGenerator.dispose()
+        /*try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()
         } catch (error: UninitializedPropertyAccessException) {
             Gdx.app.error("BaseGame", "Error $error")
-        }
+        }*/
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {

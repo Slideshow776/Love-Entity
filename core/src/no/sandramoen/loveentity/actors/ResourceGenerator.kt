@@ -359,6 +359,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         incomeTime = originalIncomeTime
         unlockIndex = 0
         ownedLabel.setText("$owned / ${unlocks[unlockIndex].goal}")
+        unlockProgression.width = 0f
 
         price = (baseCost * multiplier.pow(owned)).toLong()
         fraction = 0f
