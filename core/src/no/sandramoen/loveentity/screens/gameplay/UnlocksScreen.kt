@@ -1,6 +1,7 @@
 package no.sandramoen.loveentity.screens.gameplay
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
@@ -152,5 +153,11 @@ class UnlocksScreen : BaseScreen() {
     override fun update(dt: Float) {
         for (generator in BaseGame.resourceGenerators)
             generator.act(Gdx.graphics.deltaTime)
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if(keycode == Input.Keys.BACK)
+            BaseGame.setActiveScreen(LevelScreen())
+        return false;
     }
 }

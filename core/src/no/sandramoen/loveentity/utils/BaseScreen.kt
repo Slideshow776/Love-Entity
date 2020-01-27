@@ -3,6 +3,7 @@ package no.sandramoen.loveentity.utils
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -46,6 +47,7 @@ abstract class BaseScreen : Screen, InputProcessor {
 
     override fun show() {
         val im: InputMultiplexer = Gdx.input.inputProcessor as InputMultiplexer
+        Gdx.input.setCatchKey(Keys.BACK, true)
         im.addProcessor(this)
         im.addProcessor(uiStage)
         im.addProcessor(mainStage)

@@ -1,6 +1,7 @@
 package no.sandramoen.loveentity.screens.gameplay
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
@@ -235,6 +236,12 @@ class LevelScreen : BaseScreen() {
             time = 0f
             GameUtils.calculateAscension()
         }
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if(keycode == Input.Keys.BACK)
+            Gdx.app.exit()
+        return false;
     }
 
     private fun revealNextGenerator() {
