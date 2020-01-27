@@ -133,14 +133,14 @@ abstract class BaseGame : Game(), AssetErrorListener {
         GameUtils.saveGameState()
         super.dispose()
 
-        assetManager.dispose()
-        fontGenerator.dispose()
-        /*try { // TODO: uncomment this when development is done
+        /*assetManager.dispose()
+        fontGenerator.dispose()*/
+        try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()
         } catch (error: UninitializedPropertyAccessException) {
             Gdx.app.error("BaseGame", "Error $error")
-        }*/
+        }
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {

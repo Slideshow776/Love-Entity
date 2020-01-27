@@ -1,22 +1,20 @@
 package no.sandramoen.loveentity.screens.gameplay
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
 
 import no.sandramoen.loveentity.actors.Heart
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.actors.ResourceGenerator
+import no.sandramoen.loveentity.actors.Unlock
 import no.sandramoen.loveentity.utils.GameUtils
 import no.sandramoen.loveentity.utils.BigNumber
-import java.util.Date
 
 class LevelScreen : BaseScreen() {
     private lateinit var heart: Heart
@@ -34,17 +32,20 @@ class LevelScreen : BaseScreen() {
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
 
+        val allyUnlocks = Array<Unlock>()
+        allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
+
         if (BaseGame.resourceGenerators.size != 10) {
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", 4, 1.07f, 1f, .5f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", 60, 1.15f, 60f, 3f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", 720, 1.14f, 540f, 6f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", 8640, 1.13f, 4320f, 12f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", 103680, 1.12f, 51840f, 24f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", 1244160, 1.11f, 622080f, 96f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", 14929920, 1.1f, 7464960f, 384f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", 179159040, 1.09f, 89579520f, 1536f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", 2149908480, 1.08f, 1074954240f, 6144f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", 25798901760, 1.07f, 29668737024f, 36864f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "pixelAvatarTest", allyUnlocks, 4, 1.07f, 1f, .5f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "pixelAvatarTest", allyUnlocks,  60, 1.15f, 60f, 3f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "pixelAvatarTest", allyUnlocks,   720, 1.14f, 540f, 6f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "pixelAvatarTest", allyUnlocks,   8640, 1.13f, 4320f, 12f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", "pixelAvatarTest", allyUnlocks,   103680, 1.12f, 51840f, 24f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "pixelAvatarTest", allyUnlocks,   1244160, 1.11f, 622080f, 96f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", "pixelAvatarTest", allyUnlocks,   14929920, 1.1f, 7464960f, 384f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", "pixelAvatarTest", allyUnlocks,   179159040, 1.09f, 89579520f, 1536f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "pixelAvatarTest", allyUnlocks,   2149908480, 1.08f, 1074954240f, 6144f))
+            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "pixelAvatarTest", allyUnlocks,   25798901760, 1.07f, 29668737024f, 36864f))
         }
 
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
@@ -148,6 +149,14 @@ class LevelScreen : BaseScreen() {
             false
         }
         burgerTable.add(ascensionButton).row()
+
+        val unlocksButton = TextButton("Unlocks", BaseGame.textButtonStyle)
+        unlocksButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e))
+                BaseGame.setActiveScreen(UnlocksScreen())
+            false
+        }
+        burgerTable.add(unlocksButton).row()
 
         burgerTable.isVisible = false
 

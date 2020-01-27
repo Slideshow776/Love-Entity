@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BigNumber
@@ -24,9 +25,13 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
-                        name: String, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float) : BaseActor(x, y, s) {
+                        name: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
+    : BaseActor(x, y, s) {
     var hideTable: Table
     var infoTable: Table
+    var avatar: String
+    var unlocks: Array<Unlock>
+    var unlockIndex = 0
     private var heartIcon: BaseActor
 
     private var table: Table
@@ -47,6 +52,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var price: Long = baseCost * multiplier.pow(owned).toLong()
     private var income: Float = income
     private var incomeTime: Float = incomeTime
+    private var originalIncomeTime: Float = incomeTime
     private var time: Float = 0f
     private var fraction: Float = 0f
 
@@ -55,6 +61,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var timeLabel: Label
     private lateinit var buyLabel: Label
     private lateinit var timeProgress: BaseActor
+    private lateinit var unlockProgression: BaseActor
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -67,6 +74,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         nameLabel = Label(resourceName, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
 
+        this.avatar = avatar
+        this.unlocks = unlocks
+
         // load game state
         owned = BaseGame.prefs!!.getInteger(resourceName + "Owned")
         time = BaseGame.prefs!!.getFloat(resourceName + "Time")
@@ -76,6 +86,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         activatedAnimation = owned >= 1 && !activated
         price = baseCost * multiplier.pow(owned).toLong()
         addLoveSinceLastTimedPlayed()
+        unlockIndex = BaseGame.prefs!!.getInteger(resourceName + "UnlockIndex")
+        for (i in 0 until unlockIndex)
+            if (owned >= unlocks[i].goal)
+                applyEffect(unlocks[i].effect)
+
+        unlockProgression = BaseActor(0f, 0f, s)
+        unlockProgression.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
 
         // hide table
         val hideLabel = Label("???", BaseGame.labelStyle)
@@ -207,26 +224,41 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
-        var buttonTex = BaseGame.textureAtlas!!.findRegion("pixelAvatarTest")
+        var buttonTex = BaseGame.textureAtlas!!.findRegion(avatar)
         val buttonRegion = TextureRegion(buttonTex)
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
         activateButton = Button(buttonStyle)
 
-        ownedLabel = Label("$owned", BaseGame.labelStyle)
+        try {
+            ownedLabel = Label("$owned / ${unlocks[unlockIndex].goal}", BaseGame.labelStyle)
+        } catch (error: IndexOutOfBoundsException) {
+            ownedLabel = Label("$owned", BaseGame.labelStyle)
+        }
         ownedLabel.setFontScale(.5f)
         ownedLabel.color = Color.YELLOW
 
-        val levelProgress = BaseActor(0f, 0f, s)
-        levelProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
-        levelProgress.width = selfWidth * .25f
-        levelProgress.height = selfHeight * .175f
-        levelProgress.color = Color.FIREBRICK
+        val unlockProgress = BaseActor(0f, 0f, s)
+        unlockProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
+        unlockProgress.width = selfWidth * .25f
+        unlockProgress.height = selfHeight * .175f
+        unlockProgress.color = Color.FIREBRICK
 
-        ownedLabel.setPosition((levelProgress.width / 2) - ownedLabel.width / 3, -levelProgress.height / 2) // TODO: weird offsets that just works...
-        levelProgress.addActor(ownedLabel)
+        if (unlocks.size > unlockIndex) {
+            if (unlockIndex == 0) {
+                unlockProgression.width = (selfWidth * .25f) * (owned.toFloat() / unlocks[unlockIndex].goal)
+            } else {
+                unlockProgression.width = (selfWidth * .25f) * ((owned - unlocks[unlockIndex - 1].goal).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat())
+            }
+            unlockProgression.height = selfHeight * .175f
+            unlockProgression.color = Color.GREEN
+            unlockProgress.addActor(unlockProgression)
+        }
 
-        activateButton.addActor(levelProgress)
+        ownedLabel.setPosition((unlockProgress.width / 2) - ownedLabel.width / 3, -unlockProgress.height / 2) // TODO: weird offsets that just works...
+        unlockProgress.addActor(ownedLabel)
+
+        activateButton.addActor(unlockProgress)
         activateButton.isTransform = true
         activateButton.setOrigin(Align.center)
         activateButton.addListener { e: Event ->
@@ -268,11 +300,32 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     BaseGame.love = BaseGame.love.subtract(BaseGame.love, BigNumber(price))
                     owned++
                     BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
-                    ownedLabel.setText("$owned")
+                    try {
+                        if (owned >= unlocks[unlockIndex].goal)
+                            ownedLabel.setText("$owned / ${unlocks[unlockIndex + 1].goal}")
+                        else
+                            ownedLabel.setText("$owned / ${unlocks[unlockIndex].goal}")
+                    } catch (error: IndexOutOfBoundsException) {
+                        ownedLabel.setText("$owned")
+                    }
                     price = (baseCost * multiplier.pow(owned)).toLong()
                     buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
-                    if (owned == 1)
-                        activatedAnimation = true
+
+                    if (unlocks.size > unlockIndex && owned >= unlocks[unlockIndex].goal) {
+                        applyEffect(unlocks[unlockIndex].effect)
+                        unlockIndex++
+                        BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
+                    }
+
+                    if (unlocks.size > unlockIndex) {
+                        if (owned == 1)
+                            activatedAnimation = true
+                        if (unlockIndex == 0) {
+                            unlockProgression.width = (selfWidth * .25f) * (owned.toFloat() / unlocks[unlockIndex].goal)
+                        } else {
+                            unlockProgression.width = (selfWidth * .25f) * ((owned - unlocks[unlockIndex - 1].goal).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat())
+                        }
+                    }
                 }
             }
         })
@@ -303,7 +356,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     fun reset() {
         owned = 0
-        ownedLabel.setText("$owned")
+        incomeTime = originalIncomeTime
+        unlockIndex = 0
+        ownedLabel.setText("$owned / ${unlocks[unlockIndex].goal}")
 
         price = (baseCost * multiplier.pow(owned)).toLong()
         fraction = 0f
@@ -324,6 +379,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
         BaseGame.prefs!!.putInteger(resourceName + "Upgrade", 1)
         BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
+        BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
 
         isVisible = false
         hideTable.isVisible = true
@@ -352,5 +408,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             hours == 0 -> timeLabel.setText("${minutes}m ${seconds}s")
             else -> timeLabel.setText("${hours}h ${minutes}m ${seconds}s")
         }
+    }
+
+    private fun applyEffect(effect: String) {
+        if (effect[0].toString() == "x") {
+            println(effect.substring(1, effect.length).toInt())
+            upgrade *= effect.substring(1, effect.length).toInt()
+        }
+        if (effect == "speed")
+            incomeTime /= 2
     }
 }
