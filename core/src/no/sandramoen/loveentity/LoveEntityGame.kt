@@ -1,13 +1,12 @@
 package no.sandramoen.loveentity
 
-import no.sandramoen.loveentity.screens.gameplay.CommunityLeadersScreen
-import no.sandramoen.loveentity.screens.gameplay.LevelScreen
 import no.sandramoen.loveentity.utils.BaseGame
+import no.sandramoen.loveentity.screens.shell.SplashScreen
 
 class LoveEntityGame : BaseGame() {
     override fun create() {
         super.create()
-        setActiveScreen(LevelScreen())
-        // setActiveScreen(CommunityLeadersScreen())
+        setActiveScreen(SplashScreen())
+        // setActiveScreen(LevelScreen())
     }
 }

@@ -10,9 +10,8 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.NinePatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.Texture.TextureFilter
+import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
@@ -39,6 +38,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var labelStyle: LabelStyle? = null
         var textButtonStyle: TextButtonStyle? = null
         var textureAtlas: TextureAtlas? = null
+        var splashAnim: Animation<TextureRegion>? = null
+        var splashTexture: Texture? = null
 
         // game state
         var prefs: Preferences? = null
@@ -74,12 +75,17 @@ abstract class BaseGame : Game(), AssetErrorListener {
         // asset manager
         assetManager = AssetManager()
         assetManager.setErrorListener(this)
-        assetManager.load("images/packed/loveEntity.pack.atlas", TextureAtlas::class.java)
+        assetManager.load("images/included/packed/loveEntity.pack.atlas", TextureAtlas::class.java)
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
         assetManager.setLoader(BitmapFont::class.java, ".ttf", FreetypeFontLoader(resolver))
         assetManager.finishLoading();
-        textureAtlas = assetManager.get("images/packed/loveEntity.pack.atlas") // all images are found in this global static variable
+        textureAtlas = assetManager.get("images/included/packed/loveEntity.pack.atlas") // all images are found in this global static variable
+
+        // images that are excluded from the asset manager
+        splashTexture = Texture(Gdx.files.internal("images/excluded/splash.jpg"))
+        splashTexture!!.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
+        splashAnim = Animation(1f, TextureRegion(splashTexture))
 
         // fonts
         FreeTypeFontGenerator.setMaxTextureSize(2048) // solves font bug that won't show some characters like "." and "," in android

@@ -90,8 +90,8 @@ project(":core") {
     }
 
     task packTextures {
-        def inputDir = "$rootDir/android/assets/images"
-        def outputDir = "$rootDir/android/assets/images/packed"
+        def inputDir = "$rootDir/android/assets/images/included"
+        def outputDir = "$rootDir/android/assets/images/included/packed"
         inputs.dir inputDir
         outputs.dir outputDir
         doLast {

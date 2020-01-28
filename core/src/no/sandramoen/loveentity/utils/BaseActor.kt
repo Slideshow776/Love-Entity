@@ -67,6 +67,12 @@ open class BaseActor(x: Float, y: Float, s: Stage) : Group() {
         animationPaused = pause
     }
 
+    fun loadTexture(fileName: String): Animation<TextureRegion> {
+        val fileNames: Array<String> = Array(1)
+        fileNames.add(fileName)
+        return loadAnimationFromFiles(fileNames, 1f, true)
+    }
+
     fun loadAnimationFromFiles(fileNames: Array<String>, frameDuration: Float, loop: Boolean,
                                textureFilter: TextureFilter = TextureFilter.Linear): Animation<TextureRegion> {  // TODO: might not need this
         val textureArray: Array<TextureRegion> = Array()
