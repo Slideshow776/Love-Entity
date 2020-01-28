@@ -18,7 +18,7 @@ class SplashScreen : BaseScreen() {
     override fun initialize() {
         // image with effect
         shock = ShockwaveBackground(0f, 0f, "images/excluded/splash.jpg", mainStage)
-        shock.addListener {e: Event ->
+        shock.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 val x = (Gdx.input.x.toFloat() - 0) / (Gdx.graphics.width - 0)
                 val y = (Gdx.input.y.toFloat() - 0) / (Gdx.graphics.height - 0)
@@ -42,7 +42,10 @@ class SplashScreen : BaseScreen() {
                 ))
         background.addAction(Actions.after(Actions.run {
             dispose()
-            BaseGame.setActiveScreen(LevelScreen())
+            if (BaseGame.prefs!!.getBoolean("skipIntro"))
+                BaseGame.setActiveScreen(LevelScreen())
+            else
+                BaseGame.setActiveScreen(IntroScreen())
         }))
     }
 
