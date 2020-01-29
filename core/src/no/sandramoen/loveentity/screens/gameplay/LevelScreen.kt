@@ -16,7 +16,6 @@ import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
 
-
 class LevelScreen : BaseScreen() {
     private lateinit var loveLabel: Label
     private lateinit var burgerButton: Button
@@ -233,6 +232,8 @@ class LevelScreen : BaseScreen() {
                     burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("burger"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .0f))
                     burgerTable.isVisible = false
+                    for (generator in BaseGame.resourceGenerators)
+                        generator.enable()
                 } else {
                     burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("cross-white"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
@@ -240,8 +241,11 @@ class LevelScreen : BaseScreen() {
                     burgerButton.clearActions()
                     burgerButton.color = Color.WHITE
                     burgerButton.rotation = 0f
+                    for (generator in BaseGame.resourceGenerators)
+                        generator.disable()
                 }
                 burgerMenuActive = !burgerMenuActive
+                heart.disabled = !heart.disabled
             }
             false
         }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -24,6 +25,8 @@ class UpgradesScreen : BaseScreen() {
     private lateinit var descriptionLabel: Label
 
     private lateinit var upgradesTable: Table
+    private lateinit var infoTable: Table
+    private lateinit var exitButton: Button
 
     override fun initialize() {
         titleLabel = Label("Upgrades", BaseGame.labelStyle)
@@ -34,7 +37,7 @@ class UpgradesScreen : BaseScreen() {
 
         val exitButtonStyle = Button.ButtonStyle()
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
-        val exitButton = Button(exitButtonStyle)
+        exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
@@ -51,7 +54,7 @@ class UpgradesScreen : BaseScreen() {
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
 
-        val infoTable = Table()
+        infoTable = Table()
         val whiteInfoTable = Table()
         whiteInfoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(1f, 1f, 1f, 1f))
         whiteInfoTable.add(infoLabel).expand().fill().pad(20f)
@@ -128,6 +131,16 @@ class UpgradesScreen : BaseScreen() {
 
         for (generator in BaseGame.resourceGenerators)
             generator.act(Gdx.graphics.deltaTime)
+
+        if (infoTable.isVisible) {
+            exitButton.touchable = Touchable.disabled
+            for (upgrade in BaseGame.upgrades)
+                upgrade.touchable = Touchable.disabled
+        } else {
+            exitButton.touchable = Touchable.enabled
+            for (upgrade in BaseGame.upgrades)
+                upgrade.touchable = Touchable.enabled
+        }
     }
 
     override fun keyDown(keycode: Int): Boolean {

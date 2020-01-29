@@ -3,11 +3,11 @@ package no.sandramoen.loveentity.screens.gameplay
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
@@ -18,6 +18,9 @@ import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.GameUtils
 
 class UnlocksScreen : BaseScreen() {
+    private lateinit var infoTable: Table
+    private lateinit var exitButton: Button
+
     override fun initialize() {
         val titleLabel = Label("Unlocks", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
@@ -25,7 +28,7 @@ class UnlocksScreen : BaseScreen() {
         // main exit button
         val exitButtonStyle = Button.ButtonStyle()
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
-        val exitButton = Button(exitButtonStyle)
+        exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
@@ -42,7 +45,7 @@ class UnlocksScreen : BaseScreen() {
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
 
-        val infoTable = Table()
+        infoTable = Table()
         val whiteInfoTable = Table()
         whiteInfoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(1f, 1f, 1f, 1f))
         whiteInfoTable.add(infoLabel).expand().fill().pad(20f)
@@ -153,6 +156,11 @@ class UnlocksScreen : BaseScreen() {
     override fun update(dt: Float) {
         for (generator in BaseGame.resourceGenerators)
             generator.act(Gdx.graphics.deltaTime)
+
+        if (infoTable.isVisible)
+            exitButton.touchable = Touchable.disabled
+        else
+            exitButton.touchable = Touchable.enabled
     }
 
     override fun keyDown(keycode: Int): Boolean {

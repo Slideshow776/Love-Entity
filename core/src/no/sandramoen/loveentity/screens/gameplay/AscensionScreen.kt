@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -18,6 +19,13 @@ class AscensionScreen : BaseScreen() {
     var time = 0f
     private lateinit var currentAscensionPointsLabel: Label
     private lateinit var claimAscensionPointsLabel: Label
+
+    private lateinit var exitButton: Button
+    private lateinit var claimButton: Button
+    private lateinit var infoButton: Button
+    private lateinit var infoTable: Table
+    private lateinit var warningTable: Table
+
     override fun initialize() {
         val titleLabel = Label("Ascension", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
@@ -25,7 +33,7 @@ class AscensionScreen : BaseScreen() {
         // main exit button
         val exitButtonStyle = Button.ButtonStyle()
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
-        val exitButton = Button(exitButtonStyle)
+        exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
@@ -42,7 +50,7 @@ class AscensionScreen : BaseScreen() {
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
 
-        val infoTable = Table()
+        infoTable = Table()
         val whiteInfoTable = Table()
         whiteInfoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(1f, 1f, 1f, 1f))
         whiteInfoTable.add(infoLabel).expand().fill().pad(20f)
@@ -58,7 +66,7 @@ class AscensionScreen : BaseScreen() {
 
         val infoButtonStyle = Button.ButtonStyle()
         infoButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("question")))
-        val infoButton = Button(infoButtonStyle)
+        infoButton = Button(infoButtonStyle)
         infoButton.isTransform = true
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
@@ -104,7 +112,7 @@ class AscensionScreen : BaseScreen() {
         whiteWarningTable.align(Align.bottom)
         // whiteWarningTable.debug = true
 
-        val warningTable = Table()
+        warningTable = Table()
         warningTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
         warningTable.isVisible = false
         warningTable.add(whiteWarningTable).width(Gdx.graphics.width * .6f).height(Gdx.graphics.height * .25f).row()
@@ -164,11 +172,11 @@ class AscensionScreen : BaseScreen() {
         claimedDescriptionLabel.setWrap(true)
         claimedDescriptionLabel.setAlignment(Align.center)
 
-        val button = TextButton("Claim", BaseGame.textButtonStyle)
-        button.isTransform = true
-        button.scaleBy(-.2f)
-        button.setOrigin(Align.center)
-        button.addListener { e: Event ->
+        claimButton = TextButton("Claim", BaseGame.textButtonStyle)
+        claimButton.isTransform = true
+        claimButton.scaleBy(-.2f)
+        claimButton.setOrigin(Align.center)
+        claimButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 warningTable.isVisible = !warningTable.isVisible
             false
@@ -180,7 +188,7 @@ class AscensionScreen : BaseScreen() {
         restartLabel.setAlignment(Align.center)
         lowerRightTable.add(claimAscensionPointsLabel).row()
         lowerRightTable.add(claimedDescriptionLabel).width(Gdx.graphics.width * .3f).row()
-        lowerRightTable.add(button).row()
+        lowerRightTable.add(claimButton).row()
         lowerRightTable.add(restartLabel)
 
         // table layout
@@ -217,6 +225,26 @@ class AscensionScreen : BaseScreen() {
             time = 0f
             GameUtils.calculateAscension()
         }
+
+        if (infoTable.isVisible || warningTable.isVisible) {
+            exitButton.touchable = Touchable.disabled
+            claimButton.touchable = Touchable.disabled
+            infoButton.touchable = Touchable.disabled
+        } else {
+            exitButton.touchable = Touchable.enabled
+            claimButton.touchable = Touchable.enabled
+            infoButton.touchable = Touchable.enabled
+        }
+
+        /*if (warningTable.isVisible) {
+            infoButton.touchable = Touchable.disabled
+            exitButton.touchable = Touchable.disabled
+            claimButton.touchable = Touchable.disabled
+        } else {
+            infoButton.touchable = Touchable.enabled
+            exitButton.touchable = Touchable.enabled
+            claimButton.touchable = Touchable.enabled
+        }*/
     }
 
     override fun keyDown(keycode: Int): Boolean {

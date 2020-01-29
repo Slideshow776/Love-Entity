@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -60,6 +61,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var ownedLabel: Label
     private lateinit var timeLabel: Label
     private lateinit var buyLabel: Label
+    private lateinit var buyButton: Button
+    private var infoButton: Button
     private lateinit var timeProgress: BaseActor
     private var unlockProgression: BaseActor
 
@@ -137,7 +140,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buttonTex = BaseGame.textureAtlas!!.findRegion("info")
         val buttonRegion = TextureRegion(buttonTex)
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
-        val infoButton = Button(buttonStyle)
+        infoButton = Button(buttonStyle)
 
         val nameAndInfoTable = Table()
         nameAndInfoTable.add(nameLabel)
@@ -221,6 +224,70 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
     }
 
+    fun addLoveSinceLastTimedPlayed() {
+        if (time > 0) {
+            BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(((income / incomeTime) * BaseGame.secondsSinceLastPlayed).toLong()))
+            time += BaseGame.secondsSinceLastPlayed % time
+        }
+    }
+
+    fun reset() {
+        owned = 0
+        incomeTime = originalIncomeTime
+        unlockIndex = 0
+        ownedLabel.setText("$owned / ${unlocks[unlockIndex].goal}")
+        unlockProgression.width = 0f
+
+        price = (baseCost * multiplier.pow(owned)).toLong()
+        fraction = 0f
+        buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
+
+        time = 0f
+        timeLabel.setText("?")
+        activated = false
+        hasCommunityLeader = false
+        upgrade = 1
+
+        timeProgress.width = 0f
+
+        activateButton.actions.clear()
+        activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
+
+        BaseGame.prefs!!.putFloat(resourceName + "Time", time)
+        BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
+        BaseGame.prefs!!.putInteger(resourceName + "Upgrade", 1)
+        BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
+        BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
+
+        isVisible = false
+        hideTable.isVisible = true
+        heartIcon.isVisible = true
+        infoTable.isVisible = false
+        hideTable.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
+        heartIcon.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
+    }
+
+    fun exposeResourceGenerator() {
+        hideTable.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
+        heartIcon.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
+        hideTable.addAction(Actions.sequence(
+                Actions.delay(1f),
+                Actions.run { hideTable.isVisible = false }
+        ))
+    }
+
+    fun disable() {
+        infoButton.touchable = Touchable.disabled
+        activateButton.touchable = Touchable.disabled
+        buyButton.touchable = Touchable.disabled
+    }
+
+    fun enable() {
+        infoButton.touchable = Touchable.enabled
+        activateButton.touchable = Touchable.enabled
+        buyButton.touchable = Touchable.enabled
+    }
+
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
         var buttonTex = BaseGame.textureAtlas!!.findRegion(avatar)
@@ -289,10 +356,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         buyLabel = Label("  Buy 1x     ${BigNumber(price).presentLongScale()}", BaseGame.labelStyle)
         buyLabel.setFontScale(.4f)
-        val buy = Button(buttonStyle)
-        buy.addActor(buyLabel)
-        buy.color = Color.ORANGE
-        buy.addListener(object : ActorGestureListener() {
+        buyButton = Button(buttonStyle)
+        buyButton.addActor(buyLabel)
+        buyButton.color = Color.ORANGE
+        buyButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(price))) {
@@ -341,61 +408,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         val table = Table()
         table.add(timeProgress).colspan(2).pad(selfWidth * .01f).row()
-        table.add(buy).pad(selfWidth * .01f).width(selfWidth * .5f).height(selfHeight * .375f)
+        table.add(buyButton).pad(selfWidth * .01f).width(selfWidth * .5f).height(selfHeight * .375f)
         table.add(time).pad(selfWidth * .01f)
         return table
-    }
-
-    fun addLoveSinceLastTimedPlayed() {
-        if (time > 0) {
-            BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(((income / incomeTime) * BaseGame.secondsSinceLastPlayed).toLong()))
-            time += BaseGame.secondsSinceLastPlayed % time
-        }
-    }
-
-    fun reset() {
-        owned = 0
-        incomeTime = originalIncomeTime
-        unlockIndex = 0
-        ownedLabel.setText("$owned / ${unlocks[unlockIndex].goal}")
-        unlockProgression.width = 0f
-
-        price = (baseCost * multiplier.pow(owned)).toLong()
-        fraction = 0f
-        buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
-
-        time = 0f
-        timeLabel.setText("?")
-        activated = false
-        hasCommunityLeader = false
-        upgrade = 1
-
-        timeProgress.width = 0f
-
-        activateButton.actions.clear()
-        activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
-
-        BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-        BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
-        BaseGame.prefs!!.putInteger(resourceName + "Upgrade", 1)
-        BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
-        BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
-
-        isVisible = false
-        hideTable.isVisible = true
-        heartIcon.isVisible = true
-        infoTable.isVisible = false
-        hideTable.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
-        heartIcon.addAction(Actions.alpha(1f, 0f, Interpolation.linear))
-    }
-
-    fun exposeResourceGenerator() {
-        hideTable.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
-        heartIcon.addAction(Actions.alpha(0f, .5f, Interpolation.linear))
-        hideTable.addAction(Actions.sequence(
-                Actions.delay(1f),
-                Actions.run { hideTable.isVisible = false }
-        ))
     }
 
     private fun labelTime(timeInSeconds: Float) { // labels time, e.g. "1h 23m 17s"

@@ -13,9 +13,10 @@ import no.sandramoen.loveentity.utils.BigNumber
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     val income = 1L
-    var bonusTime = 0f
-    var cpsTime = 0f
+    private var bonusTime = 0f
+    private var cpsTime = 0f
     var clicks = 0
+    var disabled = false
 
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
@@ -25,19 +26,21 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
         addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                clicks++
+                if (!disabled) {
+                    clicks++
 
-                if (BaseGame.currentAscensionPoints > 0) {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
-                } else {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * BaseGame.heartBonus))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * BaseGame.heartBonus))
+                    if (BaseGame.currentAscensionPoints > 0) {
+                        BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
+                    } else {
+                        BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * BaseGame.heartBonus))
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * BaseGame.heartBonus))
+                    }
+
+                    addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
+                    addAction(Actions.delay(.25f))
+                    addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
                 }
-
-                addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
-                addAction(Actions.delay(.25f))
-                addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
                 return true
             }
         })
@@ -62,17 +65,5 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             cpsTime = 0f
             clicks = 0
         }
-
-        /*if (time >= 2f) {
-            touched = false
-            bonusTime -= dt
-        } else {
-            bonusTime += dt
-        }
-
-        if (bonusTime < 0f)
-            bonusTime = 0f
-        if (bonusTime > 5f)
-            bonusTime = 5f*/
     }
 }

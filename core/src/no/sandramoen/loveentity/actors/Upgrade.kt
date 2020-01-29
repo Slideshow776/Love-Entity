@@ -32,7 +32,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
     private var descriptionLabel: Label
     private var heartIcon: BaseActor
     private var costLabel: Label
-    private var button: TextButton
+    var button: TextButton
 
     var price = price
 

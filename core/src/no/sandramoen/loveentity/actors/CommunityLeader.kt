@@ -33,7 +33,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     private var descriptionLabel: Label
     private var heartIcon: BaseActor
     private var costLabel: Label
-    private var button: TextButton
+    var button: TextButton
 
     init {
         this.isVisible = false // solves a visibility bug
