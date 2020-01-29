@@ -50,39 +50,11 @@ class LevelScreen : BaseScreen() {
             BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
             BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
 
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(15000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigNumber(500000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigNumber(1200000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigNumber(10000000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigNumber(111111111)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigNumber(555555555)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigNumber(10000000000)))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigNumber(100000000000)))
-
-            // this system assumes all upgrades are multiplicable of 3's
-            if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-                BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
-            if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(500)))
-            if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(1000000)))
-            if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(5000000)))
-            if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
-            if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(25000000)))
-            if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(500000000)))
-            if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
-            if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(250_000_000_000)))
-            if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(999999999999999999)))
+            initializeCommunityLeadersAndUpgrades()
         }
+
+        for (generator in BaseGame.resourceGenerators)
+            generator.enable()
 
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
@@ -139,17 +111,19 @@ class LevelScreen : BaseScreen() {
         }
         debugButton5.label.color = Color.GREEN
         debugButton5.addListener { e: Event ->
-            // the restart button
-            if (GameUtils.isTouchDownEvent(e)) {
+            if (GameUtils.isTouchDownEvent(e)) { // the restart button
                 BaseGame.love = BigNumber(0)
                 BaseGame.lifeTimeLove = BigNumber(0)
                 BaseGame.revealNextGeneratorIndex = 0
                 BaseGame.currentAscensionPoints = 0
                 BaseGame.heartBonus = 1
+                BaseGame.communityLeadersWiggleIndex = 0
+                BaseGame.upgradesWiggleIndex = 0
                 for (generator in BaseGame.resourceGenerators)
                     generator.reset()
                 BaseGame.communityLeaders.clear()
                 BaseGame.upgrades.clear()
+                initializeCommunityLeadersAndUpgrades()
 
                 table.reset()
                 val heartTable = Table()
@@ -391,5 +365,40 @@ class LevelScreen : BaseScreen() {
                         Actions.rotateBy(-4f, .25f)
                 )))
         )
+    }
+
+    private fun initializeCommunityLeadersAndUpgrades() {
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(15000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigNumber(500000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigNumber(1200000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigNumber(10000000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigNumber(111111111)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigNumber(555555555)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigNumber(10000000000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigNumber(100000000000)))
+
+        // this system assumes all upgrades are multiplicable of 3's
+        if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
+            BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
+        if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(500)))
+        if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(1000000)))
+        if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(5000000)))
+        if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
+        if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(25000000)))
+        if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(500000000)))
+        if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
+        if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(250_000_000_000)))
+        if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(999999999999999999)))
     }
 }

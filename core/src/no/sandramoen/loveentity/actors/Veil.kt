@@ -27,6 +27,7 @@ class Veil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         label = Label("x1", BaseGame.labelStyle)
         label.setOrigin(Align.center)
         label.isVisible = false
+        label.touchable = Touchable.childrenOnly
         val table = Table()
         table.setFillParent(true)
         table.add(label)
