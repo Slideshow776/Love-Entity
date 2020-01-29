@@ -65,7 +65,6 @@ class GameUtils {
 
         fun reset() {
             BaseGame.love = BigNumber(0)
-            BaseGame.revealNextGeneratorIndex = 0
             BaseGame.lifeTimeLove = BigNumber(0)
             BaseGame.revealNextGeneratorIndex = 0
             BaseGame.heartBonus = 1

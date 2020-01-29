@@ -35,23 +35,8 @@ class LevelScreen : BaseScreen() {
         val heart = Heart(0f, 0f, mainStage)
         val veil = Veil(0f, 0f, mainStage)
 
-        val allyUnlocks = Array<Unlock>()
-        allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
-
-        if (BaseGame.resourceGenerators.size != 10) {
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "pixelAvatarTest", allyUnlocks, 4, 1.07f, 1f, .5f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "pixelAvatarTest", allyUnlocks, 60, 1.15f, 60f, 3f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "pixelAvatarTest", allyUnlocks, 720, 1.14f, 540f, 6f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "pixelAvatarTest", allyUnlocks, 8640, 1.13f, 4320f, 12f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
-
-            initializeCommunityLeadersAndUpgrades()
-        }
+        if (BaseGame.resourceGenerators.size != 10)
+            initializeAssets()
 
         for (generator in BaseGame.resourceGenerators)
             generator.enable()
@@ -112,18 +97,9 @@ class LevelScreen : BaseScreen() {
         debugButton5.label.color = Color.GREEN
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) { // the restart button
-                BaseGame.love = BigNumber(0)
-                BaseGame.lifeTimeLove = BigNumber(0)
-                BaseGame.revealNextGeneratorIndex = 0
                 BaseGame.currentAscensionPoints = 0
-                BaseGame.heartBonus = 1
-                BaseGame.communityLeadersWiggleIndex = 0
-                BaseGame.upgradesWiggleIndex = 0
-                for (generator in BaseGame.resourceGenerators)
-                    generator.reset()
-                BaseGame.communityLeaders.clear()
-                BaseGame.upgrades.clear()
-                initializeCommunityLeadersAndUpgrades()
+                GameUtils.reset() // resets a bunch of stuff
+                initializeAssets()
 
                 table.reset()
                 val heartTable = Table()
@@ -367,7 +343,21 @@ class LevelScreen : BaseScreen() {
         )
     }
 
-    private fun initializeCommunityLeadersAndUpgrades() {
+    private fun initializeAssets() {
+        val allyUnlocks = Array<Unlock>()
+        allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
+
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "pixelAvatarTest", allyUnlocks, 4, 1.07f, 1f, .5f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "pixelAvatarTest", allyUnlocks, 60, 1.15f, 60f, 3f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "pixelAvatarTest", allyUnlocks, 720, 1.14f, 540f, 6f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "pixelAvatarTest", allyUnlocks, 8640, 1.13f, 4320f, 12f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
+
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(15000)))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100000)))
