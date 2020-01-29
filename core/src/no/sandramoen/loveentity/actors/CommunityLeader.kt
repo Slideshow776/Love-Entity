@@ -23,7 +23,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     var remove = false
     var hideTable: Table
 
-    private var price = price
+    var price = price
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
@@ -81,7 +81,8 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         // button
         button = TextButton("Recruit!", BaseGame.textButtonStyle)
         button.isTransform = true
-        if (!BaseGame.love.isGreaterThanOrEqualTo(price)) button.color = Color.DARK_GRAY
+        if (BaseGame.love.isGreaterThanOrEqualTo(price)) button.color = Color.WHITE
+        else button.color = Color.DARK_GRAY
         button.scaleBy(-.2f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
@@ -139,7 +140,9 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     }
 
     fun checkAffordable() {
-        if (!BaseGame.love.isGreaterThanOrEqualTo(price))
+        if (BaseGame.love.isGreaterThanOrEqualTo(price))
+            button.color = Color.WHITE
+        else
             button.color = Color.DARK_GRAY
     }
 

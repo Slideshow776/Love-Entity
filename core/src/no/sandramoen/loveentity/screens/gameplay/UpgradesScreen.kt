@@ -23,7 +23,6 @@ class UpgradesScreen : BaseScreen() {
     private lateinit var subtitleLabel: Label
     private lateinit var descriptionLabel: Label
 
-    private lateinit var upgrades: Array<Upgrade>
     private lateinit var upgradesTable: Table
 
     override fun initialize() {
@@ -94,28 +93,6 @@ class UpgradesScreen : BaseScreen() {
 
         // upgrades table
         upgradesTable = Table()
-        upgrades = Array()
-        // this system assumes all upgrades are multiplicable of 3's
-        if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-            upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
-        if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(500)))
-        if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(1000000)))
-        if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(5000000)))
-        if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
-        if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(25000000)))
-        if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(500000000)))
-        if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
-        if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(250_000_000_000)))
-        if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-            upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(999999999999999999)))
         initializeUpgrades()
 
         val scroll = ScrollPane(upgradesTable)
@@ -142,8 +119,8 @@ class UpgradesScreen : BaseScreen() {
     override fun update(dt: Float) {
         loveLabel.setText("${BaseGame.love.presentLongScale()} love")
 
-        for (i in 0 until upgrades.size) {
-            if (upgrades[i].remove) {
+        for (i in 0 until BaseGame.upgrades.size) {
+            if (BaseGame.upgrades[i].remove) {
                 initializeUpgrades()
                 break
             }
@@ -165,14 +142,14 @@ class UpgradesScreen : BaseScreen() {
         upgradesTable.add(descriptionLabel).padBottom(25f).row()
         upgradesTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
-        for (i in 0 until upgrades.size) {
-            if (BaseGame.resourceGenerators[upgrades[i].id].isVisible && !upgrades[i].remove) {
-                upgrades[i].isVisible = true
-                upgrades[i].checkAffordable()
-                upgradesTable.add(upgrades[i]).padBottom(Gdx.graphics.height * .07f).row()
+        for (i in 0 until BaseGame.upgrades.size) {
+            if (BaseGame.resourceGenerators[BaseGame.upgrades[i].id].isVisible && !BaseGame.upgrades[i].remove) {
+                BaseGame.upgrades[i].isVisible = true
+                BaseGame.upgrades[i].checkAffordable()
+                upgradesTable.add(BaseGame.upgrades[i]).padBottom(Gdx.graphics.height * .07f).row()
 
-                if (!BaseGame.resourceGenerators[upgrades[i].id].hideTable.isVisible)
-                    upgrades[i].hideTable.isVisible = false
+                if (!BaseGame.resourceGenerators[BaseGame.upgrades[i].id].hideTable.isVisible)
+                    BaseGame.upgrades[i].hideTable.isVisible = false
             }
         }
     }

@@ -10,11 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Array
-import no.sandramoen.loveentity.actors.CommunityLeader
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
-import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
 
 class CommunityLeadersScreen : BaseScreen() {
@@ -23,7 +20,6 @@ class CommunityLeadersScreen : BaseScreen() {
     private lateinit var subtitleLabel: Label
     private lateinit var descriptionLabel: Label
 
-    private lateinit var communityLeaders: Array<CommunityLeader>
     private lateinit var communityLeadersTable: Table
 
     override fun initialize() {
@@ -93,17 +89,6 @@ class CommunityLeadersScreen : BaseScreen() {
 
         // community leaders table
         communityLeadersTable = Table()
-        communityLeaders = Array()
-        communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
-        communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(15000)))
-        communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100000)))
-        communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigNumber(500000)))
-        communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigNumber(1200000)))
-        communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigNumber(10000000)))
-        communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigNumber(111111111)))
-        communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigNumber(555555555)))
-        communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigNumber(10000000000)))
-        communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigNumber(100000000000)))
         initializeCommunityLeaders()
 
         val scroll = ScrollPane(communityLeadersTable)
@@ -132,9 +117,9 @@ class CommunityLeadersScreen : BaseScreen() {
     override fun update(dt: Float) {
         loveLabel.setText("${BaseGame.love.presentLongScale()} love")
 
-        for (i in 0 until communityLeaders.size) {
-            if (communityLeaders[i].remove) {
-                communityLeaders[i].remove()
+        for (i in 0 until BaseGame.communityLeaders.size) {
+            if (BaseGame.communityLeaders[i].remove) {
+                BaseGame.communityLeaders[i].remove()
                 initializeCommunityLeaders()
                 break
             }
@@ -158,15 +143,15 @@ class CommunityLeadersScreen : BaseScreen() {
 
         for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == communityLeaders.size
             if (BaseGame.resourceGenerators[i].isVisible &&
-                    !communityLeaders[i].remove &&
+                    !BaseGame.communityLeaders[i].remove &&
                     !BaseGame.resourceGenerators[i].hasCommunityLeader) {
 
-                communityLeaders[i].isVisible = true
-                communityLeaders[i].checkAffordable()
-                communityLeadersTable.add(communityLeaders[i]).padBottom(Gdx.graphics.height * .07f).row()
+                BaseGame.communityLeaders[i].isVisible = true
+                BaseGame.communityLeaders[i].checkAffordable()
+                communityLeadersTable.add(BaseGame.communityLeaders[i]).padBottom(Gdx.graphics.height * .07f).row()
 
                 if (!BaseGame.resourceGenerators[i].hideTable.isVisible)
-                    communityLeaders[i].hideTable.isVisible = false
+                    BaseGame.communityLeaders[i].hideTable.isVisible = false
             }
         }
     }

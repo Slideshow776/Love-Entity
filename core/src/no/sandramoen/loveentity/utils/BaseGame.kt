@@ -20,7 +20,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.Array
+import no.sandramoen.loveentity.actors.CommunityLeader
 import no.sandramoen.loveentity.actors.ResourceGenerator
+import no.sandramoen.loveentity.actors.Upgrade
 import java.util.Date
 
 abstract class BaseGame : Game(), AssetErrorListener {
@@ -49,6 +51,10 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
         lateinit var resourceGenerators: Array<ResourceGenerator>
+        lateinit var communityLeaders: Array<CommunityLeader>
+        var communityLeadersWiggleIndex = 0
+        var upgradesWiggleIndex = 0
+        lateinit var upgrades: Array<Upgrade>
         var currentAscensionPoints: Long = 1L
         var claimAscensionPoints: Long = 0L
         var ascensionBonus = 2
@@ -72,6 +78,10 @@ abstract class BaseGame : Game(), AssetErrorListener {
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
         resourceGenerators = Array()
+        communityLeaders = Array()
+        communityLeadersWiggleIndex = prefs!!.getInteger("communityLeadersWiggleIndex")
+        upgrades = Array()
+        upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
 
         // asset manager

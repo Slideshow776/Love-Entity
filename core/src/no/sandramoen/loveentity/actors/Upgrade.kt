@@ -34,7 +34,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
     private var costLabel: Label
     private var button: TextButton
 
-    private var price = price
+    var price = price
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -83,6 +83,8 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         button.isTransform = true
         if (!BaseGame.love.isGreaterThanOrEqualTo(price))
             button.color = Color.DARK_GRAY
+        else
+            button.color = Color.WHITE
         button.scaleBy(-.2f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->

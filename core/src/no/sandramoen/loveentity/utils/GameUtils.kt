@@ -17,6 +17,8 @@ class GameUtils {
             BaseGame.prefs!!.putLong("lastTimePlayed", Date().time)
             BaseGame.prefs!!.putInteger("revealNextGeneratorIndex", BaseGame.revealNextGeneratorIndex)
             BaseGame.prefs!!.putLong("currentAscensionPoints", BaseGame.currentAscensionPoints)
+            BaseGame.prefs!!.putInteger("communityLeadersWiggleIndex", BaseGame.communityLeadersWiggleIndex)
+            BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.upgradesWiggleIndex)
             BaseGame.prefs!!.flush()
         }
 
@@ -67,8 +69,13 @@ class GameUtils {
             BaseGame.lifeTimeLove = BigNumber(0)
             BaseGame.revealNextGeneratorIndex = 0
             BaseGame.heartBonus = 1
+            BaseGame.communityLeadersWiggleIndex = 0
+            BaseGame.upgradesWiggleIndex = 0
             for (generator in BaseGame.resourceGenerators)
                 generator.reset()
+            BaseGame.resourceGenerators.clear()
+            BaseGame.communityLeaders.clear()
+            BaseGame.upgrades.clear()
             saveGameState()
         }
 
