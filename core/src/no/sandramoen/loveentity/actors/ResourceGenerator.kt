@@ -61,7 +61,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var timeLabel: Label
     private lateinit var buyLabel: Label
     private lateinit var timeProgress: BaseActor
-    private lateinit var unlockProgression: BaseActor
+    private var unlockProgression: BaseActor
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -176,17 +176,16 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             val product = income * owned
             if (product >= 1) {
                 val totalIncome = if (BaseGame.currentAscensionPoints > 0)
-                    (income * owned).toLong() * upgrade * (BaseGame.currentAscensionPoints * 2)
+                    product.toLong() * upgrade * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus * BaseGame.heartBonus)
                 else
-                    (income * owned).toLong() * upgrade
+                    product.toLong() * upgrade * BaseGame.heartBonus
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(totalIncome))
                 BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(totalIncome))
-                /* -------------------------------------- */
             } else { // hack to support BigNumber fractions
                 if (BaseGame.currentAscensionPoints > 0)
-                    fraction += (product - floor(product)) * upgrade * (BaseGame.currentAscensionPoints * 2)
+                    fraction += (product - floor(product)) * upgrade * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus
                 else
-                    fraction += (product - floor(product)) * upgrade
+                    fraction += (product - floor(product)) * upgrade * BaseGame.heartBonus
                 if (fraction >= 1) {
                     BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(fraction.toLong()))
                     BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(fraction.toLong()))
@@ -212,7 +211,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         } else {
             if (activatedAnimation) {
                 activateButton.addAction(Actions.forever(Actions.sequence(
-                        Actions.scaleTo(1.05f, 1.05f, .25f),
+                        Actions.scaleTo(1.1f, 1.1f, .25f),
                         Actions.delay(.125f),
                         Actions.scaleTo(1.0f, 1.0f, .25f)
                 )))

@@ -66,6 +66,7 @@ class GameUtils {
             BaseGame.revealNextGeneratorIndex = 0
             BaseGame.lifeTimeLove = BigNumber(0)
             BaseGame.revealNextGeneratorIndex = 0
+            BaseGame.heartBonus = 1
             for (generator in BaseGame.resourceGenerators)
                 generator.reset()
             saveGameState()

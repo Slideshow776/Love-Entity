@@ -12,8 +12,10 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BigNumber
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
-
-    val income = 4L
+    val income = 1L
+    var bonusTime = 0f
+    var cpsTime = 0f
+    var clicks = 0
 
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
@@ -23,12 +25,14 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
         addListener(object : InputListener() {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                clicks++
+
                 if (BaseGame.currentAscensionPoints > 0) {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * 2)))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * 2)))
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
                 } else {
-                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income))
-                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income))
+                    BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * BaseGame.heartBonus))
+                    BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * BaseGame.heartBonus))
                 }
 
                 addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
@@ -37,5 +41,38 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                 return true
             }
         })
+    }
+
+    override fun act(dt: Float) {
+        super.act(dt)
+        bonusTime += dt
+        cpsTime += dt
+        if (cpsTime >= 5f) {
+            val cps = clicks.toFloat() / cpsTime
+            when {
+                cps >= 9 && bonusTime >= 35 -> BaseGame.heartBonus = 5
+                cps >= 7 && bonusTime >= 25 -> BaseGame.heartBonus = 4
+                cps >= 5 && bonusTime >= 15 -> BaseGame.heartBonus = 3
+                cps >= 3 -> BaseGame.heartBonus = 2
+                else -> {
+                    BaseGame.heartBonus = 1
+                    bonusTime = 0f
+                }
+            }
+            cpsTime = 0f
+            clicks = 0
+        }
+
+        /*if (time >= 2f) {
+            touched = false
+            bonusTime -= dt
+        } else {
+            bonusTime += dt
+        }
+
+        if (bonusTime < 0f)
+            bonusTime = 0f
+        if (bonusTime > 5f)
+            bonusTime = 5f*/
     }
 }

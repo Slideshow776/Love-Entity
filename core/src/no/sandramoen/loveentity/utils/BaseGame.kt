@@ -51,6 +51,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         lateinit var resourceGenerators: Array<ResourceGenerator>
         var currentAscensionPoints: Long = 1L
         var claimAscensionPoints: Long = 0L
+        var ascensionBonus = 2
+        var heartBonus = 1
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
@@ -140,14 +142,14 @@ abstract class BaseGame : Game(), AssetErrorListener {
         GameUtils.saveGameState()
         super.dispose()
 
-        /*assetManager.dispose()
-        fontGenerator.dispose()*/
-        try { // TODO: uncomment this when development is done
+        assetManager.dispose()
+        fontGenerator.dispose()
+        /*try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()
         } catch (error: UninitializedPropertyAccessException) {
             Gdx.app.error("BaseGame", "Error $error")
-        }
+        }*/
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {

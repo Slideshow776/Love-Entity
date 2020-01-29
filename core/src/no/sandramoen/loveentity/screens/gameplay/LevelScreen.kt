@@ -8,18 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Array
-
 import no.sandramoen.loveentity.actors.Heart
-import no.sandramoen.loveentity.utils.BaseGame
-import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.actors.ResourceGenerator
 import no.sandramoen.loveentity.actors.Unlock
-import no.sandramoen.loveentity.utils.GameUtils
+import no.sandramoen.loveentity.actors.Veil
+import no.sandramoen.loveentity.utils.BaseGame
+import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.BigNumber
+import no.sandramoen.loveentity.utils.GameUtils
+
 
 class LevelScreen : BaseScreen() {
-    private lateinit var heart: Heart
-
     private lateinit var loveLabel: Label
     private lateinit var burgerButton: Button
     private var burgerMenuActive = false
@@ -31,7 +30,8 @@ class LevelScreen : BaseScreen() {
     private var time = 0f
 
     override fun initialize() {
-        heart = Heart(0f, 0f, mainStage)
+        val heart = Heart(0f, 0f, mainStage)
+        val veil = Veil(0f, 0f, mainStage)
 
         val allyUnlocks = Array<Unlock>()
         allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
@@ -105,11 +105,21 @@ class LevelScreen : BaseScreen() {
                 BaseGame.lifeTimeLove = BigNumber(0)
                 BaseGame.revealNextGeneratorIndex = 0
                 BaseGame.currentAscensionPoints = 0
+                BaseGame.heartBonus = 1
                 for (generator in BaseGame.resourceGenerators)
                     generator.reset()
 
                 table.reset()
-                table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
+                val heartTable = Table()
+                heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
+                val veilTable = Table().top()
+                veilTable.add(veil).expand().fill().bottom()
+
+                val stack = Stack()
+                stack.add(heartTable)
+                stack.add(veilTable)
+
+                table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
                 for (i in 0 until 2) {
                     table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
                     BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
@@ -189,7 +199,17 @@ class LevelScreen : BaseScreen() {
         val scrollableTable = Table()
 
         table = Table()
-        table.add(heart).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
+
+        val heartTable = Table()
+        heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
+        val veilTable = Table().top()
+        veilTable.add(veil).expand().fill().bottom()
+
+        val stack = Stack()
+        stack.add(heartTable)
+        stack.add(veilTable)
+
+        table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
             for (i in 0 until 2) {
                 table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
