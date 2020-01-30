@@ -50,7 +50,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     var owned: Int = 0
     var baseCost: Long = baseCost
     private var multiplier: Float = multiplier
-    private var price: Long = baseCost * multiplier.pow(owned).toLong()
+    var price: Long = baseCost * multiplier.pow(owned).toLong()
+    var nextPurchase: Long = price
+    private var nextPurchaseAmount = 1L
+    private var nextPurchaseLabel = "x1"
     private var income: Float = income
     var incomeTime: Float = incomeTime
     private var originalIncomeTime: Float = incomeTime
@@ -88,6 +91,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             upgrade = BaseGame.prefs!!.getInteger(resourceName + "Upgrade")
         activatedAnimation = owned >= 1 && !activated
         price = baseCost * multiplier.pow(owned).toLong()
+        nextPurchase = price
         addLoveSinceLastTimedPlayed()
         unlockIndex = BaseGame.prefs!!.getInteger(resourceName + "UnlockIndex")
         for (i in 0 until unlockIndex)
@@ -184,7 +188,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     product.toLong() * upgrade * BaseGame.heartBonus
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(totalIncome))
                 BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(totalIncome))
-            } else { // hack to support BigNumber fractions
+            }/* else { // hack to support BigNumber fractions // TODO: turned off for now
                 if (BaseGame.currentAscensionPoints > 0)
                     fraction += (product - floor(product)) * upgrade * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus
                 else
@@ -194,7 +198,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(fraction.toLong()))
                     fraction -= 1
                 }
-            }
+            }*/
 
             activated = hasCommunityLeader
 
@@ -222,6 +226,11 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             }
         }
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
+
+        if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(nextPurchase)))
+            buyButton.color = Color.ORANGE
+        else
+            buyButton.color = Color.GRAY
     }
 
     fun addLoveSinceLastTimedPlayed() {
@@ -239,8 +248,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         unlockProgression.width = 0f
 
         price = (baseCost * multiplier.pow(owned)).toLong()
+        nextPurchase = price
         fraction = 0f
-        buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
+        buyLabel.setText("  Buy 1x     ${BigNumber(nextPurchase).presentLongScale()}")
 
         time = 0f
         timeLabel.setText("?")
@@ -286,6 +296,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         infoButton.touchable = Touchable.enabled
         activateButton.touchable = Touchable.enabled
         buyButton.touchable = Touchable.enabled
+    }
+
+    fun nextPurchase(amount: Long) {
+        nextPurchase = price * amount
+        nextPurchaseAmount = amount
+        buyLabel.setText("  Buy x${BigNumber(nextPurchaseAmount).presentLongScale()}     ${BigNumber(nextPurchase).presentLongScale()}")
     }
 
     private fun leftTable(s: Stage): Table {
@@ -354,7 +370,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buttonRegion = TextureRegion(buttonTex)
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
-        buyLabel = Label("  Buy 1x     ${BigNumber(price).presentLongScale()}", BaseGame.labelStyle)
+        buyLabel = Label("  Buy 1x     ${BigNumber(nextPurchase).presentLongScale()}", BaseGame.labelStyle)
         buyLabel.setFontScale(.4f)
         buyButton = Button(buttonStyle)
         buyButton.addActor(buyLabel)
@@ -362,9 +378,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buyButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
-                if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(price))) {
-                    BaseGame.love = BaseGame.love.subtract(BaseGame.love, BigNumber(price))
-                    owned++
+                if (BaseGame.love.isGreaterThanOrEqualTo(BigNumber(nextPurchase))) {
+                    BaseGame.love = BaseGame.love.subtract(BaseGame.love, BigNumber(nextPurchase))
+                    if (price > 0)
+                        owned += (nextPurchase / price).toInt()
+                    else
+                        owned = -1
                     BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
                     try {
                         if (owned >= unlocks[unlockIndex].goal)
@@ -375,7 +394,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                         ownedLabel.setText("$owned")
                     }
                     price = (baseCost * multiplier.pow(owned)).toLong()
-                    buyLabel.setText("  Buy 1x     ${BigNumber(price).presentLongScale()}")
+                    nextPurchase = price * nextPurchaseAmount
+                    buyLabel.setText("  Buy x${BigNumber(nextPurchaseAmount).presentLongScale()}     ${BigNumber(nextPurchase).presentLongScale()}")
 
                     if (unlocks.size > unlockIndex && owned >= unlocks[unlockIndex].goal) {
                         applyEffect(unlocks[unlockIndex].effect)

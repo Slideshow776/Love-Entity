@@ -36,6 +36,10 @@ class LevelScreen : BaseScreen() {
     private lateinit var quickLoveNumberLabel: Label
     private lateinit var quickLoveList: Array<ResourceGenerator>
 
+    private lateinit var buyButton: Button
+    private lateinit var buyAmountLabel: Label
+    private var buyIndex = 1
+
     override fun initialize() {
         val heart = Heart(0f, 0f, mainStage)
         val veil = Veil(0f, 0f, mainStage)
@@ -138,12 +142,13 @@ class LevelScreen : BaseScreen() {
         burgerTable.add(debugButton2).row()
         burgerTable.add(debugButton3).row()
         burgerTable.add(debugButton4).row()
-        burgerTable.add(debugButton5).padBottom(100f).row()
+        burgerTable.add(debugButton5).padBottom(50f).row()
         /* ------------------------------------------------------------------------------------------------------- */
 
         communityLeadersButton = TextButton("Community Leaders", BaseGame.textButtonStyle)
         communityLeadersButton.isTransform = true
         communityLeadersButton.setOrigin(Align.center)
+        (communityLeadersButton as TextButton).label.setFontScale(.8f)
         communityLeadersButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(CommunityLeadersScreen())
@@ -154,6 +159,7 @@ class LevelScreen : BaseScreen() {
         upgradesButton = TextButton("Upgrades", BaseGame.textButtonStyle)
         upgradesButton.isTransform = true
         upgradesButton.setOrigin(Align.center)
+        (upgradesButton as TextButton).label.setFontScale(.8f)
         upgradesButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(UpgradesScreen())
@@ -164,6 +170,7 @@ class LevelScreen : BaseScreen() {
         ascensionButton = TextButton("Ascension", BaseGame.textButtonStyle)
         ascensionButton.isTransform = true
         ascensionButton.setOrigin(Align.center)
+        (ascensionButton as TextButton).label.setFontScale(.8f)
         ascensionButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(AscensionScreen())
@@ -172,6 +179,7 @@ class LevelScreen : BaseScreen() {
         burgerTable.add(ascensionButton).row()
 
         val unlocksButton = TextButton("Unlocks", BaseGame.textButtonStyle)
+        (unlocksButton as TextButton).label.setFontScale(.8f)
         unlocksButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 BaseGame.setActiveScreen(UnlocksScreen())
@@ -232,21 +240,96 @@ class LevelScreen : BaseScreen() {
             false
         }
 
+        // quick love
         quickLoveNumberLabel = Label("${quickLoveList.size}", BaseGame.labelStyle)
         quickLoveNumberLabel.setFontScale(.5f)
 
-        val label = Label("Quick Love!", BaseGame.labelStyle)
-        label.setFontScale(.3f)
+        val quickLoveLabel = Label("Quick Love!", BaseGame.labelStyle)
+        quickLoveLabel.setFontScale(.3f)
 
         val qTable = Table()
         qTable.add(quickLoveNumberLabel).top().right().padRight(10f).padBottom(25f).row()
-        qTable.add(label).bottom().padTop(35f)
+        qTable.add(quickLoveLabel).bottom().padTop(35f)
         qTable.setFillParent(true)
         // qTable.debug = true
 
         quickLoveButton.addActor(qTable)
         // quickLoveButton.debug = true
 
+        // buy button
+        buyButton = Button()
+        val buyButtonStyle = Button.ButtonStyle()
+        buyButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("buyBanner")))
+        buyButton = Button(buyButtonStyle)
+        buyButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                var label = ""
+                var amount = -1L
+                when (buyIndex) {
+                    0 -> {
+                        label = "x1"
+                        amount = 1L
+                    }
+                    1 -> {
+                        label = "x10"
+                        amount = 10L
+                    }
+                    2 -> {
+                        label = "x100"
+                        amount = 100L
+                    }
+                    3 -> {
+                        label = "next"
+                        amount = 1
+                    }
+                    4 -> {
+                        label = "max"
+                        amount = 1L
+                        buyIndex = -1
+                    }
+                }
+                for (generator in BaseGame.resourceGenerators) {
+                    if (generator.hideTable.isVisible) break // saves some computing
+                    when (label) {
+                        "next" -> {
+                            val num = generator.unlocks[generator.unlockIndex].goal - generator.owned
+                            if (generator.unlockIndex < generator.unlocks.size && num >= 0) {
+                                Gdx.app.error("LevelScreen", "${generator.unlocks[generator.unlockIndex].goal}")
+                                generator.nextPurchase(num.toLong())
+                            } else
+                                generator.nextPurchase(1L)
+                        }
+                        "max" -> {
+                            val num = BaseGame.love.divide(BaseGame.love, BigNumber(generator.price))
+                            val temp = num.convertBigNumberToString()
+                            if (BaseGame.love.isGreaterThanOrEqualTo(num)) {
+                                generator.nextPurchase(temp.toLong())
+                            } else {
+                                generator.nextPurchase(1)
+                            }
+                        }
+                        else -> generator.nextPurchase(amount)
+                    }
+                }
+                buyAmountLabel.setText("$label")
+                buyIndex++
+            }
+            false
+        }
+        val buyLabel = Label("Buy", BaseGame.labelStyle)
+        buyLabel.setFontScale(.15f)
+        buyAmountLabel = Label("x1", BaseGame.labelStyle)
+        buyAmountLabel.setFontScale(.4f)
+
+        val buyTable = Table()
+        buyTable.add(buyLabel).row()
+        buyTable.add(buyAmountLabel)
+        buyTable.setFillParent(true)
+        // buyTable.debug = true
+
+        buyButton.addActor(buyTable)
+
+        uiTable.add(buyButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .04f).row()
         uiTable.add(burgerTable).fillY().expandY().row()
         uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
                 .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
@@ -312,6 +395,24 @@ class LevelScreen : BaseScreen() {
         if (time > 1) { // calculate every second
             time = 0f
             GameUtils.calculateAscension()
+        }
+
+        // check buy next and buy max
+        for (generator in BaseGame.resourceGenerators) {
+            if (generator.hideTable.isVisible) break // saves some computing
+            if (buyIndex == 4) { // next
+                val num = generator.unlocks[generator.unlockIndex].goal - generator.owned
+                if (generator.unlockIndex < generator.unlocks.size && num >= 0) {
+                    generator.nextPurchase(num.toLong())
+                }
+            } else if (buyIndex == 0) { // max
+                val num = BaseGame.love.divide(BaseGame.love, BigNumber(generator.price))
+                val temp = num.convertBigNumberToString()
+                if (num.maxNumber[0] == 0 && num.maxNumber.size == 1)
+                    generator.nextPurchase(1)
+                else
+                    generator.nextPurchase(temp.toLong())
+            }
         }
 
         // burger menu notifications

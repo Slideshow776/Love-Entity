@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array
 *           which is 999_999_999_999_999_999.
 * */
 class BigNumber(number: Long) {
-    var maxNumber: Array<Int>
+    var maxNumber: Array<Int> = Array()
 
     init {
         maxNumber = convertNumberToArray(number)
@@ -170,6 +170,24 @@ class BigNumber(number: Long) {
         return difference
     }
 
+    /*
+    * Warning:  Becomes more and more imprecise
+    *           This algorithm assumes dividend >= divisor
+    * */
+    fun divide(dividend: BigNumber, divisor: BigNumber): BigNumber {
+        var quotient = BigNumber(0)
+        try {
+            try { // most precise
+                quotient = BigNumber((dividend.convertBigNumberToString().toDouble() / divisor.convertBigNumberToString().toDouble()).toLong())
+            } catch (error: ArithmeticException) { // second most precise
+                quotient = BigNumber(dividend.divideByExponent(divisor.maxNumber.size.toLong()).maxNumber.toString().toDouble().toLong())
+            }
+        } catch (error: ArithmeticException) { // not precise, but works
+            quotient = BigNumber(dividend.maxNumber.size / divisor.maxNumber.size.toLong())
+        }
+        return quotient
+    }
+
     fun isGreaterThanOrEqualTo(number: BigNumber): Boolean {
         // make sure both BigNumbers are of equal size
         if (maxNumber.size < number.size()) {
@@ -232,10 +250,24 @@ class BigNumber(number: Long) {
     private fun size() = maxNumber.size
 
     private fun convertNumberToArray(number: Long): Array<Int> {
+        // Gdx.app.error("BigNumber", "$number")
         val numberString: String = number.toString()
+        /*if (numberString[0].toString() == "-") { // TODO: totally imprecise
+            if (maxNumber.size == 0) {
+                val temp  = Array<Int>()
+                for (i in 0..999999999999999999) // when $number is more than 1 trillion, just add a trillion
+                    temp.add(0)
+                maxNumber = temp
+            } else {
+                for (i in 0..999999999999999999) // when $number is more than 1 trillion, just add a trillion
+                    maxNumber.add(0)
+            }
+            return maxNumber
+        }*/
         val converted = Array<Int>(numberString.length)
-        for (element in numberString)
+        for (element in numberString) {
             converted.add(element.toString().toInt())
+        }
         return converted  // highest tens comes first, e.g. 10 => [1, 0]
     }
 

@@ -20,9 +20,16 @@ burger
   index: -1
 button
   rotate: false
-  xy: 788, 414
+  xy: 509, 19
   size: 78, 78
   orig: 78, 78
+  offset: 0, 0
+  index: -1
+buyBanner
+  rotate: false
+  xy: 788, 429
+  size: 130, 63
+  orig: 130, 63
   offset: 0, 0
   index: -1
 cross-black
@@ -48,7 +55,7 @@ heart
   index: -1
 info
   rotate: false
-  xy: 509, 34
+  xy: 920, 429
   size: 70, 63
   orig: 70, 63
   offset: 0, 0
