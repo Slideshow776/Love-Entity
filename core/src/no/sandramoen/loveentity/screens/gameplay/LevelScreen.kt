@@ -294,7 +294,6 @@ class LevelScreen : BaseScreen() {
                         "next" -> {
                             val num = generator.unlocks[generator.unlockIndex].goal - generator.owned
                             if (generator.unlockIndex < generator.unlocks.size && num >= 0) {
-                                Gdx.app.error("LevelScreen", "${generator.unlocks[generator.unlockIndex].goal}")
                                 generator.nextPurchase(num.toLong())
                             } else
                                 generator.nextPurchase(1L)
@@ -414,7 +413,6 @@ class LevelScreen : BaseScreen() {
                     generator.nextPurchase(temp.toLong())
             }
         }
-
         // burger menu notifications
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeadersWiggleIndex == i &&
@@ -492,14 +490,16 @@ class LevelScreen : BaseScreen() {
         }
     }
 
-    private fun wiggleButton(widget: Button) {
-        widget.addAction(Actions.color(Color.ORANGE, 1f))
-        widget.addAction(Actions.after(Actions.forever(
-                Actions.sequence(
-                        Actions.rotateBy(4f, .25f),
-                        Actions.rotateBy(-4f, .25f)
-                )))
-        )
+    private fun wiggleButton(button: Button) {
+        if (button.actions.size == 0) {
+            button.addAction(Actions.color(Color.ORANGE, 1f))
+            button.addAction(Actions.after(Actions.forever(
+                    Actions.sequence(
+                            Actions.rotateBy(4f, .25f),
+                            Actions.rotateBy(-4f, .25f)
+                    )))
+            )
+        }
     }
 
     private fun initializeAssets() {
