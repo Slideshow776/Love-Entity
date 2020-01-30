@@ -44,7 +44,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     var hasCommunityLeader = false
     var upgrade: Int = 1
-    private var activated = false
+    var activated = false
     private var activatedAnimation = false
 
     var owned: Int = 0
@@ -52,7 +52,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var multiplier: Float = multiplier
     private var price: Long = baseCost * multiplier.pow(owned).toLong()
     private var income: Float = income
-    private var incomeTime: Float = incomeTime
+    var incomeTime: Float = incomeTime
     private var originalIncomeTime: Float = incomeTime
     private var time: Float = 0f
     private var fraction: Float = 0f

@@ -31,6 +31,11 @@ class LevelScreen : BaseScreen() {
 
     private var time = 0f
 
+    private lateinit var quickLoveButton: Button
+    private lateinit var quickLoveButtonStyle: Button.ButtonStyle
+    private lateinit var quickLoveNumberLabel: Label
+    private lateinit var quickLoveList: Array<ResourceGenerator>
+
     override fun initialize() {
         val heart = Heart(0f, 0f, mainStage)
         val veil = Veil(0f, 0f, mainStage)
@@ -44,11 +49,6 @@ class LevelScreen : BaseScreen() {
         loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
-        val burgerButtonStyle = Button.ButtonStyle()
-        burgerButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("burger")))
-
-        burgerTable = Table()
-
         /* debug options------------------------------------------------------------------------------------------ */
         val debugButton1 = TextButton("Add 1k love", BaseGame.textButtonStyle)
         val debugButton2 = TextButton("Add 100k love", BaseGame.textButtonStyle)
@@ -57,6 +57,7 @@ class LevelScreen : BaseScreen() {
         val debugButton5 = TextButton("Restart", BaseGame.textButtonStyle)
 
         debugButton1.label.color = Color.GREEN
+        debugButton1.label.setFontScale(.8f)
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000))
@@ -66,6 +67,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton2.label.color = Color.GREEN
+        debugButton2.label.setFontScale(.8f)
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000))
@@ -75,6 +77,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton3.label.color = Color.GREEN
+        debugButton3.label.setFontScale(.8f)
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000_000))
@@ -84,6 +87,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton4.label.color = Color.GREEN
+        debugButton4.label.setFontScale(.8f)
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 /*BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000_000))
@@ -95,10 +99,12 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton5.label.color = Color.GREEN
+        debugButton5.label.setFontScale(.8f)
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) { // the restart button
                 BaseGame.currentAscensionPoints = 0
                 GameUtils.reset() // resets a bunch of stuff
+                quickLoveList.clear()
                 initializeAssets()
 
                 table.reset()
@@ -125,6 +131,8 @@ class LevelScreen : BaseScreen() {
         val debugLabel = Label("These are debug options", BaseGame.labelStyle)
         debugLabel.color = Color(0 / 255f, 153 / 255f, 0 / 255f, 1f)
         debugLabel.setFontScale(.25f)
+
+        burgerTable = Table()
         burgerTable.add(debugLabel).row()
         burgerTable.add(debugButton1).row()
         burgerTable.add(debugButton2).row()
@@ -169,10 +177,12 @@ class LevelScreen : BaseScreen() {
                 BaseGame.setActiveScreen(UnlocksScreen())
             false
         }
-        burgerTable.add(unlocksButton).row()
+        burgerTable.add(unlocksButton)
 
         burgerTable.isVisible = false
 
+        val burgerButtonStyle = Button.ButtonStyle()
+        burgerButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("burger")))
         burgerButton = Button(burgerButtonStyle)
         burgerButton.isTransform = true
         burgerButton.setOrigin(Align.center)
@@ -204,9 +214,44 @@ class LevelScreen : BaseScreen() {
         uiToggleTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
         uiToggleTable.add(burgerButton).pad(Gdx.graphics.height * .01f)
 
+        quickLoveList = Array()
+        quickLoveButtonStyle = Button.ButtonStyle()
+        quickLoveButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("info")))
+        quickLoveButton = Button(quickLoveButtonStyle)
+        quickLoveButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                var highest = 0f
+                var generatorToBeActivated: ResourceGenerator? = null
+                for (generator in quickLoveList) {
+                    if (generator.incomeTime > highest)
+                        generatorToBeActivated = generator
+                }
+                if (generatorToBeActivated != null)
+                    generatorToBeActivated!!.activated = true
+            }
+            false
+        }
+
+        quickLoveNumberLabel = Label("${quickLoveList.size}", BaseGame.labelStyle)
+        quickLoveNumberLabel.setFontScale(.5f)
+
+        val label = Label("Quick Love!", BaseGame.labelStyle)
+        label.setFontScale(.3f)
+
+        val qTable = Table()
+        qTable.add(quickLoveNumberLabel).top().right().padRight(10f).padBottom(25f).row()
+        qTable.add(label).bottom().padTop(35f)
+        qTable.setFillParent(true)
+        // qTable.debug = true
+
+        quickLoveButton.addActor(qTable)
+        // quickLoveButton.debug = true
+
+        uiTable.add(burgerTable).fillY().expandY().row()
+        uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
+                .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
+        uiTable.add(uiToggleTable).fillX().expandX().bottom()
         // uiTable.debug = true
-        uiTable.add(burgerTable).row()
-        uiTable.add(uiToggleTable).fillX().expand().bottom()
 
         val scrollableTable = Table()
 
@@ -298,6 +343,19 @@ class LevelScreen : BaseScreen() {
             if (!burgerTable.isVisible) wiggleButton(burgerButton)
             wiggleButton(ascensionButton)
         }
+
+        // quick love button
+        quickLoveButton.isVisible = quickLoveList.size > 0
+        for (generator in BaseGame.resourceGenerators) {
+            if (!generator.activated && generator.owned > 0) {
+                quickLoveButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion(generator.avatar))
+                if (!quickLoveList.contains(generator)) quickLoveList.add(generator)
+                quickLoveNumberLabel.setText("${quickLoveList.size}")
+            } else {
+                if (quickLoveList.contains(generator)) quickLoveList.removeValue(generator, true)
+                quickLoveNumberLabel.setText("${quickLoveList.size}")
+            }
+        }
     }
 
     override fun keyDown(keycode: Int): Boolean {
@@ -347,10 +405,10 @@ class LevelScreen : BaseScreen() {
         val allyUnlocks = Array<Unlock>()
         allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
 
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "pixelAvatarTest", allyUnlocks, 4, 1.07f, 1f, .5f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "pixelAvatarTest", allyUnlocks, 60, 1.15f, 60f, 3f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "pixelAvatarTest", allyUnlocks, 720, 1.14f, 540f, 6f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "pixelAvatarTest", allyUnlocks, 8640, 1.13f, 4320f, 12f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "pixelAvatarTestA", allyUnlocks, 4, 1.07f, 1f, .5f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "pixelAvatarTestB", allyUnlocks, 60, 1.15f, 60f, 3f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "pixelAvatarTestG", allyUnlocks, 720, 1.14f, 540f, 6f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "pixelAvatarTestL", allyUnlocks, 8640, 1.13f, 4320f, 12f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))

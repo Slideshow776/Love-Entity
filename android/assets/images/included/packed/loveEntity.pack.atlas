@@ -1,75 +1,103 @@
 
 loveEntity.pack.png
-size: 1024,256
+size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 border
   rotate: false
-  xy: 771, 171
+  xy: 661, 287
   size: 78, 78
   orig: 78, 78
   offset: 0, 0
   index: -1
 burger
   rotate: false
-  xy: 340, 10
+  xy: 509, 99
   size: 150, 85
   orig: 150, 85
   offset: 0, 0
   index: -1
 button
   rotate: false
-  xy: 492, 17
+  xy: 788, 414
   size: 78, 78
   orig: 78, 78
   offset: 0, 0
   index: -1
 cross-black
   rotate: false
-  xy: 340, 97
+  xy: 509, 340
   size: 150, 152
   orig: 150, 152
   offset: 0, 0
   index: -1
 cross-white
   rotate: false
-  xy: 492, 97
+  xy: 509, 186
   size: 150, 152
   orig: 150, 152
   offset: 0, 0
   index: -1
 heart
   rotate: false
-  xy: 644, 124
+  xy: 661, 367
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
 info
   rotate: false
-  xy: 851, 186
+  xy: 509, 34
   size: 70, 63
   orig: 70, 63
   offset: 0, 0
   index: -1
 itemTest
   rotate: false
-  xy: 2, 5
+  xy: 2, 248
   size: 167, 244
   orig: 167, 244
   offset: 0, 0
   index: -1
 pixelAvatarTest
   rotate: false
+  xy: 2, 5
+  size: 167, 241
+  orig: 167, 241
+  offset: 0, 0
+  index: -1
+pixelAvatarTestA
+  rotate: false
+  xy: 171, 251
+  size: 167, 241
+  orig: 167, 241
+  offset: 0, 0
+  index: -1
+pixelAvatarTestB
+  rotate: false
   xy: 171, 8
+  size: 167, 241
+  orig: 167, 241
+  offset: 0, 0
+  index: -1
+pixelAvatarTestG
+  rotate: false
+  xy: 340, 251
+  size: 167, 241
+  orig: 167, 241
+  offset: 0, 0
+  index: -1
+pixelAvatarTestL
+  rotate: false
+  xy: 340, 8
   size: 167, 241
   orig: 167, 241
   offset: 0, 0
   index: -1
 question
   rotate: false
-  xy: 572, 32
+  xy: 661, 222
   size: 70, 63
   orig: 70, 63
   offset: 0, 0
