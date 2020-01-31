@@ -22,6 +22,7 @@ import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
 import java.math.BigInteger
+import kotlin.math.floor
 import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
@@ -44,7 +45,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     var hasCommunityLeader = false
     var upgrade: Int = 1
     var activated = false
-    private var activatedAnimation = false
 
     var owned: BigInteger = BigInteger.ZERO
     var baseCost: Long = baseCost
@@ -56,7 +56,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     var incomeTime: Float = incomeTime
     private var originalIncomeTime: Float = incomeTime
     private var time: Float = 0f
-    private var fraction: Float = 0f
 
     private lateinit var activateButton: Button
     private lateinit var ownedLabel: Label
@@ -85,9 +84,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         owned = GameUtils.getBigNumber(resourceName + "Owned")
         time = BaseGame.prefs!!.getFloat(resourceName + "Time")
         hasCommunityLeader = BaseGame.prefs!!.getBoolean(resourceName + "HasCommunityLeader")
+        activated = BaseGame.prefs!!.getBoolean(resourceName + "Activated")
         if (BaseGame.prefs!!.getInteger(resourceName + "Upgrade") > 0)
             upgrade = BaseGame.prefs!!.getInteger(resourceName + "Upgrade")
-        activatedAnimation = owned >= BigInteger.ONE && !activated
         price = BigInteger(baseCost.toString()).multiply(BigInteger(multiplier.pow(owned.toFloat()).toLong().toString()))
         nextPurchase = BigInteger(price.toString())
         addLoveSinceLastTimedPlayed()
@@ -178,7 +177,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         labelTime(time)
 
         if (time >= incomeTime) {
-            val product = owned.multiply(BigInteger(income.toString()))
+            val product = owned.multiply(BigInteger(income.toLong().toString()))
             val totalIncome = if (BaseGame.currentAscensionPoints > 0)
                 product.toLong() * upgrade * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus * BaseGame.heartBonus)
             else
@@ -187,9 +186,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger(totalIncome.toString()))
 
             activated = hasCommunityLeader
-
-            if (!activated)
-                activatedAnimation = true
             time = 0f
             timeProgress.width = 0f
         }
@@ -197,18 +193,18 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (activated || (hasCommunityLeader && owned > BigInteger.ZERO)) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
+            BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
             labelTime(time)
             timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
             activateButton.clearActions()
             activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
         } else {
-            if (activatedAnimation) {
+            if (activateButton.actions.isEmpty && owned > BigInteger.ZERO) {
                 activateButton.addAction(Actions.forever(Actions.sequence(
                         Actions.scaleTo(1.1f, 1.1f, .25f),
                         Actions.delay(.125f),
                         Actions.scaleTo(1.0f, 1.0f, .25f)
                 )))
-                activatedAnimation = false
             }
         }
         timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
@@ -220,8 +216,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     }
 
     fun addLoveSinceLastTimedPlayed() {
-        if (time > 0) {
-            BaseGame.love = BaseGame.love.add(BigInteger(((income / incomeTime) * BaseGame.secondsSinceLastPlayed).toInt().toString()))
+        if (hasCommunityLeader || activated) {
+            val temp = floor((BaseGame.secondsSinceLastPlayed + BaseGame.prefs!!.getFloat(resourceName + "Time")) / incomeTime)
+            if (BaseGame.currentAscensionPoints > 0)
+                BaseGame.love = BaseGame.love.add(BigInteger((temp * income * upgrade * BaseGame.currentAscensionPoints * BaseGame.ascensionBonus).toLong().toString()))
+            else
+                BaseGame.love = BaseGame.love.add(BigInteger((temp * income * upgrade).toLong().toString()))
             time += BaseGame.secondsSinceLastPlayed % time
         }
     }
@@ -235,7 +235,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         price = BigInteger((baseCost * multiplier.pow(owned.toFloat())).toLong().toString())
         nextPurchase = price
-        fraction = 0f
         buyLabel.setText("  Buy 1x     ${GameUtils.presentLongScale(nextPurchase)}")
 
         time = 0f
@@ -251,8 +250,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         BaseGame.prefs!!.putFloat(resourceName + "Time", time)
         BaseGame.prefs!!.putBoolean(resourceName + "HasCommunityLeader", false)
+        BaseGame.prefs!!.putBoolean(resourceName + "Activated", false)
         BaseGame.prefs!!.putInteger(resourceName + "Upgrade", 1)
-        // BaseGame.prefs!!.putInteger(resourceName + "Owned", owned)
         GameUtils.putBigNumber(resourceName + "Owned", owned)
         BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
 
@@ -334,7 +333,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             if (GameUtils.isTouchDownEvent(e)) {
                 if (owned > BigInteger.ZERO) {
                     activated = true
-                    activatedAnimation = false
+                    BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
                 }
             }
             false
@@ -343,7 +342,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     }
 
     private fun rightTable(s: Stage): Table {
-
         // progress
         timeProgress = BaseActor(0f, 0f, s)
         timeProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
@@ -389,8 +387,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     }
 
                     if (unlocks.size > unlockIndex) {
-                        if (owned == BigInteger.ONE)
-                            activatedAnimation = true
                         if (unlockIndex == 0) {
                             unlockProgression.width = (selfWidth * .25f) * (owned.toFloat() / unlocks[unlockIndex].goal)
                         } else {

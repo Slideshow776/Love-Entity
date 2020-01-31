@@ -455,8 +455,13 @@ class LevelScreen : BaseScreen() {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Input.Keys.BACK)
+        if (keycode == Input.Keys.BACK) {
+            GameUtils.saveGameState()
+            super.dispose()
+            BaseGame.assetManager.dispose()
+            BaseGame.fontGenerator.dispose()
             Gdx.app.exit()
+        }
         return false;
     }
 

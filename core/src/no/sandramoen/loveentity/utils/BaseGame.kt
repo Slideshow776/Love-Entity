@@ -27,16 +27,15 @@ import java.math.BigInteger
 import java.util.Date
 
 abstract class BaseGame : Game(), AssetErrorListener {
-
-    private lateinit var assetManager: AssetManager
-    private lateinit var fontGenerator: FreeTypeFontGenerator
-
     init {
         game = this
     }
 
     companion object {
         private var game: BaseGame? = null
+
+        lateinit var assetManager: AssetManager
+        lateinit var fontGenerator: FreeTypeFontGenerator
 
         var labelStyle: LabelStyle? = null
         var textButtonStyle: TextButtonStyle? = null
