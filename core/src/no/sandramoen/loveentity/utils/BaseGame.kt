@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.CommunityLeader
 import no.sandramoen.loveentity.actors.ResourceGenerator
 import no.sandramoen.loveentity.actors.Upgrade
+import java.math.BigInteger
 import java.util.Date
 
 abstract class BaseGame : Game(), AssetErrorListener {
@@ -45,8 +46,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         // game state
         var prefs: Preferences? = null
-        lateinit var love: BigNumber
-        lateinit var lifeTimeLove: BigNumber
+        lateinit var love: BigInteger
+        lateinit var lifeTimeLove: BigInteger
         var revealNextGeneratorIndex = 0
         var lastTimePlayed = 0L
         var secondsSinceLastPlayed = 0L
@@ -72,8 +73,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         prefs = Gdx.app.getPreferences("loveEntityGameState")
         love = GameUtils.getBigNumber("love")
         lifeTimeLove = GameUtils.getBigNumber("lifeTimeLove")
-        if (love.maxNumber.size == 0) love = BigNumber(0)
-        if (lifeTimeLove.maxNumber.size == 0) lifeTimeLove = BigNumber(0)
+        if (love == BigInteger.ZERO) love = BigInteger("0")
+        if (lifeTimeLove == BigInteger.ZERO) lifeTimeLove = BigInteger("0")
         revealNextGeneratorIndex = BaseGame.prefs!!.getInteger("revealNextGeneratorIndex")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
@@ -139,7 +140,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         // add love generated since pausing
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
         if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
-        for (generator in BaseGame.resourceGenerators)
+        for (generator in resourceGenerators)
             generator.addLoveSinceLastTimedPlayed()
     }
 

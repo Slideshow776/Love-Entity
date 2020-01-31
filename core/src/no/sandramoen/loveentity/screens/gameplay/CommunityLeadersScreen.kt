@@ -30,7 +30,7 @@ class CommunityLeadersScreen : BaseScreen() {
         titleLabel = Label("Community Leaders", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
 
-        loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
@@ -119,7 +119,7 @@ class CommunityLeadersScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveLabel.setText("${BaseGame.love.presentLongScale()} love")
+        loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
 
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeaders[i].remove) {

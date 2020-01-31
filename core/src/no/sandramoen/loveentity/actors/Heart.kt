@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
-import no.sandramoen.loveentity.utils.BigNumber
+import java.math.BigInteger
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     val income = 1L
@@ -30,11 +30,11 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                     clicks++
 
                     if (BaseGame.currentAscensionPoints > 0) {
-                        BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
-                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus))
+                        BaseGame.love = BaseGame.love.add(BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString()))
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString()))
                     } else {
-                        BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(income * BaseGame.heartBonus))
-                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(income * BaseGame.heartBonus))
+                        BaseGame.love = BaseGame.love.add(BigInteger((income * BaseGame.heartBonus).toString()))
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger((income * BaseGame.heartBonus).toString()))
                     }
 
                     addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))

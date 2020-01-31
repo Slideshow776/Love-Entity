@@ -2,6 +2,7 @@ package no.sandramoen.loveentity.utils
 
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import java.math.BigInteger
 import java.util.Date
 import kotlin.math.sqrt
 
@@ -22,15 +23,10 @@ class GameUtils {
             BaseGame.prefs!!.flush()
         }
 
-        fun getBigNumber(value: String): BigNumber {
-            val bigNumber = BigNumber(0)
-            var i = 0
-            while (BaseGame.prefs!!.contains("$value-$i")) {
-                bigNumber.maxNumber.add(BaseGame.prefs!!.getInteger("$value-$i"))
-                i++
-            }
-            bigNumber.maxNumber.removeIndex(0) // removes the initialized value
-            return bigNumber
+        fun getBigNumber(value: String): BigInteger {
+            if (BaseGame.prefs!!.getString(value) == "0" || BaseGame.prefs!!.getString(value) == "")
+                return BigInteger.ZERO
+            return BigInteger(BaseGame.prefs!!.getString(value))
         }
 
         fun getInformationText(name: String): String {
@@ -50,22 +46,13 @@ class GameUtils {
         }
 
         fun calculateAscension() {
-            var quotient = 0.0
-            try {
-                try { // most precise
-                    quotient = BaseGame.lifeTimeLove.convertBigNumberToString().toDouble() / 1_000_000_000_000_000 // 10^15
-                } catch (error: ArithmeticException) { // second most precise
-                    quotient = BaseGame.lifeTimeLove.divideByExponent(15).maxNumber.toString().toDouble()
-                }
-            } catch (error: ArithmeticException) { // not precise, but works
-                quotient = (BaseGame.lifeTimeLove.maxNumber.size / 15).toDouble()
-            }
-            BaseGame.claimAscensionPoints = (150 * sqrt(quotient)).toLong()
+            val quotient = BaseGame.lifeTimeLove.divide(BigInteger("1000000000000000")).toDouble()
+            BaseGame.claimAscensionPoints = 150 * sqrt(quotient).toLong()
         }
 
         fun reset() {
-            BaseGame.love = BigNumber(0)
-            BaseGame.lifeTimeLove = BigNumber(0)
+            BaseGame.love = BigInteger("0")
+            BaseGame.lifeTimeLove = BigInteger("0")
             BaseGame.revealNextGeneratorIndex = 0
             BaseGame.heartBonus = 1
             BaseGame.communityLeadersWiggleIndex = 0
@@ -78,16 +65,106 @@ class GameUtils {
             saveGameState()
         }
 
-        private fun putBigNumber(value: String, bigNumber: BigNumber) {
-            var i = 0
-            while (BaseGame.prefs!!.contains("$value-$i")) { // clear value in case of contamination
-                BaseGame.prefs!!.remove("$value-$i")
-                i++
+        fun putBigNumber(value: String, bigNumber: BigInteger) {
+            BaseGame.prefs!!.putString("$value", bigNumber.toString())
+        }
+
+        fun presentLongScale(number: BigInteger): String {
+            var label = ""
+            when {
+                number.toString().length >= 600 + 1 -> label = labelBigNumber(number.toString(), "centillion", 600)
+                number.toString().length >= 120 + 1 -> label = labelBigNumber(number.toString(), "vigintillion", 120)
+                number.toString().length >= 114 + 1 -> label = labelBigNumber(number.toString(), "novemdecillion", 114)
+                number.toString().length >= 108 + 1 -> label = labelBigNumber(number.toString(), "octodecillion", 108)
+                number.toString().length >= 102 + 1 -> label = labelBigNumber(number.toString(), "septendecillion", 102)
+                number.toString().length >= 96 + 1 -> label = labelBigNumber(number.toString(), "sexdecillion", 96)
+                number.toString().length >= 90 + 1 -> label = labelBigNumber(number.toString(), "quindecillion", 90)
+                number.toString().length >= 84 + 1 -> label = labelBigNumber(number.toString(), "quattuordecillion", 84)
+                number.toString().length >= 78 + 1 -> label = labelBigNumber(number.toString(), "tredecillion", 78)
+                number.toString().length >= 72 + 1 -> label = labelBigNumber(number.toString(), "duodecillion", 72)
+                number.toString().length >= 66 + 1 -> label = labelBigNumber(number.toString(), "undecillion", 66)
+                number.toString().length >= 60 + 1 -> label = labelBigNumber(number.toString(), "decillion", 60)
+                number.toString().length >= 54 + 1 -> label = labelBigNumber(number.toString(), "nonillion", 54)
+                number.toString().length >= 48 + 1 -> label = labelBigNumber(number.toString(), "octillion", 48)
+                number.toString().length >= 42 + 1 -> label = labelBigNumber(number.toString(), "septillion", 42)
+                number.toString().length >= 36 + 1 -> label = labelBigNumber(number.toString(), "sextillion", 36)
+                number.toString().length >= 30 + 1 -> label = labelBigNumber(number.toString(), "quintillion", 30)
+                number.toString().length >= 24 + 1 -> label = labelBigNumber(number.toString(), "quadrillion", 24)
+                number.toString().length >= 18 + 1 -> label = labelBigNumber(number.toString(), "trillion", 18)
+                number.toString().length >= 15 + 1 -> label = labelBigNumber(number.toString(), "billiard", 15)
+                number.toString().length >= 12 + 1 -> label = labelBigNumber(number.toString(), "billion", 12)
+                number.toString().length >= 9 + 1 -> label = labelBigNumber(number.toString(), "milliard", 9)
+                number.toString().length >= 6 + 1 -> label = labelBigNumber(number.toString(), "million", 6)
+                else -> {
+                    val temp = number.toString()
+                    for (i in temp.length - 1 downTo 0) {
+                        if (i % 3 == 0 && i > 0)
+                            label += "${temp[temp.length - (i + 1)]}," // 9 - 8 = 1
+                        else
+                            label += "${temp[temp.length - (i + 1)]}"
+                    }
+                }
+            }
+            return label
+        }
+
+        fun presentShortScale(number: BigInteger): String {
+            var label = ""
+            when {
+                number.toString().length >= 303 + 1 -> label = labelBigNumber(number.toString(), "centillion", 303)
+                number.toString().length >= 63 + 1 -> label = labelBigNumber(number.toString(), "vigintillion", 63)
+                number.toString().length >= 60 + 1 -> label = labelBigNumber(number.toString(), "novemdecillion", 60)
+                number.toString().length >= 57 + 1 -> label = labelBigNumber(number.toString(), "octodecillion", 57)
+                number.toString().length >= 54 + 1 -> label = labelBigNumber(number.toString(), "septendecillion", 54)
+                number.toString().length >= 51 + 1 -> label = labelBigNumber(number.toString(), "sexdecillion", 51)
+                number.toString().length >= 48 + 1 -> label = labelBigNumber(number.toString(), "quindecillion", 48)
+                number.toString().length >= 45 + 1 -> label = labelBigNumber(number.toString(), "quattuordecillion", 45)
+                number.toString().length >= 42 + 1 -> label = labelBigNumber(number.toString(), "tredecillion", 42)
+                number.toString().length >= 39 + 1 -> label = labelBigNumber(number.toString(), "duodecillion", 39)
+                number.toString().length >= 36 + 1 -> label = labelBigNumber(number.toString(), "undecillion", 36)
+                number.toString().length >= 33 + 1 -> label = labelBigNumber(number.toString(), "decillion", 33)
+                number.toString().length >= 30 + 1 -> label = labelBigNumber(number.toString(), "nonillion", 30)
+                number.toString().length >= 27 + 1 -> label = labelBigNumber(number.toString(), "octillion", 27)
+                number.toString().length >= 24 + 1 -> label = labelBigNumber(number.toString(), "septillion", 24)
+                number.toString().length >= 21 + 1 -> label = labelBigNumber(number.toString(), "sextillion", 21)
+                number.toString().length >= 18 + 1 -> label = labelBigNumber(number.toString(), "quintillion", 18)
+                number.toString().length >= 15 + 1 -> label = labelBigNumber(number.toString(), "quadrillion", 15)
+                number.toString().length >= 12 + 1 -> label = labelBigNumber(number.toString(), "trillion", 12)
+                number.toString().length >= 9 + 1 -> label = labelBigNumber(number.toString(), "billion", 9)
+                number.toString().length >= 6 + 1 -> label = labelBigNumber(number.toString(), "million", 6)
+                else -> {
+                    val temp = number.toString()
+                    for (i in temp.length - 1 downTo 0) {
+                        if (i % 3 == 0 && i > 0)
+                            label += "${temp[temp.length - (i + 1)]}," // 9 - 8 = 1
+                        else
+                            label += "${temp[temp.length - (i + 1)]}"
+                    }
+                }
+            }
+            return label
+        }
+
+        private fun labelBigNumber(number: String, name: String, current: Int): String {
+            var label = ""
+
+            // integers
+            for (i in current until number.length)
+                label += number[i - current]
+
+            // decimals
+            when {
+                number[number.length - current + 2].toString().toInt() > 0 ->
+                    label += ".${number[number.length - current + 0]}${number[number.length - current + 1]}${number[number.length - current + 2]}"
+                number[number.length - current + 1].toString().toInt() > 0 ->
+                    label += ".${number[number.length - current + 0]}${number[number.length - current + 1]}"
+                number[number.length - current + 0].toString().toInt() > 0 ->
+                    label += ".${number[number.length - current + 0]}"
             }
 
-            for (i in 0 until bigNumber.maxNumber.size) {
-                BaseGame.prefs!!.putInteger("$value-$i", bigNumber.maxNumber[i])
-            }
+            // add name
+            label += " $name"
+            return label
         }
     }
 }

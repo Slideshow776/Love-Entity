@@ -11,11 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Array
-import no.sandramoen.loveentity.actors.Upgrade
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
-import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
 
 class UpgradesScreen : BaseScreen() {
@@ -32,7 +29,7 @@ class UpgradesScreen : BaseScreen() {
         titleLabel = Label("Upgrades", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
 
-        loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
@@ -120,7 +117,7 @@ class UpgradesScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveLabel.setText("${BaseGame.love.presentLongScale()} love")
+        loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
 
         for (i in 0 until BaseGame.upgrades.size) {
             if (BaseGame.upgrades[i].remove) {
@@ -144,7 +141,7 @@ class UpgradesScreen : BaseScreen() {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if(keycode == Input.Keys.BACK)
+        if (keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
         return false;
     }

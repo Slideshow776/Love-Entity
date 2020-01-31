@@ -16,10 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
-import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
+import java.math.BigInteger
 
-class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description: String, price: BigNumber) : BaseActor(0f, 0f, s) {
+class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description: String, price: BigInteger) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
     var id = id
@@ -34,7 +34,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
     private var costLabel: Label
     var button: TextButton
 
-    var price = price
+    var price: BigInteger = price
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -66,7 +66,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         heartIcon.height = 40f
 
         // cost
-        costLabel = Label("${price.presentLongScale()}", BaseGame.labelStyle)
+        costLabel = Label("${GameUtils.presentLongScale(price)}", BaseGame.labelStyle)
         costLabel.setFontScale(.5f)
 
         val infoTable = Table()
@@ -81,7 +81,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         // button
         button = TextButton("Invest!", BaseGame.textButtonStyle)
         button.isTransform = true
-        if (!BaseGame.love.isGreaterThanOrEqualTo(price))
+        if (!BaseGame.love >= price)
             button.color = Color.DARK_GRAY
         else
             button.color = Color.WHITE
@@ -89,8 +89,8 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                if (BaseGame.love.isGreaterThanOrEqualTo(price)) {
-                    BaseGame.love = BaseGame.love.subtract(BaseGame.love, price)
+                if (BaseGame.love >= price) {
+                    BaseGame.love = BaseGame.love.subtract(price)
                     GameUtils.saveGameState()
                     BaseGame.resourceGenerators[id].upgrade *= 3 // this systems assumes all upgrades are multiplicable of 3's
                     BaseGame.prefs!!.putInteger(BaseGame.resourceGenerators[id].resourceName + "Upgrade", BaseGame.resourceGenerators[id].upgrade)
@@ -142,7 +142,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
     }
 
     fun checkAffordable() {
-        if (BaseGame.love.isGreaterThanOrEqualTo(price))
+        if (BaseGame.love >= price)
             button.color = Color.WHITE
         else
             button.color = Color.DARK_GRAY

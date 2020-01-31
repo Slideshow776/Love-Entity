@@ -16,14 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
-import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
+import java.math.BigInteger
 
-class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, description: String, price: BigNumber) : BaseActor(0f, 0f, s) {
+class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, description: String, price: BigInteger) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
 
-    var price = price
+    var price: BigInteger = price
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
@@ -65,7 +65,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         heartIcon.height = 40f
 
         // cost
-        costLabel = Label("${price.presentLongScale()}", BaseGame.labelStyle)
+        costLabel = Label("${GameUtils.presentLongScale(price)}", BaseGame.labelStyle)
         costLabel.setFontScale(.5f)
 
 
@@ -81,14 +81,14 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         // button
         button = TextButton("Recruit!", BaseGame.textButtonStyle)
         button.isTransform = true
-        if (BaseGame.love.isGreaterThanOrEqualTo(price)) button.color = Color.WHITE
+        if (BaseGame.love >= price) button.color = Color.WHITE
         else button.color = Color.DARK_GRAY
         button.scaleBy(-.2f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                if (BaseGame.love.isGreaterThanOrEqualTo(price)) {
-                    BaseGame.love = BaseGame.love.subtract(BaseGame.love, price)
+                if (BaseGame.love >= price) {
+                    BaseGame.love = BaseGame.love.subtract(price)
                     GameUtils.saveGameState()
                     BaseGame.resourceGenerators[id].hasCommunityLeader = true
                     BaseGame.prefs!!.putBoolean(BaseGame.resourceGenerators[id].resourceName + "HasCommunityLeader", true)
@@ -140,7 +140,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     }
 
     fun checkAffordable() {
-        if (BaseGame.love.isGreaterThanOrEqualTo(price))
+        if (BaseGame.love >= price)
             button.color = Color.WHITE
         else
             button.color = Color.DARK_GRAY

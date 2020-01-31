@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.*
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
-import no.sandramoen.loveentity.utils.BigNumber
 import no.sandramoen.loveentity.utils.GameUtils
+import java.math.BigInteger
 
 class LevelScreen : BaseScreen() {
     private lateinit var loveLabel: Label
@@ -50,7 +50,7 @@ class LevelScreen : BaseScreen() {
         for (generator in BaseGame.resourceGenerators)
             generator.enable()
 
-        loveLabel = Label("${BaseGame.love.presentLongScale()} love", BaseGame.labelStyle)
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
         /* debug options------------------------------------------------------------------------------------------ */
@@ -64,8 +64,8 @@ class LevelScreen : BaseScreen() {
         debugButton1.label.setFontScale(.8f)
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000))
-                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1_000))
+                BaseGame.love = BaseGame.love.add(BigInteger("1000"))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("1000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
@@ -74,8 +74,8 @@ class LevelScreen : BaseScreen() {
         debugButton2.label.setFontScale(.8f)
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000))
-                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(100_000))
+                BaseGame.love = BaseGame.love.add(BigInteger("100000"))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("100000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
@@ -84,8 +84,8 @@ class LevelScreen : BaseScreen() {
         debugButton3.label.setFontScale(.8f)
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(1_000_000))
-                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(1_000_000))
+                BaseGame.love = BaseGame.love.add(BigInteger("1000000"))
+                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("1000000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
@@ -94,10 +94,8 @@ class LevelScreen : BaseScreen() {
         debugButton4.label.setFontScale(.8f)
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                /*BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(100_000_000))
-                BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BaseGame.lifeTimeLove, BigNumber(100_000_000))*/
-                BaseGame.love = BaseGame.love.add(BaseGame.love, BigNumber(999_999_999_999_999_999))
-                BaseGame.lifeTimeLove = BaseGame.love.add(BaseGame.lifeTimeLove, BigNumber(999_999_999_999_999_999))
+                BaseGame.love = BaseGame.love.add(BigInteger("1000000000000000000"))
+                BaseGame.lifeTimeLove = BaseGame.love.add(BigInteger("1000000000000000000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
             }
             false
@@ -292,22 +290,21 @@ class LevelScreen : BaseScreen() {
                     if (generator.hideTable.isVisible) break // saves some computing
                     when (label) {
                         "next" -> {
-                            val num = generator.unlocks[generator.unlockIndex].goal - generator.owned
-                            if (generator.unlockIndex < generator.unlocks.size && num >= 0) {
-                                generator.nextPurchase(num.toLong())
+                            if (generator.unlockIndex < generator.unlocks.size) {
+                                val num = BigInteger((generator.unlocks[generator.unlockIndex].goal).toString()).subtract(generator.owned)
+                                generator.nextPurchase(BigInteger(num.toString()))
                             } else
-                                generator.nextPurchase(1L)
+                                generator.nextPurchase(BigInteger.ONE)
                         }
                         "max" -> {
-                            val num = BaseGame.love.divide(BaseGame.love, BigNumber(generator.price))
-                            val temp = num.convertBigNumberToString()
-                            if (BaseGame.love.isGreaterThanOrEqualTo(num)) {
-                                generator.nextPurchase(temp.toLong())
+                            val num = BaseGame.love.divide(generator.price)
+                            if (BaseGame.love >= num) {
+                                generator.nextPurchase(num)
                             } else {
-                                generator.nextPurchase(1)
+                                generator.nextPurchase(BigInteger.ONE)
                             }
                         }
-                        else -> generator.nextPurchase(amount)
+                        else -> generator.nextPurchase(BigInteger(amount.toString()))
                     }
                 }
                 buyAmountLabel.setText("$label")
@@ -381,10 +378,10 @@ class LevelScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveLabel.setText("${BaseGame.love.presentLongScale()} love")
+        loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
 
         if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size &&
-                BaseGame.love.isGreaterThanOrEqualTo(BigNumber(BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex].baseCost)))
+                BaseGame.love >= BigInteger((BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex].baseCost).toString()))
             revealNextGenerator = true
 
         if (revealNextGenerator)
@@ -400,24 +397,24 @@ class LevelScreen : BaseScreen() {
         for (generator in BaseGame.resourceGenerators) {
             if (generator.hideTable.isVisible) break // saves some computing
             if (buyIndex == 4) { // next
-                val num = generator.unlocks[generator.unlockIndex].goal - generator.owned
-                if (generator.unlockIndex < generator.unlocks.size && num >= 0) {
-                    generator.nextPurchase(num.toLong())
-                }
+                if (generator.unlockIndex < generator.unlocks.size) {
+                    val num = BigInteger((generator.unlocks[generator.unlockIndex].goal).toString()).subtract(generator.owned)
+                    generator.nextPurchase(BigInteger(num.toString()))
+                } else
+                    generator.nextPurchase(BigInteger.ONE)
             } else if (buyIndex == 0) { // max
-                val num = BaseGame.love.divide(BaseGame.love, BigNumber(generator.price))
-                val temp = num.convertBigNumberToString()
-                if (num.maxNumber[0] == 0 && num.maxNumber.size == 1)
-                    generator.nextPurchase(1)
+                val num = BaseGame.love.divide(generator.price)
+                if (num == BigInteger.ZERO)
+                    generator.nextPurchase(BigInteger.ONE)
                 else
-                    generator.nextPurchase(temp.toLong())
+                    generator.nextPurchase(num)
             }
         }
         // burger menu notifications
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeadersWiggleIndex == i &&
                     !BaseGame.communityLeaders[i].remove &&
-                    BaseGame.love.isGreaterThanOrEqualTo(BaseGame.communityLeaders[i].price)) {
+                    BaseGame.love >= BaseGame.communityLeaders[i].price) {
                 BaseGame.communityLeadersWiggleIndex++ // seen, but not clicked on
                 BaseGame.prefs!!.putInteger("communityLeadersWiggleIndex", BaseGame.communityLeadersWiggleIndex)
                 if (!burgerTable.isVisible) wiggleButton(burgerButton)
@@ -429,7 +426,7 @@ class LevelScreen : BaseScreen() {
         for (i in 0 until BaseGame.upgrades.size) {
             if (BaseGame.upgradesWiggleIndex == i &&
                     !BaseGame.upgrades[i].remove &&
-                    BaseGame.love.isGreaterThanOrEqualTo(BaseGame.upgrades[i].price)) {
+                    BaseGame.love >= BaseGame.upgrades[i].price) {
                 BaseGame.upgradesWiggleIndex++ // seen, but not clicked on
                 BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.communityLeadersWiggleIndex)
                 if (!burgerTable.isVisible) wiggleButton(burgerButton)
@@ -446,7 +443,7 @@ class LevelScreen : BaseScreen() {
         // quick love button
         quickLoveButton.isVisible = quickLoveList.size > 0
         for (generator in BaseGame.resourceGenerators) {
-            if (!generator.activated && generator.owned > 0) {
+            if (!generator.activated && generator.owned > BigInteger.ZERO) {
                 quickLoveButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion(generator.avatar))
                 if (!quickLoveList.contains(generator)) quickLoveList.add(generator)
                 quickLoveNumberLabel.setText("${quickLoveList.size}")
@@ -517,37 +514,37 @@ class LevelScreen : BaseScreen() {
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
 
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigNumber(1_000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigNumber(15000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigNumber(100000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigNumber(500000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigNumber(1200000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigNumber(10000000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigNumber(111111111)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigNumber(555555555)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigNumber(10000000000)))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigNumber(100000000000)))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigInteger("1000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigInteger("15000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigInteger("100000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigInteger("500000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigInteger("1200000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigInteger("10000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigInteger("111111111")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigInteger("555555555")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigInteger("10000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigInteger("100000000000")))
 
         // this system assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-            BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigNumber(250)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigInteger("250")))
         if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigNumber(500)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigInteger("500")))
         if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigNumber(1000000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigInteger("1000000")))
         if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigNumber(5000000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigInteger("5000000")))
         if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigNumber(10_000_000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigInteger("10000000")))
         if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigNumber(25000000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigInteger("25000000")))
         if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigNumber(500000000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigInteger("500000000")))
         if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigNumber(10_000_000_000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigInteger("10000000000")))
         if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigNumber(250_000_000_000)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigInteger("250000000000")))
         if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigNumber(999999999999999999)))
+            BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigInteger("999999999999999999")))
     }
 }
