@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Event
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -22,6 +23,8 @@ class LevelScreen : BaseScreen() {
     private lateinit var communityLeadersButton: Button
     private lateinit var upgradesButton: Button
     private lateinit var ascensionButton: Button
+    private lateinit var buyButtonLabel: Label
+    private lateinit var quickLoveLabel: Label
 
     private var revealNextGenerator = false
 
@@ -48,9 +51,6 @@ class LevelScreen : BaseScreen() {
 
         for (generator in BaseGame.resourceGenerators)
             generator.enable()
-
-        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
-        loveLabel.setFontScale(.5f)
 
         /* debug options------------------------------------------------------------------------------------------ */
         val debugButton1 = TextButton("Add 1k love", BaseGame.textButtonStyle)
@@ -186,6 +186,7 @@ class LevelScreen : BaseScreen() {
 
         burgerTable.isVisible = false
 
+        // burger button
         val burgerButtonStyle = Button.ButtonStyle()
         burgerButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("burger")))
         burgerButton = Button(burgerButtonStyle)
@@ -199,6 +200,14 @@ class LevelScreen : BaseScreen() {
                     burgerTable.isVisible = false
                     for (generator in BaseGame.resourceGenerators)
                         generator.enable()
+                    buyButton.touchable = Touchable.enabled
+                    buyButton.color.a = 1f
+                    buyButtonLabel.color.a = 1f
+                    buyAmountLabel.color.a = 1f
+                    quickLoveButton.touchable = Touchable.enabled
+                    quickLoveButton.color.a = 1f
+                    quickLoveLabel.color.a = 1f
+                    quickLoveNumberLabel.color.a = 1f
                 } else {
                     burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("cross-white"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
@@ -208,6 +217,14 @@ class LevelScreen : BaseScreen() {
                     burgerButton.rotation = 0f
                     for (generator in BaseGame.resourceGenerators)
                         generator.disable()
+                    buyButton.touchable = Touchable.disabled
+                    buyButton.color.a = .75f
+                    buyButtonLabel.color.a = .75f
+                    buyAmountLabel.color.a = .75f
+                    quickLoveButton.touchable = Touchable.disabled
+                    quickLoveButton.color.a = .75f
+                    quickLoveLabel.color.a = .75f
+                    quickLoveNumberLabel.color.a = .75f
                 }
                 burgerMenuActive = !burgerMenuActive
                 heart.disabled = !heart.disabled
@@ -219,6 +236,7 @@ class LevelScreen : BaseScreen() {
         uiToggleTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
         uiToggleTable.add(burgerButton).pad(Gdx.graphics.height * .01f)
 
+        // quick love
         quickLoveList = Array()
         quickLoveButtonStyle = Button.ButtonStyle()
         quickLoveButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("info")))
@@ -237,20 +255,19 @@ class LevelScreen : BaseScreen() {
             false
         }
 
-        // quick love
         quickLoveNumberLabel = Label("${quickLoveList.size}", BaseGame.labelStyle)
         quickLoveNumberLabel.setFontScale(.5f)
 
-        val quickLoveLabel = Label("Quick Love!", BaseGame.labelStyle)
+        quickLoveLabel = Label("Quick Love!", BaseGame.labelStyle)
         quickLoveLabel.setFontScale(.3f)
 
-        val qTable = Table()
-        qTable.add(quickLoveNumberLabel).top().right().padRight(10f).padBottom(25f).row()
-        qTable.add(quickLoveLabel).bottom().padTop(35f)
-        qTable.setFillParent(true)
+        val quickLoveTable = Table()
+        quickLoveTable.add(quickLoveNumberLabel).top().right().padRight(10f).padBottom(25f).row()
+        quickLoveTable.add(quickLoveLabel).bottom().padTop(35f)
+        quickLoveTable.setFillParent(true)
         // qTable.debug = true
 
-        quickLoveButton.addActor(qTable)
+        quickLoveButton.addActor(quickLoveTable)
         // quickLoveButton.debug = true
 
         // buy button
@@ -311,8 +328,8 @@ class LevelScreen : BaseScreen() {
             }
             false
         }
-        val buyLabel = Label("Buy", BaseGame.labelStyle)
-        buyLabel.setFontScale(.15f)
+        buyButtonLabel = Label("Buy", BaseGame.labelStyle)
+        buyButtonLabel.setFontScale(.15f)
         var buyTemp = ""
         when (BaseGame.buyIndex) {
             1 -> buyTemp = "x1"
@@ -325,7 +342,7 @@ class LevelScreen : BaseScreen() {
         buyAmountLabel.setFontScale(.4f)
 
         val buyTable = Table()
-        buyTable.add(buyLabel).row()
+        buyTable.add(buyButtonLabel).row()
         buyTable.add(buyAmountLabel)
         buyTable.setFillParent(true)
         // buyTable.debug = true
@@ -341,6 +358,7 @@ class LevelScreen : BaseScreen() {
         uiTable.add(uiToggleTable).fillX().expandX().bottom()
         // uiTable.debug = true
 
+        // gameplay table
         val heartTable = Table()
         heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
         val veilTable = Table().top()
@@ -350,7 +368,9 @@ class LevelScreen : BaseScreen() {
         stack.add(heartTable)
         stack.add(veilTable)
 
-        // gameplay table
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        loveLabel.setFontScale(.5f)
+
         table = Table()
         table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
@@ -374,8 +394,7 @@ class LevelScreen : BaseScreen() {
         val mainTable = Table()
         mainTable.setFillParent(true)
 
-        mainTable.add(loveLabel)
-        mainTable.row()
+        mainTable.add(loveLabel).row()
         mainTable.add(scrollableTable)
 
         mainStage.addActor(mainTable)
