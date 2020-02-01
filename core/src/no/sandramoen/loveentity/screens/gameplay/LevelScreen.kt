@@ -22,12 +22,12 @@ class LevelScreen : BaseScreen() {
     private lateinit var communityLeadersButton: Button
     private lateinit var upgradesButton: Button
     private lateinit var ascensionButton: Button
-    private var burgerMenuActive = false
 
     private var revealNextGenerator = false
 
     private lateinit var table: Table
     private lateinit var burgerTable: Table
+    private var burgerMenuActive = false
 
     private var time = 0f
 
@@ -379,21 +379,42 @@ class LevelScreen : BaseScreen() {
 
     override fun update(dt: Float) {
         loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        calculateAscension(dt)
+        revealNextGeneratorUpdate()
+        checkBuyNextAndMaxUpdate()
+        burgerMenuUpdate()
+        quickLoveUpdate()
+    }
 
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.BACK) {
+            GameUtils.saveGameState()
+            super.dispose()
+            BaseGame.assetManager.dispose()
+            BaseGame.fontGenerator.dispose()
+            Gdx.app.exit()
+        }
+        return false;
+    }
+
+    private fun calculateAscension(dt: Float) {
+        time += dt
+        if (time > 1) { // calculate every second
+            time = 0f
+            GameUtils.calculateAscension()
+        }
+    }
+
+    private fun revealNextGeneratorUpdate() {
         if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size &&
                 BaseGame.love >= BigInteger((BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex].baseCost).toString()))
             revealNextGenerator = true
 
         if (revealNextGenerator)
             revealNextGenerator()
+    }
 
-        time += dt
-        if (time > 1) { // calculate every second
-            time = 0f
-            GameUtils.calculateAscension()
-        }
-
-        // check buy next and buy max
+    private fun checkBuyNextAndMaxUpdate() { // check buy next and buy max
         for (generator in BaseGame.resourceGenerators) {
             if (generator.hideTable.isVisible) break // saves some computing
             if (buyIndex == 4) { // next
@@ -410,7 +431,9 @@ class LevelScreen : BaseScreen() {
                     generator.nextPurchase(num)
             }
         }
-        // burger menu notifications
+    }
+
+    private fun burgerMenuUpdate() { // burger menu notifications
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeadersWiggleIndex == i &&
                     !BaseGame.communityLeaders[i].remove &&
@@ -439,30 +462,22 @@ class LevelScreen : BaseScreen() {
             if (!burgerTable.isVisible) wiggleButton(burgerButton)
             wiggleButton(ascensionButton)
         }
+    }
 
-        // quick love button
+    private fun quickLoveUpdate() { // quick love button
         quickLoveButton.isVisible = quickLoveList.size > 0
         for (generator in BaseGame.resourceGenerators) {
             if (!generator.activated && generator.owned > BigInteger.ZERO) {
                 quickLoveButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion(generator.avatar))
-                if (!quickLoveList.contains(generator)) quickLoveList.add(generator)
+                if (!quickLoveList.contains(generator))
+                    quickLoveList.add(generator)
                 quickLoveNumberLabel.setText("${quickLoveList.size}")
             } else {
-                if (quickLoveList.contains(generator)) quickLoveList.removeValue(generator, true)
+                if (quickLoveList.contains(generator))
+                    quickLoveList.removeValue(generator, true)
                 quickLoveNumberLabel.setText("${quickLoveList.size}")
             }
         }
-    }
-
-    override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Input.Keys.BACK) {
-            GameUtils.saveGameState()
-            super.dispose()
-            BaseGame.assetManager.dispose()
-            BaseGame.fontGenerator.dispose()
-            Gdx.app.exit()
-        }
-        return false;
     }
 
     private fun revealNextGenerator() {
