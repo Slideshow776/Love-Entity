@@ -417,14 +417,22 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     private fun labelTime(timeInSeconds: Float) { // labels time, e.g. "1h 23m 17s"
         var timeLeftInSeconds = incomeTime - timeInSeconds
+
         val hours = (timeLeftInSeconds / 3600).toInt()
-        val minutes = (timeLeftInSeconds / 60).toInt()
-        val seconds = (timeLeftInSeconds - (hours * 3600) - (minutes * 60)).toInt()
-        when {
-            minutes == 0 -> timeLabel.setText("${seconds}s")
-            hours == 0 -> timeLabel.setText("${minutes}m ${seconds}s")
-            else -> timeLabel.setText("${hours}h ${minutes}m ${seconds}s")
-        }
+        var remainder = (timeLeftInSeconds - (hours * 3600)).toInt()
+        val minutes = remainder / 60
+        remainder -= (minutes * 60)
+        val seconds = remainder
+
+        var text = ""
+        if (hours != 0)
+            text += "${hours}h "
+        if (minutes != 0)
+            text += "${minutes}m "
+        if (seconds != 0)
+            text += "${seconds}s"
+
+        timeLabel.setText(text)
     }
 
     private fun applyEffect(effect: String) {
