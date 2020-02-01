@@ -332,16 +332,14 @@ class LevelScreen : BaseScreen() {
 
         buyButton.addActor(buyTable)
 
+        // table layout
+        // uiTable
         uiTable.add(buyButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .04f).row()
         uiTable.add(burgerTable).fillY().expandY().row()
         uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
                 .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
         uiTable.add(uiToggleTable).fillX().expandX().bottom()
         // uiTable.debug = true
-
-        val scrollableTable = Table()
-
-        table = Table()
 
         val heartTable = Table()
         heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
@@ -352,6 +350,8 @@ class LevelScreen : BaseScreen() {
         stack.add(heartTable)
         stack.add(veilTable)
 
+        // gameplay table
+        table = Table()
         table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
             for (i in 0 until 2) {
@@ -367,6 +367,7 @@ class LevelScreen : BaseScreen() {
             revealTwoNextGenerators()
         }
 
+        val scrollableTable = Table()
         val scroll = ScrollPane(table)
         scrollableTable.add(scroll)
 
@@ -386,6 +387,9 @@ class LevelScreen : BaseScreen() {
 
     override fun update(dt: Float) {
         loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        if (BaseGame.heartTouched)
+            mainStage.cancelTouchFocus()
+
         calculateAscension(dt)
         revealNextGeneratorUpdate()
         checkBuyNextAndMaxUpdate()

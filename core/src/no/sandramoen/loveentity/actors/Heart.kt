@@ -17,6 +17,7 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     private var cpsTime = 0f
     var clicks = 0
     var disabled = false
+    var time = 0f
 
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
@@ -28,6 +29,7 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
                 if (!disabled) {
                     clicks++
+                    BaseGame.heartTouched = true
 
                     if (BaseGame.currentAscensionPoints > 0) {
                         BaseGame.love = BaseGame.love.add(BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString()))
@@ -64,6 +66,12 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             }
             cpsTime = 0f
             clicks = 0
+        }
+
+        time += dt
+        if (time > .25f) {
+            time = 0f
+            BaseGame.heartTouched = false
         }
     }
 }

@@ -60,6 +60,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var ascensionBonus = 2
         var heartBonus = 1
         var buyIndex = 1
+        var heartTouched = false
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
