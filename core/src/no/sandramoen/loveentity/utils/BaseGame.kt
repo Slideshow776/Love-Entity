@@ -59,6 +59,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var claimAscensionPoints: Long = 0L
         var ascensionBonus = 2
         var heartBonus = 1
+        var buyIndex = 1
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)

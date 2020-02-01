@@ -38,7 +38,6 @@ class LevelScreen : BaseScreen() {
 
     private lateinit var buyButton: Button
     private lateinit var buyAmountLabel: Label
-    private var buyIndex = 1
 
     override fun initialize() {
         val heart = Heart(0f, 0f, mainStage)
@@ -263,7 +262,7 @@ class LevelScreen : BaseScreen() {
             if (GameUtils.isTouchDownEvent(e)) {
                 var label = ""
                 var amount = -1L
-                when (buyIndex) {
+                when (BaseGame.buyIndex) {
                     0 -> {
                         label = "x1"
                         amount = 1L
@@ -283,7 +282,7 @@ class LevelScreen : BaseScreen() {
                     4 -> {
                         label = "max"
                         amount = 1L
-                        buyIndex = -1
+                        BaseGame.buyIndex = -1
                     }
                 }
                 for (generator in BaseGame.resourceGenerators) {
@@ -308,13 +307,21 @@ class LevelScreen : BaseScreen() {
                     }
                 }
                 buyAmountLabel.setText("$label")
-                buyIndex++
+                BaseGame.buyIndex++
             }
             false
         }
         val buyLabel = Label("Buy", BaseGame.labelStyle)
         buyLabel.setFontScale(.15f)
-        buyAmountLabel = Label("x1", BaseGame.labelStyle)
+        var buyTemp = ""
+        when (BaseGame.buyIndex) {
+            1 -> buyTemp = "x1"
+            2 -> buyTemp = "x10"
+            3 -> buyTemp = "x100"
+            4 -> buyTemp = "next"
+            0 -> buyTemp = "max"
+        }
+        buyAmountLabel = Label(buyTemp, BaseGame.labelStyle)
         buyAmountLabel.setFontScale(.4f)
 
         val buyTable = Table()
@@ -417,13 +424,13 @@ class LevelScreen : BaseScreen() {
     private fun checkBuyNextAndMaxUpdate() { // check buy next and buy max
         for (generator in BaseGame.resourceGenerators) {
             if (generator.hideTable.isVisible) break // saves some computing
-            if (buyIndex == 4) { // next
+            if (BaseGame.buyIndex == 4) { // next
                 if (generator.unlockIndex < generator.unlocks.size) {
                     val num = BigInteger((generator.unlocks[generator.unlockIndex].goal).toString()).subtract(generator.owned)
                     generator.nextPurchase(BigInteger(num.toString()))
                 } else
                     generator.nextPurchase(BigInteger.ONE)
-            } else if (buyIndex == 0) { // max
+            } else if (BaseGame.buyIndex == 0) { // max
                 val num = BaseGame.love.divide(generator.price)
                 if (num == BigInteger.ZERO)
                     generator.nextPurchase(BigInteger.ONE)
