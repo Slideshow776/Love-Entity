@@ -490,7 +490,7 @@ class LevelScreen : BaseScreen() {
                 break
             }
         }
-        
+
         if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f) {
             if (BaseGame.wiggleAscension && !burgerTable.isVisible) wiggleButton(burgerButton)
             wiggleButton(ascensionButton)
@@ -500,7 +500,7 @@ class LevelScreen : BaseScreen() {
     private fun quickLoveUpdate() { // quick love button
         quickLoveButton.isVisible = quickLoveList.size > 0
         for (generator in BaseGame.resourceGenerators) {
-            if (!generator.activated && generator.owned > BigInteger.ZERO) {
+            if (!generator.hasCommunityLeader && !generator.activated && generator.owned > BigInteger.ZERO) {
                 quickLoveButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion(generator.avatar))
                 if (!quickLoveList.contains(generator))
                     quickLoveList.add(generator)
