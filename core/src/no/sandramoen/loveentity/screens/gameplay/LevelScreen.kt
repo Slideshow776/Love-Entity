@@ -169,8 +169,11 @@ class LevelScreen : BaseScreen() {
         ascensionButton.setOrigin(Align.center)
         (ascensionButton as TextButton).label.setFontScale(.8f)
         ascensionButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f)
+                    BaseGame.wiggleAscension = false
                 BaseGame.setActiveScreen(AscensionScreen())
+            }
             false
         }
         burgerTable.add(ascensionButton).row()
@@ -487,9 +490,9 @@ class LevelScreen : BaseScreen() {
                 break
             }
         }
-
+        
         if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f) {
-            if (!burgerTable.isVisible) wiggleButton(burgerButton)
+            if (BaseGame.wiggleAscension && !burgerTable.isVisible) wiggleButton(burgerButton)
             wiggleButton(ascensionButton)
         }
     }

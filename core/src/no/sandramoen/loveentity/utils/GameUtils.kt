@@ -20,6 +20,7 @@ class GameUtils {
             BaseGame.prefs!!.putLong("currentAscensionPoints", BaseGame.currentAscensionPoints)
             BaseGame.prefs!!.putInteger("communityLeadersWiggleIndex", BaseGame.communityLeadersWiggleIndex)
             BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.upgradesWiggleIndex)
+            BaseGame.prefs!!.putBoolean("wiggleAscension", BaseGame.wiggleAscension)
             BaseGame.prefs!!.flush()
         }
 
@@ -62,6 +63,7 @@ class GameUtils {
             BaseGame.resourceGenerators.clear()
             BaseGame.communityLeaders.clear()
             BaseGame.upgrades.clear()
+            BaseGame.wiggleAscension = true
             saveGameState()
         }
 

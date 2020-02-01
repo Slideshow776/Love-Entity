@@ -61,6 +61,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var heartBonus = 1
         var buyIndex = 1
         var heartTouched = false
+        var wiggleAscension = true
 
         fun setActiveScreen(s: BaseScreen) {
             game?.setScreen(s)
@@ -85,6 +86,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         upgrades = Array()
         upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
+        wiggleAscension = prefs!!.getBoolean("wiggleAscension")
 
         // asset manager
         assetManager = AssetManager()
