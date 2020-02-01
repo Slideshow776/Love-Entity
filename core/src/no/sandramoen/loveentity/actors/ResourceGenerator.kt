@@ -380,7 +380,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     nextPurchase = BigInteger((price.multiply(BigInteger(nextPurchaseAmount.toString()))).toString())
                     buyLabel.setText("  Buy x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
 
-                    if (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {
+                    while (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {
+                        /*if (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {*/
                         applyEffect(unlocks[unlockIndex].effect)
                         unlockIndex++
                         BaseGame.prefs!!.putInteger(resourceName + "UnlockIndex", unlockIndex)
@@ -427,10 +428,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     }
 
     private fun applyEffect(effect: String) {
-        if (effect[0].toString() == "x") {
+        if (effect[0].toString() == "x")
             upgrade *= effect.substring(1, effect.length).toInt()
-        }
-        if (effect == "speed")
+        else if (effect == "speed")
             incomeTime /= 2
     }
 }
