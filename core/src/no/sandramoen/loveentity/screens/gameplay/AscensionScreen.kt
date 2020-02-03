@@ -21,13 +21,24 @@ class AscensionScreen : BaseScreen() {
     private lateinit var claimAscensionPointsLabel: Label
 
     private lateinit var exitButton: Button
-    private lateinit var claimButton: Button
+    private lateinit var claimButton: TextButton
     private lateinit var infoButton: Button
     private lateinit var infoTable: Table
     private lateinit var warningTable: Table
 
+    private lateinit var titleLabel: Label
+    private lateinit var infoLabel: Label
+    private lateinit var warningLabel: Label
+    private lateinit var warningButton: TextButton
+    private lateinit var subtitleLabel: Label
+    private lateinit var descriptionLabel: Label
+    private lateinit var ascensionDescriptionLabel: Label
+    private lateinit var bonusDescriptionLabel: Label
+    private lateinit var claimedDescriptionLabel: Label
+    private lateinit var restartLabel: Label
+
     override fun initialize() {
-        val titleLabel = Label("Ascension", BaseGame.labelStyle)
+        titleLabel = Label("Ascension", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
 
         // main exit button
@@ -44,7 +55,7 @@ class AscensionScreen : BaseScreen() {
         }
 
         // info table
-        val infoLabel = Label("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+        infoLabel = Label("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
                 "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.", BaseGame.labelStyle)
         infoLabel.color = Color.PURPLE
         infoLabel.setWrap(true)
@@ -77,13 +88,18 @@ class AscensionScreen : BaseScreen() {
         }
 
         // warning table
-        val warningLabel = Label("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!", BaseGame.labelStyle)
-        if (BaseGame.claimAscensionPoints > 0) warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points ready to boost your love! To claim them you will need to reset your progress.")
+        warningLabel = Label("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!", BaseGame.labelStyle)
+        if (BaseGame.claimAscensionPoints > 0) {
+            if (BaseGame.english)
+                warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points ready to boost your love! To claim them you will need to reset your progress.")
+            else
+                warningLabel.setText("Du har ${BaseGame.claimAscensionPoints} oppløftningspoeng klar til å øke din kjærlighet! For å innfri disse må du starte på nytt igjen.")
+        }
         warningLabel.color = Color.PURPLE
         warningLabel.setWrap(true)
         warningLabel.setFontScale(.3f)
 
-        val warningButton = TextButton("Reset now!", BaseGame.textButtonStyle)
+        warningButton = TextButton("Reset now!", BaseGame.textButtonStyle)
         warningButton.isTransform = true
         warningButton.scaleBy(-.2f)
         warningButton.setOrigin(Align.center)
@@ -124,14 +140,14 @@ class AscensionScreen : BaseScreen() {
         // warningTable.debug = true
 
         // upper table
-        val subtitleLabel = Label("Ascend to a greater compassion level!", BaseGame.labelStyle)
+        subtitleLabel = Label("Ascend to a greater compassion level!", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.4f)
         subtitleLabel.color = Color.PURPLE
-        val descriptionLabel = Label("The more love you earn, the more Ascension points you realize! When claimed increase your capacity for love, but you'll need to start over. (Psst! It's worth it!)", BaseGame.labelStyle)
+        descriptionLabel = Label("The more love you earn, the more Ascension points you realize! When claimed increase your capacity for love, but you'll need to start over. (Psst! It's worth it!)", BaseGame.labelStyle)
         descriptionLabel.setWrap(true)
         descriptionLabel.setFontScale(.3f)
         descriptionLabel.setAlignment(Align.center)
-        val ascensionDescriptionLabel = Label("Your Total Ascension Points", BaseGame.labelStyle)
+        ascensionDescriptionLabel = Label("Your Total Ascension Points", BaseGame.labelStyle)
         ascensionDescriptionLabel.setFontScale(.55f)
         ascensionDescriptionLabel.color = Color.PURPLE
         currentAscensionPointsLabel = Label("${BaseGame.currentAscensionPoints}", BaseGame.labelStyle)
@@ -156,7 +172,7 @@ class AscensionScreen : BaseScreen() {
         lowerLeftTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, .9f))
         val bonusLabel = Label("2%", BaseGame.labelStyle)
         bonusLabel.setFontScale(.5f)
-        val bonusDescriptionLabel = Label("Compassion bonus per ascension point", BaseGame.labelStyle)
+        bonusDescriptionLabel = Label("Compassion bonus per ascension point", BaseGame.labelStyle)
         bonusDescriptionLabel.setFontScale(.25f)
         bonusDescriptionLabel.setWrap(true)
         bonusDescriptionLabel.setAlignment(Align.center)
@@ -167,7 +183,7 @@ class AscensionScreen : BaseScreen() {
         lowerRightTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, .9f))
         claimAscensionPointsLabel = Label("${BaseGame.currentAscensionPoints}", BaseGame.labelStyle)
         claimAscensionPointsLabel.setFontScale(.5f)
-        val claimedDescriptionLabel = Label("Ascension points claimed when restart", BaseGame.labelStyle)
+        claimedDescriptionLabel = Label("Ascension points claimed when restart", BaseGame.labelStyle)
         claimedDescriptionLabel.setFontScale(.25f)
         claimedDescriptionLabel.setWrap(true)
         claimedDescriptionLabel.setAlignment(Align.center)
@@ -182,7 +198,7 @@ class AscensionScreen : BaseScreen() {
             false
         }
 
-        val restartLabel = Label("Restart your love", BaseGame.labelStyle)
+        restartLabel = Label("Restart your love", BaseGame.labelStyle)
         restartLabel.setFontScale(.3f)
         restartLabel.setWrap(true)
         restartLabel.setAlignment(Align.center)
@@ -211,6 +227,7 @@ class AscensionScreen : BaseScreen() {
         mainTable.align(Align.top)
 
         mainStage.addActor(stack)
+        checkLanguage()
     }
 
     override fun update(dt: Float) {
@@ -248,8 +265,38 @@ class AscensionScreen : BaseScreen() {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if(keycode == Input.Keys.BACK)
+        if (keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
         return false;
+    }
+
+    private fun checkLanguage() {
+        if (BaseGame.english) {
+            titleLabel.setText("Ascension")
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+                    "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
+            warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!")
+            warningButton.setText("Reset now!")
+            subtitleLabel.setText("Ascend to a greater compassion level!")
+            descriptionLabel.setText("The more love you earn, the more Ascension points you realize! When claimed increase your capacity for love, but you'll need to start over. (Psst! It's worth it!)")
+            ascensionDescriptionLabel.setText("Your Total Ascension Points")
+            bonusDescriptionLabel.setText("Compassion bonus per ascension point")
+            claimedDescriptionLabel.setText("Ascension points claimed when restart")
+            claimButton.setText("Claim")
+            restartLabel.setText("Restart your love")
+        } else {
+            titleLabel.setText("Oppløftning")
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+                    "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
+            warningLabel.setText("Du har ${BaseGame.claimAscensionPoints} oppløftningspoeng! En omstart nå er en dårlig idé. Fortsett å tjen mer kjærlighet!")
+            warningButton.setText("Omstart nå!")
+            subtitleLabel.setText("Løft deg opp til et høyere medfølelsenivå")
+            descriptionLabel.setText("Jo mer du tjener, jo mere oppløftningspoeng får du! Når du innfrir dem øker du din kapasitet for kjærlighet, men du må starte helt omigjen. (Psst! Det er verdt det!)")
+            ascensionDescriptionLabel.setText("Dine Oppløftningspoeng")
+            bonusDescriptionLabel.setText("Medfølelse bonus per oppløftningspoeng")
+            claimedDescriptionLabel.setText("Oppløftningspoeng du får ved omstart")
+            claimButton.setText("Innfri")
+            restartLabel.setText("Elsk igjen")
+        }
     }
 }

@@ -20,11 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.I18NBundle
 import no.sandramoen.loveentity.actors.CommunityLeader
 import no.sandramoen.loveentity.actors.ResourceGenerator
 import no.sandramoen.loveentity.actors.Upgrade
 import java.math.BigInteger
-import java.util.Date
+import java.util.*
 
 abstract class BaseGame : Game(), AssetErrorListener {
     init {
@@ -42,6 +43,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var textureAtlas: TextureAtlas? = null
         var splashAnim: Animation<TextureRegion>? = null
         var splashTexture: Texture? = null
+        var english = false
 
         // game state
         var prefs: Preferences? = null
@@ -87,6 +89,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
+        english = prefs!!.getBoolean("english")
 
         // asset manager
         assetManager = AssetManager()

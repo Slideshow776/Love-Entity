@@ -26,7 +26,7 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
-                        name: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
+                        private var labelName: String, saveName: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
     : BaseActor(x, y, s) {
     var hideTable: Table
     var infoTable: Table
@@ -36,7 +36,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var heartIcon: BaseActor
 
     private var table: Table
-    var resourceName: String = name
+    var resourceName: String = saveName
     private var nameLabel: Label
 
     private var selfWidth = Gdx.graphics.width * .95f // 600f
@@ -61,6 +61,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var ownedLabel: Label
     private lateinit var timeLabel: Label
     private lateinit var buyLabel: Label
+    private var infoLabel: Label
     private lateinit var buyButton: Button
     private var infoButton: Button
     private lateinit var timeProgress: BaseActor
@@ -74,7 +75,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // color = Color(random(0, 255) / 255f, random(0, 255) / 255f, random(0, 255) / 255f, 1f)
         color = Color.DARK_GRAY
 
-        nameLabel = Label(resourceName, BaseGame.labelStyle)
+        nameLabel = Label(labelName, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
 
         this.avatar = avatar
@@ -121,7 +122,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // hideTable.debug = true
 
         // info table
-        val infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
+        infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
         infoLabel.color = Color.PURPLE
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
@@ -235,7 +236,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         price = BigInteger((baseCost * multiplier.pow(owned.toFloat())).toLong().toString())
         nextPurchase = price
-        buyLabel.setText("  Buy 1x     ${GameUtils.presentLongScale(nextPurchase)}")
+        if (BaseGame.english)
+            buyLabel.setText("  Acquire 1x     ${GameUtils.presentLongScale(nextPurchase)}")
+        else
+            buyLabel.setText("  Erverv 1x     ${GameUtils.presentLongScale(nextPurchase)}")
 
         time = 0f
         timeLabel.setText("?")
@@ -287,7 +291,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     fun nextPurchase(amount: BigInteger) {
         nextPurchase = price.multiply(BigInteger(amount.toString()))
         nextPurchaseAmount = amount
-        buyLabel.setText("  Buy x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+        if (BaseGame.english)
+            buyLabel.setText("  Acquire x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+        else
+            buyLabel.setText("  Erverv x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
     }
 
     private fun leftTable(s: Stage): Table {
@@ -355,7 +362,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val buttonRegion = TextureRegion(buttonTex)
         buttonStyle.up = TextureRegionDrawable(buttonRegion)
 
-        buyLabel = Label("  Buy 1x     ${GameUtils.presentLongScale(nextPurchase)}", BaseGame.labelStyle)
+        if (BaseGame.english)
+            buyLabel = Label("  Acquire 1x     ${GameUtils.presentLongScale(nextPurchase)}", BaseGame.labelStyle)
+        else
+            buyLabel = Label("  Erverv 1x     ${GameUtils.presentLongScale(nextPurchase)}", BaseGame.labelStyle)
         buyLabel.setFontScale(.4f)
         buyButton = Button(buttonStyle)
         buyButton.addActor(buyLabel)
@@ -378,7 +388,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     }
                     price = BigInteger((baseCost * multiplier.pow(owned.toFloat())).toLong().toString())
                     nextPurchase = BigInteger((price.multiply(BigInteger(nextPurchaseAmount.toString()))).toString())
-                    buyLabel.setText("  Buy x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+                    if (BaseGame.english)
+                        buyLabel.setText("  Acquire x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+                    else
+                        buyLabel.setText("  Erverv x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
 
                     while (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {
                         /*if (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {*/
@@ -425,8 +438,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         val seconds = remainder
 
         var text = ""
-        if (hours != 0)
-            text += "${hours}h "
+        if (hours != 0) {
+            if (BaseGame.english) text += "${hours}h "
+            else text += "${hours}t "
+        }
         if (minutes != 0)
             text += "${minutes}m "
         if (seconds != 0)

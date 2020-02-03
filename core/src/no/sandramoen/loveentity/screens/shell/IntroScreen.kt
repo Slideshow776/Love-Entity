@@ -11,8 +11,10 @@ import no.sandramoen.loveentity.utils.BaseScreen
 class IntroScreen : BaseScreen() {
     override fun initialize() {
         val label0 = Label("You are a ", BaseGame.labelStyle)
+        if (!BaseGame.english) label0.setText("Du er en ")
         label0.setFontScale(.7f)
         val label1 = Label("love entity", BaseGame.labelStyle)
+        if (!BaseGame.english) label1.setText("kjærlighets-entitet")
         label1.setFontScale(.7f)
         val label2 = Label("...", BaseGame.labelStyle)
         label2.setFontScale(.7f)
@@ -27,6 +29,7 @@ class IntroScreen : BaseScreen() {
                 Actions.delay(4f),
                 Actions.run {
                     label0.setText("How much can you love?")
+                    if (!BaseGame.english) label0.setText("Hvor mye kan du elske?")
                     label1.setText("")
                     label2.setText("")
                 },

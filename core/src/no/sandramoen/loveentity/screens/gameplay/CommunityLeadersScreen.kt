@@ -119,7 +119,10 @@ class CommunityLeadersScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        if (BaseGame.english)
+            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        else
+            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
 
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeaders[i].remove) {
@@ -144,7 +147,7 @@ class CommunityLeadersScreen : BaseScreen() {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if(keycode == Input.Keys.BACK)
+        if (keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
         return false;
     }

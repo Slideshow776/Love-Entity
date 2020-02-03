@@ -23,6 +23,8 @@ class UnlocksScreen : BaseScreen() {
 
     override fun initialize() {
         val titleLabel = Label("Unlocks", BaseGame.labelStyle)
+        if (!BaseGame.english)
+            titleLabel.setText("Oppnåelser")
         titleLabel.setFontScale(.7f)
 
         // main exit button
@@ -41,6 +43,9 @@ class UnlocksScreen : BaseScreen() {
         // info table
         val infoLabel = Label("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
                 "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.", BaseGame.labelStyle)
+        if (!BaseGame.english)
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+                    "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
         infoLabel.color = Color.PURPLE
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
@@ -73,9 +78,11 @@ class UnlocksScreen : BaseScreen() {
 
         // upper table
         val subtitleLabel = Label("Unlocking your potential!", BaseGame.labelStyle)
+        if (!BaseGame.english) subtitleLabel.setText("Oppnå ditt potensiale!")
         subtitleLabel.setFontScale(.4f)
         subtitleLabel.color = Color.PURPLE
-        val descriptionLabel = Label("Want to maximize your love? Unlock these bonuses for a sweet lovin' bonus ", BaseGame.labelStyle)
+        val descriptionLabel = Label("Want to maximize your love? Unlock these for a sweet lovin' bonus", BaseGame.labelStyle)
+        if (!BaseGame.english) descriptionLabel.setText("Har du lyst å maksimere din kjærllighet? Oppnå disse for en ekstra bonus!")
         descriptionLabel.setWrap(true)
         descriptionLabel.setFontScale(.3f)
         descriptionLabel.setAlignment(Align.center)
@@ -166,6 +173,6 @@ class UnlocksScreen : BaseScreen() {
     override fun keyDown(keycode: Int): Boolean {
         if(keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
-        return false;
+        return false
     }
 }

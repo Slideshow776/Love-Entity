@@ -79,7 +79,10 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         // infoTable.debug = true
 
         // button
-        button = TextButton("Invest!", BaseGame.textButtonStyle)
+        if (BaseGame.english)
+            button = TextButton("Invest!", BaseGame.textButtonStyle)
+        else
+            button = TextButton("Invester!", BaseGame.textButtonStyle)
         button.isTransform = true
         if (!BaseGame.love >= price)
             button.color = Color.DARK_GRAY

@@ -27,9 +27,11 @@ class UpgradesScreen : BaseScreen() {
 
     override fun initialize() {
         titleLabel = Label("Upgrades", BaseGame.labelStyle)
+        if (!BaseGame.english) titleLabel.setText("Oppgraderinger")
         titleLabel.setFontScale(.7f)
 
         loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        if (!BaseGame.english) loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
@@ -47,6 +49,9 @@ class UpgradesScreen : BaseScreen() {
         // info table
         val infoLabel = Label("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
                 "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.", BaseGame.labelStyle)
+        if (!BaseGame.english)
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\\n\" +\n" +
+                    "                \"\\n\" + \"Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
         infoLabel.color = Color.PURPLE
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
@@ -79,8 +84,10 @@ class UpgradesScreen : BaseScreen() {
 
         // upper table
         subtitleLabel = Label("Upgrade your compassion capabilities!", BaseGame.labelStyle)
+        if (!BaseGame.english) subtitleLabel.setText("Oppgrader din medfølelse!")
         subtitleLabel.setFontScale(.3f)
         descriptionLabel = Label("Invest in these skills to give your compassion a boost", BaseGame.labelStyle)
+        if (!BaseGame.english) descriptionLabel.setText("Invister i disse evnene for å øke din medfølelse")
         descriptionLabel.setFontScale(.25f)
 
         val upperTable = Table()
@@ -117,7 +124,10 @@ class UpgradesScreen : BaseScreen() {
     }
 
     override fun update(dt: Float) {
-        loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        if (BaseGame.english)
+            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+        else
+            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
 
         for (i in 0 until BaseGame.upgrades.size) {
             if (BaseGame.upgrades[i].remove) {

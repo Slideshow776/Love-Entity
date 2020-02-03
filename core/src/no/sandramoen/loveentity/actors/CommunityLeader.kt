@@ -137,6 +137,8 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         stack.height = selfHeight // fill y
         addActor(stack)
         // debug()
+
+        checkLanguage()
     }
 
     fun checkAffordable() {
@@ -149,5 +151,10 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     override fun act(dt: Float) {
         super.act(dt)
         checkAffordable()
+    }
+
+    private fun checkLanguage() {
+        if (BaseGame.english) button.setText("Recruit!")
+        else button.setText("Rekrutter!")
     }
 }
