@@ -26,7 +26,7 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
-                        private var labelName: String, saveName: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
+                        var norwegianName: String, saveName: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
     : BaseActor(x, y, s) {
     var hideTable: Table
     var infoTable: Table
@@ -75,7 +75,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // color = Color(random(0, 255) / 255f, random(0, 255) / 255f, random(0, 255) / 255f, 1f)
         color = Color.DARK_GRAY
 
-        nameLabel = Label(labelName, BaseGame.labelStyle)
+        if (BaseGame.english)
+            nameLabel = Label(saveName, BaseGame.labelStyle)
+        else
+            nameLabel = Label(norwegianName, BaseGame.labelStyle)
         nameLabel.setFontScale(.75f)
 
         this.avatar = avatar
@@ -297,6 +300,17 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             buyLabel.setText("  Erverv x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
     }
 
+    fun checkLanguage() {
+        if (BaseGame.english) {
+            nameLabel.setText(resourceName)
+            buyLabel.setText("  Acquire x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+        } else {
+            nameLabel.setText(norwegianName)
+            buyLabel.setText("  Erverv x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}     ${GameUtils.presentLongScale(nextPurchase)}")
+        }
+        infoLabel.setText(GameUtils.getInformationText(resourceName))
+    }
+
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
         var buttonTex = BaseGame.textureAtlas!!.findRegion(avatar)
@@ -445,6 +459,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (minutes != 0)
             text += "${minutes}m "
         if (seconds != 0)
+            text += "${seconds}s"
+        else if (hours == 0 && minutes == 0 && seconds == 0)
             text += "${seconds}s"
 
         timeLabel.setText(text)

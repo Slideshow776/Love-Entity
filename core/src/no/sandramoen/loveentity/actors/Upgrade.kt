@@ -19,10 +19,13 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
 import java.math.BigInteger
 
-class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description: String, price: BigInteger) : BaseActor(0f, 0f, s) {
+class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: String, descriptionEN: String, descriptionNO: String, price: BigInteger) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
     var id = id
+    var button: TextButton
+    var price: BigInteger = price
+
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
@@ -32,9 +35,11 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
     private var descriptionLabel: Label
     private var heartIcon: BaseActor
     private var costLabel: Label
-    var button: TextButton
 
-    var price: BigInteger = price
+    private var nameEN = nameEN
+    private var nameNO = nameNO
+    private var descriptionEN = descriptionEN
+    private var descriptionNO = descriptionNO
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -50,12 +55,18 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, name: String, description
         image.height = selfHeight
 
         // name
-        nameLabel = Label(name, BaseGame.labelStyle)
+        if (BaseGame.english)
+            nameLabel = Label(nameEN, BaseGame.labelStyle)
+        else
+            nameLabel = Label(nameNO, BaseGame.labelStyle)
         nameLabel.setFontScale(.5f)
         nameLabel.color = Color(MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, 1f)
 
         // description
-        descriptionLabel = Label(description, BaseGame.labelStyle)
+        if (BaseGame.english)
+            descriptionLabel = Label(descriptionEN, BaseGame.labelStyle)
+        else
+            descriptionLabel = Label(descriptionNO, BaseGame.labelStyle)
         descriptionLabel.setFontScale(.25f)
         descriptionLabel.color = Color.GRAY
 

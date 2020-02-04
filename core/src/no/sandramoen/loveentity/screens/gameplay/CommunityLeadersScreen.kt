@@ -27,10 +27,16 @@ class CommunityLeadersScreen : BaseScreen() {
     private lateinit var exitButton: Button
 
     override fun initialize() {
-        titleLabel = Label("Community Leaders", BaseGame.labelStyle)
+        if (BaseGame.english)
+            titleLabel = Label("Community Leaders", BaseGame.labelStyle)
+        else
+            titleLabel = Label("Organisasjonsledere", BaseGame.labelStyle)
         titleLabel.setFontScale(.7f)
 
-        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        if (BaseGame.english)
+            loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        else
+            loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
@@ -46,8 +52,13 @@ class CommunityLeadersScreen : BaseScreen() {
         }
 
         // info table
-        val infoLabel = Label("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
-                "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.", BaseGame.labelStyle)
+        val infoLabel = Label("", BaseGame.labelStyle)
+        if (BaseGame.english)
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+                    "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
+        else
+            infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
+                    "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
         infoLabel.color = Color.PURPLE
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.3f)
@@ -79,9 +90,15 @@ class CommunityLeadersScreen : BaseScreen() {
         }
 
         // upper table
-        subtitleLabel = Label("Community Leaders Make Compassion Easier!", BaseGame.labelStyle)
+        if (BaseGame.english)
+            subtitleLabel = Label("Community Leaders Make Compassion Easier!", BaseGame.labelStyle)
+        else
+            subtitleLabel = Label("Organisasjonsledere Gjør Medølelse Enklere!", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.3f)
-        descriptionLabel = Label("Recruit one to act as a continuous love hub for you when you're away!", BaseGame.labelStyle)
+        if (BaseGame.english)
+            descriptionLabel = Label("Recruit one to act as a continuous love hub for you when you're away!", BaseGame.labelStyle)
+        else
+            descriptionLabel = Label("Rekrutter for å elske kontinuerlig når du er borte!", BaseGame.labelStyle)
         descriptionLabel.setFontScale(.25f)
 
         val upperTable = Table()

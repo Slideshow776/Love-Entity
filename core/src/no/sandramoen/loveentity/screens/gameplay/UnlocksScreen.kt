@@ -107,7 +107,11 @@ class UnlocksScreen : BaseScreen() {
                 unlockCostLabel.setFontScale(.5f)
                 unlockCostLabel.color = Color.PURPLE
 
-                val unlockNameLabel = Label("${BaseGame.resourceGenerators[i].resourceName}", BaseGame.labelStyle)
+                val unlockNameLabel = Label("", BaseGame.labelStyle)
+                if (BaseGame.english)
+                    unlockNameLabel.setText("${BaseGame.resourceGenerators[i].resourceName}")
+                else
+                    unlockNameLabel.setText("${BaseGame.resourceGenerators[i].norwegianName}")
                 unlockNameLabel.setFontScale(.25f)
 
                 val unlockEffectLabel = Label("${BaseGame.resourceGenerators[i].unlocks[BaseGame.resourceGenerators[i].unlockIndex].effect}", BaseGame.labelStyle)
@@ -171,7 +175,7 @@ class UnlocksScreen : BaseScreen() {
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if(keycode == Input.Keys.BACK)
+        if (keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
         return false
     }

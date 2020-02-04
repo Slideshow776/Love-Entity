@@ -125,7 +125,7 @@ class LevelScreen : BaseScreen() {
                 GameUtils.reset() // resets a bunch of stuff
                 quickLoveList.clear()
                 checkLanguage()
-                // initializeAssets()
+                initializeAssets()
 
                 table.reset()
                 val heartTable = Table()
@@ -171,6 +171,8 @@ class LevelScreen : BaseScreen() {
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.english = !BaseGame.english
                 checkLanguage()
+                for (generator in BaseGame.resourceGenerators)
+                    generator.checkLanguage()
             }
             false
         }
@@ -605,95 +607,49 @@ class LevelScreen : BaseScreen() {
         allyUnlocks = Array()
         allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
 
-        if (BaseGame.english) {
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ally", "Ally", "pixelAvatarTestA", allyUnlocks, 4, 1.07f, 1f, .5f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Bisexual", "Bisexual", "pixelAvatarTestB", allyUnlocks, 60, 1.15f, 60f, 3f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Gay", "Gay", "pixelAvatarTestG", allyUnlocks, 720, 1.14f, 540f, 6f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbian", "Lesbian", "pixelAvatarTestL", allyUnlocks, 8640, 1.13f, 4320f, 12f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Cisgender", "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transgender", "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Intersex", "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Pansexual", "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Asexual", "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Alliert", "Ally", "pixelAvatarTestA", allyUnlocks, 4, 1.07f, 1f, .5f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Biseksuell", "Bisexual", "pixelAvatarTestB", allyUnlocks, 60, 1.15f, 60f, 3f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Homofil", "Gay", "pixelAvatarTestG", allyUnlocks, 720, 1.14f, 540f, 6f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbisk", "Lesbian", "pixelAvatarTestL", allyUnlocks, 8640, 1.13f, 4320f, 12f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ciskjønnet", "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transkjønnet", "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Interkjønnet", "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Aseksuell", "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
 
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", BigInteger("1000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", BigInteger("15000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", BigInteger("100000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", BigInteger("500000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", BigInteger("1200000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", BigInteger("10000000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", BigInteger("111111111")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", BigInteger("555555555")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", BigInteger("10000000000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", BigInteger("100000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", "administrerer de Allierte", BigInteger("1000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", "administrerer Queers", BigInteger("10000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", "administrerer de Panseksuelle", BigInteger("10000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", "administrerer de Aseksuelle", BigInteger("100000000000")))
 
-            // this system assumes all upgrades are multiplicable of 3's
-            if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-                BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Ally love x3", BigInteger("250")))
-            if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Bisexual love x3", BigInteger("500")))
-            if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Gay love x3", BigInteger("1000000")))
-            if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Lesbian love x3", BigInteger("5000000")))
-            if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Cisgender love x3", BigInteger("10000000")))
-            if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Queer love x3", BigInteger("25000000")))
-            if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Transgender love x3", BigInteger("500000000")))
-            if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Intersex love x3", BigInteger("10000000000")))
-            if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Pansexual love x3", BigInteger("250000000000")))
-            if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Asexual love x3", BigInteger("999999999999999999")))
-        } else {
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Alliert", "Ally", "pixelAvatarTestA", allyUnlocks, 4, 1.07f, 1f, .5f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Biseksuell", "Bisexual", "pixelAvatarTestB", allyUnlocks, 60, 1.15f, 60f, 3f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Homofil", "Gay", "pixelAvatarTestG", allyUnlocks, 720, 1.14f, 540f, 6f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbisk", "Lesbian", "pixelAvatarTestL", allyUnlocks, 8640, 1.13f, 4320f, 12f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ciskjønnet", "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transkjønnet", "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Interkjønnet", "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
-            BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Aseksuell", "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
-
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "administrerer de Allierte", BigInteger("1000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "administrerer de Biseksuelle", BigInteger("15000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "administrerer de Homofile", BigInteger("100000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "administrerer de Lesbiske", BigInteger("500000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "administrerer de Ciskjønnede", BigInteger("1200000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "administrerer Queers", BigInteger("10000000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "administrerer de Transkjønnede", BigInteger("111111111")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "administrerer de Interkjønnede", BigInteger("555555555")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "administrerer de Panseksuelle", BigInteger("10000000000")))
-            BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "administrerer de Aseksuelle", BigInteger("100000000000")))
-
-            // this system assumes all upgrades are multiplicable of 3's
-            if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-                BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Oppgradering #1", "Alliert kjærlighet x3", BigInteger("250")))
-            if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Oppgradering #2", "Biseksuell kjærlighet x3", BigInteger("500")))
-            if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Oppgradering #3", "Homofil kjærlighet x3", BigInteger("1000000")))
-            if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Oppgradering #4", "Lesbisk kjærlighet x3", BigInteger("5000000")))
-            if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Oppgradering #5", "Ciskjønnet kjærlighet x3", BigInteger("10000000")))
-            if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Oppgradering #6", "Queer kjærlighet x3", BigInteger("25000000")))
-            if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Oppgradering #7", "Transkjønnet kjærlighet x3", BigInteger("500000000")))
-            if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Oppgradering #8", "Interkjønnet kjærlighet x3", BigInteger("10000000000")))
-            if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Oppgradering #9", "Panseksuell kjærlighet x3", BigInteger("250000000000")))
-            if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-                BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Oppgradering #10", "Aseksuell kjærlighet x3", BigInteger("999999999999999999")))
-        }
+        // this system assumes all upgrades are multiplicable of 3's
+        if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
+            BaseGame.upgrades.add(Upgrade(mainStage, 0, "itemTest", "Upgrade #1", "Oppgradering #1", "Ally love x3", "Alliert kjærlighet x3", BigInteger("250")))
+        if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 1, "itemTest", "Upgrade #2", "Oppgradering #2", "Bisexual love x3", "Biseksuell kjærlighet x3", BigInteger("500")))
+        if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 2, "itemTest", "Upgrade #3", "Oppgradering #3", "Gay love x3", "Homofil kjærlighet x3", BigInteger("1000000")))
+        if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 3, "itemTest", "Upgrade #4", "Oppgradering #4", "Lesbian love x3", "Lesbisk kjærlighet x3", BigInteger("5000000")))
+        if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 4, "itemTest", "Upgrade #5", "Oppgradering #5", "Cisgender love x3", "Ciskjønnet kjærlighet x3", BigInteger("10000000")))
+        if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 5, "itemTest", "Upgrade #6", "Oppgradering #6", "Queer love x3", "Queer kjærlighet x3", BigInteger("25000000")))
+        if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 6, "itemTest", "Upgrade #7", "Oppgradering #7", "Transgender love x3", "Transkjønnet kjærlighet x3", BigInteger("500000000")))
+        if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 7, "itemTest", "Upgrade #8", "Oppgradering #8", "Intersex love x3", "Interkjønnet kjærlighet x3", BigInteger("10000000000")))
+        if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 8, "itemTest", "Upgrade #9", "Oppgradering #9", "Pansexual love x3", "Panseksuell kjærlighet x3", BigInteger("250000000000")))
+        if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
+            BaseGame.upgrades.add(Upgrade(mainStage, 9, "itemTest", "Upgrade #10", "Oppgradering #10", "Asexual love x3", "Aseksuell kjærlighet x3", BigInteger("999999999999999999")))
     }
 
     private fun checkLanguage() {
@@ -711,29 +667,6 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Quick Love!")
             buyButtonLabel.setText("Acquire")
             languageButton.setText("change to Norwegian")
-
-            BaseGame.resourceGenerators.clear()
-            BaseGame.communityLeaders.clear()
-            BaseGame.resourceGenerators.clear()
-            initializeAssets()
-
-            table.reset()
-            val heartTable = Table()
-            heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
-            val veilTable = Table().top()
-            veilTable.add(veil).expand().fill().bottom()
-
-            val stack = Stack()
-            stack.add(heartTable)
-            stack.add(veilTable)
-            table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
-
-            for (i in 0 until BaseGame.revealNextGeneratorIndex) {
-                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
-                BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
-                BaseGame.resourceGenerators[i].hideTable.isVisible = false
-            }
-            revealTwoNextGenerators()
         } else { // Norwegian
             debugButton1.setText("Legg til 1k kjærlighet")
             debugButton2.setText("Legg til 100k kjærlighet")
@@ -748,29 +681,6 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Ta en Kjappis!")
             buyButtonLabel.setText("Erverv")
             languageButton.setText("bytt til Engelsk")
-
-            BaseGame.resourceGenerators.clear()
-            BaseGame.communityLeaders.clear()
-            BaseGame.resourceGenerators.clear()
-            initializeAssets()
-
-            table.reset()
-            val heartTable = Table()
-            heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
-            val veilTable = Table().top()
-            veilTable.add(veil).expand().fill().bottom()
-
-            val stack = Stack()
-            stack.add(heartTable)
-            stack.add(veilTable)
-            table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
-
-            for (i in 0 until BaseGame.revealNextGeneratorIndex) {
-                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
-                BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
-                BaseGame.resourceGenerators[i].hideTable.isVisible = false
-            }
-            revealTwoNextGenerators()
         }
     }
 }

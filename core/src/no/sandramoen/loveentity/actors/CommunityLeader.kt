@@ -19,11 +19,14 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
 import java.math.BigInteger
 
-class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, description: String, price: BigInteger) : BaseActor(0f, 0f, s) {
+class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, descriptionEN: String, descriptionNO: String, price: BigInteger) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
-
     var price: BigInteger = price
+    var button: TextButton
+
+    private var descriptionEN = descriptionEN
+    private var descriptionNO = descriptionNO
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
@@ -33,7 +36,6 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     private var descriptionLabel: Label
     private var heartIcon: BaseActor
     private var costLabel: Label
-    var button: TextButton
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -54,7 +56,10 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         nameLabel.color = Color(MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, 1f)
 
         // description
-        descriptionLabel = Label(description, BaseGame.labelStyle)
+        if (BaseGame.english)
+            descriptionLabel = Label(descriptionEN, BaseGame.labelStyle)
+        else
+            descriptionLabel = Label(descriptionNO, BaseGame.labelStyle)
         descriptionLabel.setFontScale(.25f)
         descriptionLabel.color = Color.GRAY
 
@@ -137,8 +142,6 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         stack.height = selfHeight // fill y
         addActor(stack)
         // debug()
-
-        checkLanguage()
     }
 
     fun checkAffordable() {
@@ -151,10 +154,5 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
     override fun act(dt: Float) {
         super.act(dt)
         checkAffordable()
-    }
-
-    private fun checkLanguage() {
-        if (BaseGame.english) button.setText("Recruit!")
-        else button.setText("Rekrutter!")
     }
 }
