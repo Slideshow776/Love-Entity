@@ -139,7 +139,7 @@ class LevelScreen : BaseScreen() {
 
                 table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
                 for (i in 0 until 2) {
-                    table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                    table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .1f).row()
                     BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
                 }
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
@@ -419,15 +419,16 @@ class LevelScreen : BaseScreen() {
         loveLabel.setFontScale(.5f)
 
         table = Table()
+        table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("starBackground")))
         table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
             for (i in 0 until 2) {
-                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .1f).row()
                 BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
             }
         } else {
             for (i in 0 until BaseGame.revealNextGeneratorIndex) {
-                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .07f).row()
+                table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .1f).row()
                 BaseGame.resourceGenerators[i].isVisible = true // solves a visibility bug
                 BaseGame.resourceGenerators[i].hideTable.isVisible = false
             }
@@ -607,16 +608,16 @@ class LevelScreen : BaseScreen() {
         allyUnlocks = Array()
         allyUnlocks.add(Unlock(25, "speed"), Unlock(50, "speed"), Unlock(100, "speed"))
 
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Alliert", "Ally", "pixelAvatarTestA", allyUnlocks, 4, 1.07f, 1f, .5f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Biseksuell", "Bisexual", "pixelAvatarTestB", allyUnlocks, 60, 1.15f, 60f, 3f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Homofil", "Gay", "pixelAvatarTestG", allyUnlocks, 720, 1.14f, 540f, 6f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbisk", "Lesbian", "pixelAvatarTestL", allyUnlocks, 8640, 1.13f, 4320f, 12f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ciskjønnet", "Cisgender", "pixelAvatarTest", allyUnlocks, 103680, 1.12f, 51840f, 24f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "pixelAvatarTest", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transkjønnet", "Transgender", "pixelAvatarTest", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Interkjønnet", "Intersex", "pixelAvatarTest", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "pixelAvatarTest", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Aseksuell", "Asexual", "pixelAvatarTest", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Alliert", "Ally", "avatar-1", allyUnlocks, 4, 1.07f, 1f, .5f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Biseksuell", "Bisexual", "avatar-5", allyUnlocks, 60, 1.15f, 60f, 3f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Homofil", "Gay", "avatar-3", allyUnlocks, 720, 1.14f, 540f, 6f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbisk", "Lesbian", "avatar-4", allyUnlocks, 8640, 1.13f, 4320f, 12f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ciskjønnet", "Cisgender", "avatar-2", allyUnlocks, 103680, 1.12f, 51840f, 24f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "avatar-6", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transkjønnet", "Transgender", "avatar-7", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Interkjønnet", "Intersex", "avatar-8", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "avatar-9", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Aseksuell", "Asexual", "avatar-10", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
 
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", "administrerer de Allierte", BigInteger("1000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))

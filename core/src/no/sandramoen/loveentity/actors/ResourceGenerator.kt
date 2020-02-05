@@ -160,7 +160,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // table
         table = Table()
         table.add(nameAndInfoTable).top().colspan(2).row()
-        table.add(leftTable(s)).pad(selfWidth * .01f) // TODO: set height and width here
+        table.add(leftTable(s)).pad(selfWidth * .01f).width(Gdx.graphics.width * .25f).height(Gdx.graphics.height * .15f).align(Align.center)
         table.add(rightTable(s))
         // table.align(Align.center)
 
@@ -386,6 +386,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buyButton.color = Color.ORANGE
         buyButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                println("tap!")
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love >= nextPurchase) {
                     BaseGame.love = BaseGame.love.subtract(nextPurchase)
@@ -427,13 +428,15 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         // time
         timeLabel = Label("?", BaseGame.labelStyle)
-        timeLabel.setFontScale(.5f)
+        timeLabel.setFontScale(.4f)
+        timeLabel.setFillParent(true)
+        timeLabel.setAlignment(Align.center)
         val time = BaseActor(0f, 0f, s)
         time.addActor(timeLabel)
-        time.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
-        time.width = selfWidth * .167f
-        time.height = selfHeight * .375f
-        time.color = Color.LIGHT_GRAY
+        time.loadAnimation(BaseGame.textureAtlas!!.findRegion("button"))
+        time.width = selfWidth * .25f
+        time.height = selfHeight * .45f
+        time.color = Color.GRAY
 
         val table = Table()
         table.add(timeProgress).colspan(2).pad(selfWidth * .01f).row()
@@ -458,7 +461,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         }
         if (minutes != 0)
             text += "${minutes}m "
-        if (seconds != 0)
+        if (seconds != 0 && hours == 0)
             text += "${seconds}s"
         else if (hours == 0 && minutes == 0 && seconds == 0)
             text += "${seconds}s"
