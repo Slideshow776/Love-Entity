@@ -115,8 +115,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         fontParameters.borderWidth = 2f
         fontParameters.borderColor = Color.BLACK
         fontParameters.borderStraight = true
-        fontParameters.minFilter = Texture.TextureFilter.Linear
-        fontParameters.magFilter = Texture.TextureFilter.Linear
+        fontParameters.minFilter = TextureFilter.Linear
+        fontParameters.magFilter = TextureFilter.Linear
         val customFont = fontGenerator.generateFont(fontParameters)
 
         val buttonFontParameters = FreeTypeFontParameter()
@@ -125,8 +125,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         buttonFontParameters.borderWidth = 2f
         buttonFontParameters.borderColor = Color.BLACK
         buttonFontParameters.borderStraight = true
-        buttonFontParameters.minFilter = Texture.TextureFilter.Linear
-        buttonFontParameters.magFilter = Texture.TextureFilter.Linear
+        buttonFontParameters.minFilter = TextureFilter.Linear
+        buttonFontParameters.magFilter = TextureFilter.Linear
         val buttonCustomFont = fontGenerator.generateFont(buttonFontParameters)
 
         labelStyle = LabelStyle()
