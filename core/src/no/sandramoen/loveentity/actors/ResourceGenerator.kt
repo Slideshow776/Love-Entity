@@ -300,31 +300,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     }
 
     fun nextPurchase(amount: BigInteger) {
-        nextPurchase = price.multiply(BigInteger(amount.toString()))
+        nextPurchase = calculatePriceForAmount(amount)
         nextPurchaseAmount = amount
-
-        val split = GameUtils.presentLongScale(nextPurchase).split(" ")
-        buyPriceLabel.setText("${split[0]}")
-        if (split.size > 1)
-            buyNumberLabel.setText("${split[1]}")
-        else
-            buyNumberLabel.setText("")
-        buyAmountLabel.setText("x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}")
-
-        if (BaseGame.english)
-            buyNameLabel.setText("Acquire")
-        else
-            buyNameLabel.setText("Erverv")
+        labelBuyButton()
     }
 
     fun checkLanguage() {
-        val split = GameUtils.presentLongScale(nextPurchase).split(" ")
-        buyPriceLabel.setText("${split[0]}")
-        if (split.size > 1)
-            buyNumberLabel.setText("${split[1]}")
-        else
-            buyNumberLabel.setText("")
-        buyAmountLabel.setText("x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}")
+        labelBuyButton()
 
         if (BaseGame.english) {
             buyNameLabel.setText("Acquire")
@@ -334,6 +316,22 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             nameLabel.setText(norwegianName)
         }
         infoLabel.setText(GameUtils.getInformationText(resourceName))
+    }
+
+    fun calculateAmountUpToValue(amount: BigInteger): BigInteger {
+        var temp = BigInteger.ZERO
+        var bi = BigInteger.ZERO
+        while (true) {
+            val calc = BigInteger((baseCost * multiplier.pow(owned.toFloat() + bi.toFloat())).toLong().toString())
+            if (temp.add(calc) <= amount) {
+                temp = temp.add(calc)
+                bi = bi.add(BigInteger.ONE)
+            } else
+                break
+        }
+        if (bi == BigInteger.ZERO)
+            bi = BigInteger.ONE
+        return bi
     }
 
     private fun leftTable(s: Stage): Table {
@@ -421,9 +419,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buyTable.add(buyAmountLabel).left().padLeft(Gdx.graphics.width * .02f)
         buyTable.add(buyNumberLabel).right().padRight(Gdx.graphics.width * .02f).padBottom(50f)
         // buyTable.debug = true
-        /* ------------------------------------------------------------------ */
+
         buyButton = Button(buttonStyle)
-        /*buyButton.addActor(buyLabel)*/
         buyButton.addActor(buyTable)
         buyButton.color = Color.ORANGE
         buyButton.addListener(object : ActorGestureListener() {
@@ -431,8 +428,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love >= nextPurchase) {
                     BaseGame.love = BaseGame.love.subtract(nextPurchase)
-                    if (price > BigInteger.ZERO)
-                        owned = owned.add(nextPurchase.divide(price))
+                    owned = owned.add(nextPurchaseAmount)
                     GameUtils.putBigNumber(resourceName + "Owned", owned)
                     try {
                         if (owned >= BigInteger((unlocks[unlockIndex].goal).toString()))
@@ -445,13 +441,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     price = BigInteger((baseCost * multiplier.pow(owned.toFloat())).toLong().toString())
                     nextPurchase = BigInteger((price.multiply(BigInteger(nextPurchaseAmount.toString()))).toString())
 
-                    val split = GameUtils.presentLongScale(nextPurchase).split(" ")
-                    buyPriceLabel.setText("${split[0]}")
-                    if (split.size > 1)
-                        buyNumberLabel.setText("${split[1]}")
-                    else
-                        buyNumberLabel.setText("")
-                    buyAmountLabel.setText("x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}")
+                    labelBuyButton()
 
                     if (BaseGame.english)
                         buyNameLabel.setText("Acquire")
@@ -523,5 +513,25 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             upgrade *= effect.substring(1, effect.length).toInt()
         else if (effect == "speed")
             incomeTime /= 2
+    }
+
+    private fun calculatePriceForAmount(amount: BigInteger): BigInteger {
+        var temp = BigInteger.ZERO
+        var bi = BigInteger.ZERO
+        while (bi < amount) {
+            temp = temp.add(BigInteger((baseCost * multiplier.pow(owned.toFloat() + bi.toString().toFloat())).toLong().toString()))
+            bi = bi.add(BigInteger.ONE)
+        }
+        return temp
+    }
+
+    private fun labelBuyButton() {
+        val split = GameUtils.presentLongScale(nextPurchase).split(" ")
+        buyPriceLabel.setText("${split[0]}")
+        if (split.size > 1)
+            buyNumberLabel.setText("${split[1]}")
+        else
+            buyNumberLabel.setText("")
+        buyAmountLabel.setText("x${GameUtils.presentLongScale(BigInteger(nextPurchaseAmount.toString()))}")
     }
 }

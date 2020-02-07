@@ -354,12 +354,8 @@ class LevelScreen : BaseScreen() {
                                 generator.nextPurchase(BigInteger.ONE)
                         }
                         "max", "maks" -> {
-                            val num = BaseGame.love.divide(generator.price)
-                            if (BaseGame.love >= num) {
-                                generator.nextPurchase(num)
-                            } else {
-                                generator.nextPurchase(BigInteger.ONE)
-                            }
+                            val num = generator.calculateAmountUpToValue(BaseGame.love)
+                            generator.nextPurchase(num)
                         }
                         else -> generator.nextPurchase(BigInteger(amount.toString()))
                     }
@@ -509,11 +505,8 @@ class LevelScreen : BaseScreen() {
                 } else
                     generator.nextPurchase(BigInteger.ONE)
             } else if (BaseGame.buyIndex == 0) { // max
-                val num = BaseGame.love.divide(generator.price)
-                if (num == BigInteger.ZERO)
-                    generator.nextPurchase(BigInteger.ONE)
-                else
-                    generator.nextPurchase(num)
+                val num = generator.calculateAmountUpToValue(BaseGame.love)
+                generator.nextPurchase(num)
             }
         }
     }
