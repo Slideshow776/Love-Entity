@@ -344,7 +344,6 @@ class LevelScreen : BaseScreen() {
                     }
                 }
                 for (generator in BaseGame.resourceGenerators) {
-                    if (generator.hideTable.isVisible) break // saves some computing
                     when (label) {
                         "next", "neste" -> {
                             if (generator.unlockIndex < generator.unlocks.size) {
