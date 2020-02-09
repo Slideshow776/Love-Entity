@@ -332,12 +332,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         infoLabel.setText(GameUtils.getInformationText(resourceName))
     }
 
-    fun calculateAmountUpToValue(amount: BigInteger): BigInteger {
+    fun calculateAmountUpToValue(value: BigInteger): BigInteger {
         var temp = BigInteger.ZERO
         var bi = BigInteger.ZERO
         while (true) {
             val calc = BigInteger((baseCost * multiplier.pow(owned.toFloat() + bi.toFloat())).toLong().toString())
-            if (temp.add(calc) <= amount) {
+            if (temp.add(calc) <= value) {
                 temp = temp.add(calc)
                 bi = bi.add(BigInteger.ONE)
             } else
@@ -345,6 +345,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         }
         if (bi == BigInteger.ZERO)
             bi = BigInteger.ONE
+        nextPurchase(bi)
         return bi
     }
 
