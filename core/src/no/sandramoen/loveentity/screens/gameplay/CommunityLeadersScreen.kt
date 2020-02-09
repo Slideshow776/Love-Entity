@@ -34,9 +34,15 @@ class CommunityLeadersScreen : BaseScreen() {
         titleLabel.setFontScale(.7f)
 
         if (BaseGame.english)
-            loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+            if (BaseGame.longScale)
+                loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+            else
+                loveLabel = Label("${GameUtils.presentShortScale(BaseGame.love)} love", BaseGame.labelStyle)
         else
-            loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet", BaseGame.labelStyle)
+            if (BaseGame.longScale)
+                loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet", BaseGame.labelStyle)
+            else
+                loveLabel = Label("${GameUtils.presentShortScale(BaseGame.love)} kjærlighet", BaseGame.labelStyle)
         loveLabel.setFontScale(.5f)
 
         val exitButtonStyle = Button.ButtonStyle()
@@ -137,9 +143,15 @@ class CommunityLeadersScreen : BaseScreen() {
 
     override fun update(dt: Float) {
         if (BaseGame.english)
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} love")
         else
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} kjærlighet")
 
         for (i in 0 until BaseGame.communityLeaders.size) {
             if (BaseGame.communityLeaders[i].remove) {

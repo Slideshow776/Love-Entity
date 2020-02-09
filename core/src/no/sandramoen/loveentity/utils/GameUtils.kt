@@ -22,6 +22,7 @@ class GameUtils {
             BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.upgradesWiggleIndex)
             BaseGame.prefs!!.putBoolean("wiggleAscension", BaseGame.wiggleAscension)
             BaseGame.prefs!!.putBoolean("english", BaseGame.english)
+            BaseGame.prefs!!.putBoolean("longScale", BaseGame.longScale)
             BaseGame.prefs!!.flush()
         }
 
@@ -67,7 +68,7 @@ class GameUtils {
                     if (BaseGame.english)
                         return "Queer is an umbrella term for sexual and gender minorities who are not heterosexual or are not cisgender."
                     else
-                        return "Queer er et paraplybegrep for seksuelle og kjønnsminoriteter som ikke er heteroseksuelle eller ikke er ciskjønnet"
+                        return "Skeiv er et paraplybegrep for seksuelle og kjønnsminoriteter som ikke er heteroseksuelle eller ikke er ciskjønnet"
                 }
                 "Transgender" -> {
                     if (BaseGame.english)
@@ -116,6 +117,7 @@ class GameUtils {
             BaseGame.upgrades.clear()
             BaseGame.wiggleAscension = true
             BaseGame.english = true
+            BaseGame.longScale = true
             saveGameState()
         }
 

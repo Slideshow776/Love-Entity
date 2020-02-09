@@ -43,7 +43,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var textureAtlas: TextureAtlas? = null
         var splashAnim: Animation<TextureRegion>? = null
         var splashTexture: Texture? = null
-        var english = false
+        var english = true
+        var longScale = true
 
         // game state
         var prefs: Preferences? = null
@@ -90,6 +91,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
         english = prefs!!.getBoolean("english")
+        longScale = prefs!!.getBoolean("longScale")
 
         // asset manager
         assetManager = AssetManager()

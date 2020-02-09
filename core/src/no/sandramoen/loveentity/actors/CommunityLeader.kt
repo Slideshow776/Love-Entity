@@ -70,7 +70,10 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         heartIcon.height = 40f
 
         // cost
-        costLabel = Label("${GameUtils.presentLongScale(price)}", BaseGame.labelStyle)
+        if (BaseGame.longScale)
+            costLabel = Label("${GameUtils.presentLongScale(price)}", BaseGame.labelStyle)
+        else
+            costLabel = Label("${GameUtils.presentShortScale(price)}", BaseGame.labelStyle)
         costLabel.setFontScale(.5f)
 
 

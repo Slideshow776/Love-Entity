@@ -53,6 +53,7 @@ class LevelScreen : BaseScreen() {
     private lateinit var debugLabel: Label
 
     private lateinit var languageButton: TextButton
+    private lateinit var scaleButton: TextButton
     private var allyUnlocks = Array<Unlock>()
 
     private lateinit var heart: Heart
@@ -78,7 +79,7 @@ class LevelScreen : BaseScreen() {
         debugButton5 = TextButton("Restart", BaseGame.textButtonStyle)
 
         debugButton1.label.color = Color.GREEN
-        debugButton1.label.setFontScale(.8f)
+        debugButton1.label.setFontScale(.6f)
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BigInteger("1000"))
@@ -88,7 +89,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton2.label.color = Color.GREEN
-        debugButton2.label.setFontScale(.8f)
+        debugButton2.label.setFontScale(.6f)
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BigInteger("100000"))
@@ -98,7 +99,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton3.label.color = Color.GREEN
-        debugButton3.label.setFontScale(.8f)
+        debugButton3.label.setFontScale(.6f)
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BigInteger("1000000"))
@@ -108,7 +109,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton4.label.color = Color.GREEN
-        debugButton4.label.setFontScale(.8f)
+        debugButton4.label.setFontScale(.6f)
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.love = BaseGame.love.add(BigInteger("1000000000000000000"))
@@ -118,7 +119,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton5.label.color = Color.GREEN
-        debugButton5.label.setFontScale(.8f)
+        debugButton5.label.setFontScale(.6f)
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) { // the restart button
                 BaseGame.currentAscensionPoints = 0
@@ -162,7 +163,7 @@ class LevelScreen : BaseScreen() {
         /* ------------------------------------------------------------------------------------------------------- */
 
         // language ui setup
-        languageButton = TextButton("change to Norwegian", BaseGame.textButtonStyle)
+        languageButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
         languageButton.label.color = Color(135 / 255f, 200 / 255f, 255 / 255f, 1f)
         languageButton.isTransform = true
         languageButton.setOrigin(Align.center)
@@ -171,12 +172,34 @@ class LevelScreen : BaseScreen() {
             if (GameUtils.isTouchDownEvent(e)) {
                 BaseGame.english = !BaseGame.english
                 checkLanguage()
-                for (generator in BaseGame.resourceGenerators)
+                checkScale()
+                for (generator in BaseGame.resourceGenerators) {
                     generator.checkLanguage()
+                    generator.checkScale()
+                }
             }
             false
         }
-        burgerTable.add(languageButton).padBottom(20f).row()
+
+        // scale ui setup
+        scaleButton = TextButton("Change to short scale", BaseGame.textButtonStyle)
+        scaleButton.label.color = Color(135 / 255f, 200 / 255f, 255 / 255f, 1f)
+        scaleButton.isTransform = true
+        scaleButton.setOrigin(Align.center)
+        scaleButton.label.setFontScale(.8f)
+        scaleButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.longScale = !BaseGame.longScale
+                checkScale()
+                for (generator in BaseGame.resourceGenerators)
+                    generator.checkScale()
+            }
+            false
+        }
+
+        // burger table
+        burgerTable.add(languageButton).row()
+        burgerTable.add(scaleButton).padBottom(20f).row()
 
         communityLeadersButton = TextButton("Community Leaders", BaseGame.textButtonStyle)
         communityLeadersButton.isTransform = true
@@ -445,16 +468,21 @@ class LevelScreen : BaseScreen() {
         // mainTable.debug = true
         // uiTable.debug = true
         // table.debug = true
-        // checkLanguage()
-
+        checkScale()
         checkLanguage()
     }
 
     override fun update(dt: Float) {
         if (BaseGame.english)
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} love")
         else
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} kjærlighet")
 
         if (BaseGame.heartTouched)
             mainStage.cancelTouchFocus()
@@ -605,7 +633,7 @@ class LevelScreen : BaseScreen() {
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Homofil", "Gay", "avatar-3", allyUnlocks, 720, 1.14f, 540f, 6f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Lesbisk", "Lesbian", "avatar-4", allyUnlocks, 8640, 1.13f, 4320f, 12f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Ciskjønnet", "Cisgender", "avatar-2", allyUnlocks, 103680, 1.12f, 51840f, 24f))
-        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Queer", "Queer", "avatar-6", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
+        BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Skeiv", "Queer", "avatar-6", allyUnlocks, 1244160, 1.11f, 622080f, 96f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Transkjønnet", "Transgender", "avatar-7", allyUnlocks, 14929920, 1.1f, 7464960f, 384f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Interkjønnet", "Intersex", "avatar-8", allyUnlocks, 179159040, 1.09f, 89579520f, 1536f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "avatar-9", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
@@ -659,7 +687,11 @@ class LevelScreen : BaseScreen() {
             unlocksButton.setText("Unlocks")
             quickLoveLabel.setText("Quick Love!")
             buyButtonLabel.setText("Acquire")
-            languageButton.setText("change to Norwegian")
+            languageButton.setText("Change to Norwegian")
+            if (BaseGame.longScale)
+                scaleButton.setText("Change to short scale")
+            else
+                scaleButton.setText("Change to long scale")
         } else { // Norwegian
             debugButton1.setText("Legg til 1k kjærlighet")
             debugButton2.setText("Legg til 100k kjærlighet")
@@ -673,7 +705,26 @@ class LevelScreen : BaseScreen() {
             unlocksButton.setText("Oppnåelser")
             quickLoveLabel.setText("Ta en Kjappis!")
             buyButtonLabel.setText("Erverv")
-            languageButton.setText("bytt til Engelsk")
+            languageButton.setText("Bytt til Engelsk")
+            if (BaseGame.longScale)
+                scaleButton.setText("Bytt til kort skala")
+            else
+                scaleButton.setText("Bytt til lang skala")
+        }
+        checkScale()
+    }
+
+    private fun checkScale() {
+        if (BaseGame.english) {
+            if (BaseGame.longScale)
+                scaleButton.label.setText("Change to short scale")
+            else
+                scaleButton.label.setText("Change to long scale")
+        } else {
+            if (BaseGame.longScale)
+                scaleButton.label.setText("Bytt til kort skala")
+            else
+                scaleButton.label.setText("Bytt til lang skala")
         }
     }
 }

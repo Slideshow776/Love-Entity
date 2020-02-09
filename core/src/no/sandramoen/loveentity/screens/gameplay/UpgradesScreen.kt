@@ -125,9 +125,15 @@ class UpgradesScreen : BaseScreen() {
 
     override fun update(dt: Float) {
         if (BaseGame.english)
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} love")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} love")
         else
-            loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            if (BaseGame.longScale)
+                loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
+            else
+                loveLabel.setText("${GameUtils.presentShortScale(BaseGame.love)} kjærlighet")
 
         for (i in 0 until BaseGame.upgrades.size) {
             if (BaseGame.upgrades[i].remove) {
