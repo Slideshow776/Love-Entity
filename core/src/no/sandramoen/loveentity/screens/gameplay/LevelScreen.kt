@@ -308,8 +308,10 @@ class LevelScreen : BaseScreen() {
                 var highest = 0f
                 var generatorToBeActivated: ResourceGenerator? = null
                 for (generator in quickLoveList) {
-                    if (generator.incomeTime > highest)
+                    if (generator.incomeTime > highest) {
                         generatorToBeActivated = generator
+                        highest = generator.incomeTime
+                    }
                 }
                 if (generatorToBeActivated != null)
                     generatorToBeActivated!!.activated = true
