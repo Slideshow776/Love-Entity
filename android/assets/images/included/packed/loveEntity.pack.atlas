@@ -61,14 +61,14 @@ avatar-10
   index: -1
 burger
   rotate: false
-  xy: 2, 2
+  xy: 200, 2
   size: 150, 85
   orig: 150, 85
   offset: 0, 0
   index: -1
 buyBanner
   rotate: false
-  xy: 154, 24
+  xy: 352, 24
   size: 130, 63
   orig: 130, 63
   offset: 0, 0
@@ -99,6 +99,13 @@ itemTest
   xy: 799, 755
   size: 167, 244
   orig: 167, 244
+  offset: 0, 0
+  index: -1
+longButton
+  rotate: false
+  xy: 2, 13
+  size: 196, 74
+  orig: 196, 74
   offset: 0, 0
   index: -1
 pixelAvatarTest

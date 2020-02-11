@@ -2,6 +2,7 @@ package no.sandramoen.loveentity.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
@@ -10,11 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.ui.Button
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Stack
-import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
@@ -69,7 +68,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var buyButton: Button
     private var infoButton: Button
     private lateinit var timeProgress: BaseActor
-    private var unlockProgression: Button
+    private var unlockProgression: BaseActor
+    private lateinit var unlockProgress: BaseActor
 
     init {
         this.isVisible = false // solves a visibility bug
@@ -78,7 +78,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         height = selfHeight
         // color = Color(MathUtils.random(0, 255) / 255f, MathUtils.random(0, 255) / 255f, MathUtils.random(0, 255) / 255f, 1f)
         color = Color.DARK_GRAY
-        unlockProgression = Button(BaseGame.textButtonStyle)
+
+        // unlockProgression = Button(BaseGame.textButtonStyle)
+        unlockProgression = BaseActor(0f, 0f, s)
+        unlockProgression.loadAnimation(BaseGame.textureAtlas!!.findRegion("longButton"))
 
         if (BaseGame.english)
             nameLabel = Label(saveName, BaseGame.labelStyle)
@@ -378,28 +381,26 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         ownedLabel.setFontScale(.4f)
         ownedLabel.color = Color.YELLOW
 
-        val unlockProgress = Button(BaseGame.textButtonStyle)
-        unlockProgress.isTransform = true
-        unlockProgress.setPosition(Gdx.graphics.width * .007f, -Gdx.graphics.height * .01f)
-        unlockProgress.width = selfWidth * .25f
+        unlockProgress = BaseActor(0f, 0f, s)
+        unlockProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("longButton"))
+        unlockProgress.width = selfWidth * .3f
         unlockProgress.height = selfHeight * .25f
         unlockProgress.color = Color.FIREBRICK
+        unlockProgress.setPosition(Gdx.graphics.width * -.03f, Gdx.graphics.height * -.005f)
 
         if (unlocks.size > unlockIndex) {
-            if (unlockIndex == 0) {
-                unlockProgression.width = (selfWidth * .25f) * (owned.toFloat() / unlocks[unlockIndex].goal)
-            } else {
-                unlockProgression.width = (selfWidth * .25f) * ((owned.subtract(BigInteger((unlocks[unlockIndex - 1].goal).toString())).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat()))
-            }
-            unlockProgression.isTransform
-            unlockProgression.setScale(0f, 0f)
-            unlockProgression.height = selfHeight * .25f
-            unlockProgression.color = Color.GREEN
-            unlockProgression.setPosition(Gdx.graphics.width * .002f, 0f)
-            unlockProgress.addActor(unlockProgression)
-        }
+            if (unlockIndex == 0)
+                unlockProgression.width = (selfWidth * .27f) * (owned.toFloat() / unlocks[unlockIndex].goal)
+            else
+                unlockProgression.width = (selfWidth * .27f) * ((owned.subtract(BigInteger((unlocks[unlockIndex - 1].goal).toString())).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat()))
+        } else
+            unlockProgression.width = (selfWidth * .27f)
+        unlockProgression.height = selfHeight * .25f
+        unlockProgression.color = Color.GREEN
+        unlockProgression.setPosition(Gdx.graphics.width * .027f, 0f)
+        unlockProgress.addActor(unlockProgression)
 
-        ownedLabel.setPosition((unlockProgress.width / 2) - ownedLabel.width / 5, -Gdx.graphics.height * .0235f) // TODO: weird offsets that just works...
+        ownedLabel.setPosition((unlockProgress.width / 2) - (ownedLabel.width / 5), -unlockProgress.height * .8f) // TODO: weird offsets that just works...
         unlockProgress.addActor(ownedLabel)
 
         activateButton.addActor(unlockProgress)
@@ -500,11 +501,23 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     }
 
                     if (unlocks.size > unlockIndex) {
-                        if (unlockIndex == 0) {
-                            unlockProgression.width = (selfWidth * .25f) * (owned.toFloat() / unlocks[unlockIndex].goal)
-                        } else {
-                            unlockProgression.width = (selfWidth * .25f) * ((owned.subtract(BigInteger((unlocks[unlockIndex - 1].goal).toString())).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat()))
-                        }
+                        if (unlockIndex == 0)
+                            unlockProgression.addAction(Actions.sizeTo(
+                                    (selfWidth * .27f) * (owned.toFloat() / unlocks[unlockIndex].goal),
+                                    selfHeight * .25f,
+                                    .5f,
+                                    Interpolation.linear)
+                            )
+                        else
+                            unlockProgression.addAction(Actions.sizeTo(
+                                    (selfWidth * .27f) * ((owned.subtract(BigInteger((unlocks[unlockIndex - 1].goal).toString())).toFloat() / (unlocks[unlockIndex].goal - unlocks[unlockIndex - 1].goal).toFloat())),
+                                    selfHeight * .25f,
+                                    .5f,
+                                    Interpolation.linear)
+                            )
+                    } else {
+                        unlockProgression.width = (selfWidth * .27f)
+                        ownedLabel.setPosition((unlockProgress.width / 2) - (ownedLabel.width / 20), -unlockProgress.height * .8f)
                     }
                 }
             }
