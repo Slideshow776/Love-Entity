@@ -253,6 +253,7 @@ class LevelScreen : BaseScreen() {
         burgerButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("burger")))
         burgerButton = Button(burgerButtonStyle)
         burgerButton.isTransform = true
+        burgerButton.scaleBy(.4f, .4f)
         burgerButton.setOrigin(Align.center)
         burgerButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -296,7 +297,7 @@ class LevelScreen : BaseScreen() {
 
         val uiToggleTable = Table()
         uiToggleTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
-        uiToggleTable.add(burgerButton).pad(Gdx.graphics.height * .01f)
+        uiToggleTable.add(burgerButton).pad(Gdx.graphics.height * .015f)
 
         // quick love
         quickLoveList = Array()
