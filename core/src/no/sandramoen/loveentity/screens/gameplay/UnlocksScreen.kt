@@ -70,6 +70,7 @@ class UnlocksScreen : BaseScreen() {
         infoButton.isTransform = true
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
+        infoButton.color = Color(95 / 255f, 152 / 255f, 209 / 255f, 1f) // grey blue
         infoButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 infoTable.isVisible = !infoTable.isVisible
@@ -78,7 +79,7 @@ class UnlocksScreen : BaseScreen() {
 
         // upper table
         val subtitleLabel = Label("Unlocking your potential!", BaseGame.labelStyle)
-        if (!BaseGame.english) subtitleLabel.setText("Oppnå ditt potensiale!")
+        if (!BaseGame.english) subtitleLabel.setText("Oppnå ditt potensial!")
         subtitleLabel.setFontScale(.4f)
         subtitleLabel.color = Color.PURPLE
         val descriptionLabel = Label("Want to maximize your love? Unlock these for a sweet lovin' bonus", BaseGame.labelStyle)
@@ -140,7 +141,7 @@ class UnlocksScreen : BaseScreen() {
 
         val table = Table()
         table.add(subtitleLabel).padTop(25f).align(Align.right)
-        table.add(infoButton).row()
+        table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
         table.add(descriptionLabel).right().padBottom(10f).width(Gdx.graphics.width * .85f).colspan(2).row()
         table.add(unlocksTable).align(Align.center).colspan(2)
         table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))

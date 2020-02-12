@@ -76,6 +76,7 @@ class UpgradesScreen : BaseScreen() {
         infoButton.isTransform = true
         infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
+        infoButton.color = Color(95 / 255f, 152 / 255f, 209 / 255f, 1f) // grey blue
         infoButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 infoTable.isVisible = !infoTable.isVisible
@@ -94,7 +95,7 @@ class UpgradesScreen : BaseScreen() {
         upperTable.add(titleLabel).expandX().center()
         upperTable.add(exitButton).row()
         upperTable.add(loveLabel)
-        upperTable.add(infoButton).row()
+        upperTable.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
         upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
         // upperTable.debug = true
 

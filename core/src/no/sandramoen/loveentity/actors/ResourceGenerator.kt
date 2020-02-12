@@ -28,7 +28,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                         var norwegianName: String, saveName: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
     : BaseActor(x, y, s) {
     var hideTable: Table
-    var infoTable: Table
+    lateinit var infoTable: Table
     var avatar: String
     var unlocks: Array<Unlock>
     var unlockIndex = 0
@@ -36,7 +36,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     private var table: Table
     var resourceName: String = saveName
-    private var nameLabel: Label
+    var saveName: String = saveName
+    private lateinit var nameLabel: Label
 
     private var selfWidth = Gdx.graphics.width * .95f // 600f
     private var selfHeight = 300f
@@ -64,9 +65,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private lateinit var buyAmountLabel: Label
     private lateinit var buyNumberLabel: Label
     private var baseCostLabel: Label
-    private var infoLabel: Label
+    private lateinit var infoLabel: Label
     private lateinit var buyButton: Button
-    private var infoButton: Button
+    private lateinit var infoButton: Button
     private lateinit var timeProgress: BaseActor
     private var unlockProgression: BaseActor
     private lateinit var unlockProgress: BaseActor
@@ -82,12 +83,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // unlockProgression = Button(BaseGame.textButtonStyle)
         unlockProgression = BaseActor(0f, 0f, s)
         unlockProgression.loadAnimation(BaseGame.textureAtlas!!.findRegion("longButton"))
-
-        if (BaseGame.english)
-            nameLabel = Label(saveName, BaseGame.labelStyle)
-        else
-            nameLabel = Label(norwegianName, BaseGame.labelStyle)
-        nameLabel.setFontScale(.75f)
 
         this.avatar = avatar
         this.unlocks = unlocks
@@ -134,45 +129,11 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         hideTable.add(baseCostLabel)
         // hideTable.debug = true
 
-        // info table
-        infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
-        infoLabel.color = Color.PURPLE
-        infoLabel.setWrap(true)
-        infoLabel.setFontScale(.3f)
-
-        infoTable = Table()
-        infoTable.add(infoLabel).expand().fill()
-        infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
-        infoTable.isVisible = false
-        infoTable.addListener(object : ActorGestureListener() {
-            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
-                infoTable.isVisible = !infoTable.isVisible
-            }
-        })
-        // infoTable.debug = true
-
-        val buttonStyle = Button.ButtonStyle()
-        val buttonTex = BaseGame.textureAtlas!!.findRegion("info")
-        val buttonRegion = TextureRegion(buttonTex)
-        buttonStyle.up = TextureRegionDrawable(buttonRegion)
-        infoButton = Button(buttonStyle)
-
-        val nameAndInfoTable = Table()
-        nameAndInfoTable.add(nameLabel)
-        nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height * .02f).padLeft(10f)
-        nameAndInfoTable.addListener(object : ActorGestureListener() {
-            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
-                infoTable.isVisible = !infoTable.isVisible
-            }
-        })
-        // nameAndInfoTable.debug = true
-
         // table
         table = Table()
-        table.add(nameAndInfoTable).top().colspan(2).row()
-        table.add(leftTable(s)).pad(selfWidth * .01f).width(Gdx.graphics.width * .25f).height(Gdx.graphics.height * .15f).align(Align.center)
-        table.add(rightTable(s))
-        // table.align(Align.center)
+        table.add(leftTable(s)).width(Gdx.graphics.width * .25f).height(Gdx.graphics.height * .15f)
+        table.add(rightTable(s)).padBottom(Gdx.graphics.height * .042f)
+        // table.debug()
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
         stack.add(table)
@@ -181,9 +142,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         stack.width = selfWidth // fill x
         stack.height = selfHeight // fill y
         addActor(stack)
-
-        /*table.debug()
-        this.debug*/
     }
 
     override fun act(dt: Float) {
@@ -207,9 +165,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (activated || (hasCommunityLeader && owned > BigInteger.ZERO)) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-            BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
+            // BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
             labelTime(time)
-            timeProgress.width = (selfWidth * .68f) * (time / incomeTime)
+            timeProgress.width = Gdx.graphics.width * .725f * (time / incomeTime)
             activateButton.clearActions()
             activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
         } else {
@@ -221,7 +179,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 )))
             }
         }
-        timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
 
         if (BaseGame.love >= nextPurchase)
             buyButton.color = Color.ORANGE
@@ -421,9 +378,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private fun rightTable(s: Stage): Table {
         // progress
         timeProgress = BaseActor(0f, 0f, s)
-        timeProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
+        timeProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("longButton2"))
         timeProgress.width = 0f
-        timeProgress.height = selfHeight * .375f
+        timeProgress.height = selfHeight * .55f
         timeProgress.color = Color.GREEN
 
         // buy
@@ -462,7 +419,6 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buyButton.color = Color.ORANGE
         buyButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
-                timeProgress.setPosition(0f, timeProgress.y) // TODO: solves some weird displacement bug...
                 if (BaseGame.love >= nextPurchase) {
                     BaseGame.love = BaseGame.love.subtract(nextPurchase)
                     owned = owned.add(nextPurchaseAmount)
@@ -533,10 +489,55 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         time.color = Color.GRAY
         time.addActor(timeLabel)
 
+        // info table
+        infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
+        infoLabel.color = Color.PURPLE
+        infoLabel.setWrap(true)
+        infoLabel.setFontScale(.3f)
+
+        infoTable = Table()
+        infoTable.add(infoLabel).expand().fill()
+        infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
+        infoTable.isVisible = false
+        infoTable.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                infoTable.isVisible = !infoTable.isVisible
+            }
+        })
+        // infoTable.debug = true
+
+        val infoButtonStyle = Button.ButtonStyle()
+        val buttonTex = BaseGame.textureAtlas!!.findRegion("info")
+        val buttonRegion = TextureRegion(buttonTex)
+        infoButtonStyle.up = TextureRegionDrawable(buttonRegion)
+        infoButton = Button(infoButtonStyle)
+        infoButton.color = Color(95 / 255f, 152 / 255f, 209 / 255f, 1f) // grey blue
+
+        if (BaseGame.english)
+            nameLabel = Label(saveName, BaseGame.labelStyle)
+        else
+            nameLabel = Label(norwegianName, BaseGame.labelStyle)
+        nameLabel.setFontScale(.75f)
+
+        val nameAndInfoTable = Table()
+        nameAndInfoTable.add(nameLabel)
+        nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height * .02f).padLeft(10f).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f)
+        nameAndInfoTable.addListener(object : ActorGestureListener() {
+            override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                infoTable.isVisible = !infoTable.isVisible
+            }
+        })
+        nameAndInfoTable.isTransform = true
+        nameAndInfoTable.align(Align.bottom)
+        nameAndInfoTable.height = Gdx.graphics.height * .5f
+        // nameAndInfoTable.debug = true
+
         val table = Table()
-        table.add(timeProgress).colspan(2).pad(selfWidth * .01f).row()
+        table.add(nameAndInfoTable).colspan(2).padRight(Gdx.graphics.width * .2f).row()
+        table.add(timeProgress).colspan(2).left().padLeft(Gdx.graphics.width * .012f).row()
         table.add(buyButton).pad(selfWidth * .01f).width(selfWidth * .5f).height(selfHeight * .6f)
         table.add(time).pad(selfWidth * .01f).width(selfWidth * .25f).height(selfHeight * .6f)
+        // table.debug = true
         return table
     }
 

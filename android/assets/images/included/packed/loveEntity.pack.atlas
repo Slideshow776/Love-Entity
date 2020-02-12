@@ -25,20 +25,6 @@ button
   orig: 78, 78
   offset: 0, 0
   index: -1
-info
-  rotate: false
-  xy: 924, 782
-  size: 70, 63
-  orig: 70, 63
-  offset: 0, 0
-  index: -1
-question
-  rotate: false
-  xy: 924, 717
-  size: 70, 63
-  orig: 70, 63
-  offset: 0, 0
-  index: -1
 whitePixel
   rotate: false
   xy: 2, 2
@@ -61,14 +47,14 @@ avatar-10
   index: -1
 burger
   rotate: false
-  xy: 200, 2
+  xy: 370, 2
   size: 150, 85
   orig: 150, 85
   offset: 0, 0
   index: -1
 buyBanner
   rotate: false
-  xy: 352, 24
+  xy: 522, 24
   size: 130, 63
   orig: 130, 63
   offset: 0, 0
@@ -108,6 +94,13 @@ longButton
   orig: 196, 74
   offset: 0, 0
   index: -1
+longButton2
+  rotate: false
+  xy: 200, 15
+  size: 168, 72
+  orig: 168, 72
+  offset: 0, 0
+  index: -1
 pixelAvatarTest
   rotate: false
   xy: 799, 512
@@ -134,6 +127,26 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+info
+  rotate: false
+  xy: 2, 490
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+starBackground
+  rotate: false
+  xy: 516, 2
+  size: 400, 1000
+  orig: 400, 1000
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack5.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 avatar-4
   rotate: false
   xy: 2, 2
@@ -142,7 +155,7 @@ avatar-4
   offset: 0, 0
   index: -1
 
-loveEntity.pack5.png
+loveEntity.pack6.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -155,7 +168,7 @@ avatar-9
   offset: 0, 0
   index: -1
 
-loveEntity.pack6.png
+loveEntity.pack7.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -168,7 +181,7 @@ avatar-7
   offset: 0, 0
   index: -1
 
-loveEntity.pack7.png
+loveEntity.pack8.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -181,7 +194,7 @@ avatar-3
   offset: 0, 0
   index: -1
 
-loveEntity.pack8.png
+loveEntity.pack9.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -194,7 +207,7 @@ avatar-8
   offset: 0, 0
   index: -1
 
-loveEntity.pack9.png
+loveEntity.pack10.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -207,7 +220,7 @@ avatar-2
   offset: 0, 0
   index: -1
 
-loveEntity.pack10.png
+loveEntity.pack11.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -220,15 +233,15 @@ avatar-1
   offset: 0, 0
   index: -1
 
-loveEntity.pack11.png
-size: 512,1024
+loveEntity.pack12.png
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-starBackground
+question
   rotate: false
   xy: 2, 2
-  size: 400, 1000
-  orig: 400, 1000
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1

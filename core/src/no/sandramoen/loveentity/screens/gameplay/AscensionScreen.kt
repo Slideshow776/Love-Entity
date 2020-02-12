@@ -78,8 +78,8 @@ class AscensionScreen : BaseScreen() {
         val infoButtonStyle = Button.ButtonStyle()
         infoButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("question")))
         infoButton = Button(infoButtonStyle)
+        infoButton.color = Color(95 / 255f, 152 / 255f, 209 / 255f, 1f) // grey blue
         infoButton.isTransform = true
-        infoButton.scaleBy(.2f)
         infoButton.setOrigin(Align.center)
         infoButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
@@ -155,7 +155,7 @@ class AscensionScreen : BaseScreen() {
 
         val table = Table()
         table.add(subtitleLabel).padTop(25f)
-        table.add(infoButton).row()
+        table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
         table.add(descriptionLabel).right().padBottom(100f).width(Gdx.graphics.width * .85f).row()
         table.add(ascensionDescriptionLabel).row()
         table.add(currentAscensionPointsLabel).padBottom(25f).row()

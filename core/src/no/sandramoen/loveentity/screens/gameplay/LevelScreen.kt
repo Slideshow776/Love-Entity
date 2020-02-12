@@ -592,7 +592,7 @@ class LevelScreen : BaseScreen() {
             if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size)
                 BaseGame.revealNextGeneratorIndex++
             if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size - 1) {
-                table.add(BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + 1]).padBottom(Gdx.graphics.height * .07f).row()
+                table.add(BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + 1]).padBottom(Gdx.graphics.height * .1f).row()
                 BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + 1].isVisible = true
             }
 
@@ -605,7 +605,7 @@ class LevelScreen : BaseScreen() {
         for (i in 0 until 2) {
             if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size) {
                 if (BaseGame.revealNextGeneratorIndex < BaseGame.resourceGenerators.size - 1) {
-                    table.add(BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + i]).padBottom(Gdx.graphics.height * .07f).row()
+                    table.add(BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + i]).padBottom(Gdx.graphics.height * .1f).row()
                     BaseGame.resourceGenerators[BaseGame.revealNextGeneratorIndex + i].isVisible = true
                 }
             }
