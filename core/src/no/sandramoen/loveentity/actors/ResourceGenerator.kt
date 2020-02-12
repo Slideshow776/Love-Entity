@@ -121,8 +121,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         hideTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), MathUtils.random(.1f, .2f), 1f))
         hideTable.isVisible = owned <= BigInteger.ZERO
         hideTable.isTransform = true
-        hideTable.setOrigin(0f, Gdx.graphics.height * .058f)
-        hideTable.scaleBy(0f, .355f)
+        hideTable.setOrigin(Gdx.graphics.width * .7f, Gdx.graphics.height * .03f)
+        hideTable.setFillParent(true)
+        hideTable.scaleBy(.05f, .75f)
 
         hideTable.add(hideLabel).colspan(2).row()
         hideTable.add(heartIcon).padRight(10f)
@@ -491,19 +492,22 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         // info table
         infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
-        infoLabel.color = Color.PURPLE
+        infoLabel.color = Color(150 / 255f, 92 / 255f, 209 / 255f, 1f)
         infoLabel.setWrap(true)
-        infoLabel.setFontScale(.3f)
+        infoLabel.setFontScale(.25f)
 
         infoTable = Table()
-        infoTable.add(infoLabel).expand().fill()
         infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
         infoTable.isVisible = false
+        infoTable.isTransform = true
+        infoTable.scaleBy(.03f, .55f)
+        infoTable.setOrigin(Gdx.graphics.width * .6f, Gdx.graphics.height * .05f)
         infoTable.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 infoTable.isVisible = !infoTable.isVisible
             }
         })
+        infoTable.add(infoLabel).expand().fill().pad(Gdx.graphics.width * .015f)
         // infoTable.debug = true
 
         val infoButtonStyle = Button.ButtonStyle()
@@ -524,7 +528,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         nameAndInfoTable.add(infoButton).padBottom(Gdx.graphics.height * .02f).padLeft(10f).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f)
         nameAndInfoTable.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
-                infoTable.isVisible = !infoTable.isVisible
+                if (!hideTable.isVisible)
+                    infoTable.isVisible = !infoTable.isVisible
             }
         })
         nameAndInfoTable.isTransform = true

@@ -36,9 +36,9 @@ class GameUtils {
             return when (name) {
                 "Ally" -> {
                     if (BaseGame.english)
-                        return "An ally, straight ally, or heterosexual ally is a heterosexual and cisgender person who supports equal civil rights, gender equality, and LGBT social movements, and challenges homophobia, biphobia, and transphobia. An ally acknowledges that LGBTQ people face discrimination and thus are socially disadvantaged. They aim to use their position as heterosexual and cisgender individuals in a society focused on heteronormativity to counter discrimination against LGBTQ people."
+                        return "An ally is a heterosexual and cisgender person who supports equal civil rights, gender equality, and LGBT social movements, and challenges homophobia, biphobia, and transphobia. An ally acknowledges that LGBTQ people face discrimination and thus are socially disadvantaged. They aim to use their position as heterosexual and cisgender individuals in a society focused on heteronormativity to counter discrimination against LGBTQ people."
                     else
-                        return "En alliert er en heteroseksuell og ciskjønnet person som støtter likeverd, likestilling og rettigheter til LHBTQ folk. De utfordrer homofobi, bifobi og transfobi. En alliert erkjenner at LHBTQ folk møter diskriminering og er sosialt vanskeligstilte. Deres mål er å bruke sin posisjon som heterofile og ciskjønnede individer i et samfunn med fokus på heteronormativitet for å motvirke diskriminering av LHBTQ folk."
+                        return "En alliert er en heteroseksuell og ciskjønnet person som støtter LHBTQ folk. De utfordrer homofobi, bifobi og transfobi. En alliert erkjenner at LHBTQ folk møter diskriminering og er sosialt vanskeligstilte. Deres mål er å bruke sin posisjon som heterofile og ciskjønnede individer i et samfunn med fokus på heteronormativitet for å motvirke diskriminering av LHBTQ folk."
                 }
                 "Bisexual" -> {
                     if (BaseGame.english)
