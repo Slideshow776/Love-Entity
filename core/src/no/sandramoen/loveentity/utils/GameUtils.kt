@@ -220,7 +220,7 @@ class GameUtils {
 
             // add name
             if (!BaseGame.english && (number[0].toString().toInt() > 1 || label.length > 1 && label[1].toString() != " ")) // norwegian translation
-                label += " $name" + "er"
+                label += " ${name}er"
             else
                 label += " $name"
             return label

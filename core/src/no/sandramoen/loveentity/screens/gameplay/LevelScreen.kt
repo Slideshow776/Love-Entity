@@ -12,11 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.*
-import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.GameUtils
-import org.w3c.dom.Text
 import java.math.BigInteger
 
 class LevelScreen : BaseScreen() {
@@ -390,7 +388,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         buyButtonLabel = Label("Acquire", BaseGame.labelStyle)
-        buyButtonLabel.setFontScale(.15f)
+        buyButtonLabel.setFontScale(.3f)
         var buyTemp = ""
         when (BaseGame.buyIndex) {
             1 -> buyTemp = "x1"
@@ -406,7 +404,7 @@ class LevelScreen : BaseScreen() {
             }
         }
         buyAmountLabel = Label(buyTemp, BaseGame.labelStyle)
-        buyAmountLabel.setFontScale(.4f)
+        buyAmountLabel.setFontScale(.5f)
 
         val buyTable = Table()
         buyTable.add(buyButtonLabel).row()
@@ -418,7 +416,12 @@ class LevelScreen : BaseScreen() {
 
         // table layout
         // uiTable
-        uiTable.add(buyButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .04f).row()
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        loveLabel.setFontScale(.55f)
+        loveLabel.setWrap(true)
+        loveLabel.setAlignment(Align.center)
+
+        uiTable.add(buyButton).right().width(Gdx.graphics.width * .17f).height(Gdx.graphics.height * .06f).row()
         uiTable.add(burgerTable).fillY().expandY().row()
         uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
                 .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
@@ -431,16 +434,13 @@ class LevelScreen : BaseScreen() {
         val veilTable = Table().top()
         veilTable.add(veil).expand().fill().bottom()
 
-        val stack = Stack()
-        stack.add(heartTable)
-        stack.add(veilTable)
-
-        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
-        loveLabel.setFontScale(.5f)
+        val heartStack = Stack()
+        heartStack.add(heartTable)
+        heartStack.add(veilTable)
 
         table = Table()
         table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("starBackground")))
-        table.add(stack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .1f).row()
+        table.add(heartStack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .2f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
             for (i in 0 until 2) {
                 table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .1f).row()
@@ -462,14 +462,22 @@ class LevelScreen : BaseScreen() {
         val mainTable = Table()
         mainTable.setFillParent(true)
 
-        mainTable.add(loveLabel).row()
-        mainTable.add(scrollableTable)
+        val loveLabelTable = Table()
+        loveLabelTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
+        loveLabelTable.add(loveLabel).width(Gdx.graphics.width * .65f).padTop(Gdx.graphics.height * .01f).padBottom(Gdx.graphics.height * .01f)
+        val loveLabelTableTable = Table()
+        loveLabelTableTable.add(loveLabelTable).width(Gdx.graphics.width.toFloat())
+        loveLabelTableTable.align(Align.top)
+
+        val scrollStack = Stack()
+        scrollStack.add(scrollableTable)
+        scrollStack.add(loveLabelTableTable)
+
+        mainTable.add(scrollStack)
+        // mainTable.debug = true
 
         mainStage.addActor(mainTable)
 
-        // mainTable.debug = true
-        // uiTable.debug = true
-        // table.debug = true
         checkScale()
         checkLanguage()
     }
