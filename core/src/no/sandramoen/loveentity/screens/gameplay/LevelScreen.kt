@@ -336,8 +336,9 @@ class LevelScreen : BaseScreen() {
         // buy button
         buyButton = Button()
         val buyButtonStyle = Button.ButtonStyle()
-        buyButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("buyBanner")))
+        buyButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("button")))
         buyButton = Button(buyButtonStyle)
+        buyButton.color = Color.PURPLE
         buyButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 var label = ""
@@ -421,7 +422,7 @@ class LevelScreen : BaseScreen() {
         loveLabel.setWrap(true)
         loveLabel.setAlignment(Align.center)
 
-        uiTable.add(buyButton).right().width(Gdx.graphics.width * .17f).height(Gdx.graphics.height * .06f).row()
+        uiTable.add(buyButton).right().width(Gdx.graphics.width * .22f).height(Gdx.graphics.height * .08f).row()
         uiTable.add(burgerTable).fillY().expandY().row()
         uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
                 .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
@@ -648,16 +649,16 @@ class LevelScreen : BaseScreen() {
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Panseksuell", "Pansexual", "avatar-9", allyUnlocks, 2149908480, 1.08f, 1074954240f, 6144f))
         BaseGame.resourceGenerators.add(ResourceGenerator(0f, 0f, mainStage, "Aseksuell", "Asexual", "avatar-10", allyUnlocks, 25798901760, 1.07f, 29668737024f, 36864f))
 
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "pixelAvatarTest", "Name Nameson", "runs Allies", "administrerer de Allierte", BigInteger("1000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "pixelAvatarTest", "Name Nameson", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "pixelAvatarTest", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "pixelAvatarTest", "Name Nameson", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "pixelAvatarTest", "Name Nameson", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "pixelAvatarTest", "Name Nameson", "runs Queers", "administrerer Queers", BigInteger("10000000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "pixelAvatarTest", "Name Nameson", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "pixelAvatarTest", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "pixelAvatarTest", "Name Nameson", "runs Pansexuals", "administrerer de Panseksuelle", BigInteger("10000000000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "pixelAvatarTest", "Name Nameson", "runs Asexuals", "administrerer de Aseksuelle", BigInteger("100000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "avatar-1", "Name Nameson", "runs Allies", "administrerer de Allierte", BigInteger("1000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "avatar-5", "Name Nameson", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "avatar-3", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "avatar-4", "Name Nameson", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "avatar-2", "Name Nameson", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "avatar-6", "Name Nameson", "runs Queers", "administrerer Queers", BigInteger("10000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "avatar-7", "Name Nameson", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "avatar-8", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "avatar-9", "Name Nameson", "runs Pansexuals", "administrerer de Panseksuelle", BigInteger("10000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "avatar-10", "Name Nameson", "runs Asexuals", "administrerer de Aseksuelle", BigInteger("100000000000")))
 
         // this system assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
@@ -697,6 +698,10 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Quick Love!")
             buyButtonLabel.setText("Acquire")
             languageButton.setText("Change to Norwegian")
+            if (buyAmountLabel.textEquals("maks"))
+                buyAmountLabel.setText("max")
+            else if (buyAmountLabel.textEquals("neste"))
+                buyAmountLabel.setText("next")
             if (BaseGame.longScale)
                 scaleButton.setText("Change to short scale")
             else
@@ -715,6 +720,10 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Ta en Kjappis!")
             buyButtonLabel.setText("Erverv")
             languageButton.setText("Bytt til Engelsk")
+            if (buyAmountLabel.textEquals("max"))
+                buyAmountLabel.setText("maks")
+            else if (buyAmountLabel.textEquals("next"))
+                buyAmountLabel.setText("neste")
             if (BaseGame.longScale)
                 scaleButton.setText("Bytt til kort skala")
             else

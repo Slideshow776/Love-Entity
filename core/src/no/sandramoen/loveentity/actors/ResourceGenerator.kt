@@ -133,7 +133,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         // table
         table = Table()
         table.add(leftTable(s)).width(Gdx.graphics.width * .25f).height(Gdx.graphics.height * .15f)
-        table.add(rightTable(s)).padBottom(Gdx.graphics.height * .042f)
+        table.add(rightTable(s)).padBottom(Gdx.graphics.height * .026f)
         // table.debug()
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
@@ -168,7 +168,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
             // BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
             labelTime(time)
-            timeProgress.width = Gdx.graphics.width * .725f * (time / incomeTime)
+            if (time >= incomeTime)
+                timeProgress.width = Gdx.graphics.width * .725f
+            else
+                timeProgress.width = Gdx.graphics.width * .725f * (time / incomeTime)
             activateButton.clearActions()
             activateButton.addAction(Actions.scaleTo(1f, 1f, .25f))
         } else {
@@ -521,7 +524,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             nameLabel = Label(saveName, BaseGame.labelStyle)
         else
             nameLabel = Label(norwegianName, BaseGame.labelStyle)
-        nameLabel.setFontScale(.75f)
+        nameLabel.setFontScale(.68f)
 
         val nameAndInfoTable = Table()
         nameAndInfoTable.add(nameLabel)
@@ -593,6 +596,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             split = GameUtils.presentLongScale(nextPurchase).split(" ")
         else
             split = GameUtils.presentShortScale(nextPurchase).split(" ")
+
         buyPriceLabel.setText("${split[0]}")
         if (split.size > 1)
             buyNumberLabel.setText("${split[1]}")
