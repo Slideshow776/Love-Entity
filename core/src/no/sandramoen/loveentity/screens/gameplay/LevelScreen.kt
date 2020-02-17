@@ -128,7 +128,7 @@ class LevelScreen : BaseScreen() {
 
                 table.reset()
                 val heartTable = Table()
-                heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
+                heartTable.add(heart).padBottom(Gdx.graphics.height * .06f)
                 val veilTable = Table().top()
                 veilTable.add(veil).expand().fill().bottom()
 
@@ -426,7 +426,7 @@ class LevelScreen : BaseScreen() {
 
         // gameplay table
         val heartTable = Table()
-        heartTable.add(heart).padBottom(Gdx.graphics.height * .035f)
+        heartTable.add(heart).padBottom(Gdx.graphics.height * .06f)
         val veilTable = Table().top()
         veilTable.add(veil).expand().fill().bottom()
 
