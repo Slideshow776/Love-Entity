@@ -166,7 +166,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (activated || (hasCommunityLeader && owned > BigInteger.ZERO)) {
             time += dt
             BaseGame.prefs!!.putFloat(resourceName + "Time", time)
-            // BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
+            BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
             labelTime(time)
             if (time >= incomeTime)
                 timeProgress.width = Gdx.graphics.width * .725f

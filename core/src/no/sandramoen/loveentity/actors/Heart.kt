@@ -21,8 +21,8 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
 
     init {
         loadAnimation(BaseGame.textureAtlas!!.findRegion("heart"))
-        width *= Gdx.graphics.width * .0065f
-        height *= Gdx.graphics.width * .0065f
+        width *= Gdx.graphics.width * .0025f
+        height *= Gdx.graphics.width * .0027f
         setOrigin(Align.center)
 
         addListener(object : InputListener() {

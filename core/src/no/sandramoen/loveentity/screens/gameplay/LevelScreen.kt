@@ -417,12 +417,7 @@ class LevelScreen : BaseScreen() {
 
         // table layout
         // uiTable
-        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
-        loveLabel.setFontScale(.55f)
-        loveLabel.setWrap(true)
-        loveLabel.setAlignment(Align.center)
-
-        uiTable.add(buyButton).right().width(Gdx.graphics.width * .22f).height(Gdx.graphics.height * .08f).row()
+        uiTable.add(buyButton).right().padRight(Gdx.graphics.width * -.016f).width(Gdx.graphics.width * .2f).height(Gdx.graphics.height * .08f).row()
         uiTable.add(burgerTable).fillY().expandY().row()
         uiTable.add(quickLoveButton).right().width(Gdx.graphics.width * .14f).height(Gdx.graphics.height * .07f)
                 .padRight(Gdx.graphics.width * .06f).padBottom(Gdx.graphics.height * .015f).row()
@@ -463,9 +458,15 @@ class LevelScreen : BaseScreen() {
         val mainTable = Table()
         mainTable.setFillParent(true)
 
+        loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
+        loveLabel.setFontScale(.55f)
+        loveLabel.setWrap(true)
+        loveLabel.setAlignment(Align.center)
+
         val loveLabelTable = Table()
         loveLabelTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
-        loveLabelTable.add(loveLabel).width(Gdx.graphics.width * .65f).padTop(Gdx.graphics.height * .01f).padBottom(Gdx.graphics.height * .01f)
+        loveLabelTable.add(loveLabel).width(Gdx.graphics.width * .69f).padTop(Gdx.graphics.height * .01f).padBottom(Gdx.graphics.height * .01f)
+        // loveLabelTable.debug = true
         val loveLabelTableTable = Table()
         loveLabelTableTable.add(loveLabelTable).width(Gdx.graphics.width.toFloat())
         loveLabelTableTable.align(Align.top)

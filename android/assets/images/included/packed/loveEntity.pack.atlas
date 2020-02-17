@@ -38,78 +38,98 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-avatar-10
-  rotate: false
-  xy: 2, 89
-  size: 795, 910
-  orig: 795, 910
-  offset: 0, 0
-  index: -1
 burger
   rotate: false
-  xy: 370, 2
+  xy: 708, 7
   size: 150, 85
   orig: 150, 85
   offset: 0, 0
   index: -1
 buyBanner
   rotate: false
-  xy: 522, 24
+  xy: 860, 29
   size: 130, 63
   orig: 130, 63
   offset: 0, 0
   index: -1
 cross-black
   rotate: false
-  xy: 799, 358
+  xy: 404, 32
   size: 150, 152
   orig: 150, 152
   offset: 0, 0
   index: -1
 cross-white
   rotate: false
-  xy: 799, 204
+  xy: 556, 32
   size: 150, 152
   orig: 150, 152
   offset: 0, 0
   index: -1
 heart
   rotate: false
-  xy: 799, 77
-  size: 125, 125
-  orig: 125, 125
+  xy: 404, 186
+  size: 357, 302
+  orig: 357, 302
+  offset: 0, 0
+  index: -1
+info
+  rotate: false
+  xy: 404, 490
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 itemTest
   rotate: false
-  xy: 799, 755
+  xy: 763, 94
   size: 167, 244
   orig: 167, 244
   offset: 0, 0
   index: -1
 longButton
   rotate: false
-  xy: 2, 13
+  xy: 763, 340
   size: 196, 74
   orig: 196, 74
   offset: 0, 0
   index: -1
 longButton2
   rotate: false
-  xy: 200, 15
+  xy: 763, 416
   size: 168, 72
   orig: 168, 72
   offset: 0, 0
   index: -1
+starBackground
+  rotate: false
+  xy: 2, 2
+  size: 400, 1000
+  orig: 400, 1000
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack3.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+avatar-10
+  rotate: false
+  xy: 2, 2
+  size: 795, 910
+  orig: 795, 910
+  offset: 0, 0
+  index: -1
 pixelAvatarTest
   rotate: false
-  xy: 799, 512
+  xy: 799, 671
   size: 167, 241
   orig: 167, 241
   offset: 0, 0
   index: -1
 
-loveEntity.pack3.png
+loveEntity.pack4.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -119,26 +139,6 @@ avatar-6
   xy: 2, 2
   size: 794, 910
   orig: 794, 910
-  offset: 0, 0
-  index: -1
-
-loveEntity.pack4.png
-size: 1024,1024
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-info
-  rotate: false
-  xy: 2, 490
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-starBackground
-  rotate: false
-  xy: 516, 2
-  size: 400, 1000
-  orig: 400, 1000
   offset: 0, 0
   index: -1
 

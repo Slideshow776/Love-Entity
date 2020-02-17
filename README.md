@@ -2,7 +2,8 @@
 
 My very own incremental game. Heavily Based on AdVenture Capitalist and Cookie Clicker.
 
-![image](https://user-images.githubusercontent.com/4059636/72716778-19e5f480-3b73-11ea-9469-6114e3559c74.png)
+![Screenshot_2020-02-17-12-29-05](https://user-images.githubusercontent.com/4059636/74650145-5c561d80-5181-11ea-809e-e5270834dc0d.png)
+
 
 # Game Design Document
 
