@@ -429,7 +429,12 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     owned = owned.add(nextPurchaseAmount)
                     GameUtils.putBigNumber(resourceName + "Owned", owned)
                     try {
-                        if (owned >= BigInteger((unlocks[unlockIndex].goal).toString()))
+                        if (owned >= BigInteger((unlocks[unlocks.size - 1].goal).toString())) {
+                            if (BaseGame.longScale)
+                                ownedLabel.setText("${GameUtils.presentLongScale(owned)}")
+                            else
+                                ownedLabel.setText("${GameUtils.presentShortScale(owned)}")
+                        } else if (owned >= BigInteger((unlocks[unlockIndex].goal).toString()))
                             if (BaseGame.longScale)
                                 ownedLabel.setText("${GameUtils.presentLongScale(owned)} / ${GameUtils.presentLongScale(BigInteger((unlocks[unlockIndex + 1].goal).toString()))}")
                             else
