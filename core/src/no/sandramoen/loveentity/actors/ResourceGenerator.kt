@@ -25,7 +25,7 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 class ResourceGenerator(x: Float, y: Float, s: Stage,
-                        var norwegianName: String, saveName: String, avatar: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
+                        var norwegianName: String, saveName: String, avatar: String, flag: String, unlocks: Array<Unlock>, baseCost: Long, multiplier: Float, income: Float, incomeTime: Float)
     : BaseActor(x, y, s) {
     var hideTable: Table
     lateinit var infoTable: Table
@@ -74,7 +74,8 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
     init {
         this.isVisible = false // solves a visibility bug
-        loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
+        if (flag == "") loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
+        else loadAnimation(BaseGame.textureAtlas!!.findRegion(flag))
         width = selfWidth
         height = selfHeight
         // color = Color(MathUtils.random(0, 255) / 255f, MathUtils.random(0, 255) / 255f, MathUtils.random(0, 255) / 255f, 1f)
