@@ -16,7 +16,7 @@ import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.GameUtils
 
 class UpgradesScreen : BaseScreen() {
-    private lateinit var titleLabel: Label
+    private lateinit var titleImage: Image
     private lateinit var loveLabel: Label
     private lateinit var subtitleLabel: Label
     private lateinit var descriptionLabel: Label
@@ -26,9 +26,10 @@ class UpgradesScreen : BaseScreen() {
     private lateinit var exitButton: Button
 
     override fun initialize() {
-        titleLabel = Label("Upgrades", BaseGame.labelStyle)
-        if (!BaseGame.english) titleLabel.setText("Oppgraderinger")
-        titleLabel.setFontScale(.7f)
+        if (BaseGame.english)
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerUpgrades"))
+        else
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerOppgraderinger"))
 
         loveLabel = Label("${GameUtils.presentLongScale(BaseGame.love)} love", BaseGame.labelStyle)
         if (!BaseGame.english) loveLabel.setText("${GameUtils.presentLongScale(BaseGame.love)} kjærlighet")
@@ -92,12 +93,18 @@ class UpgradesScreen : BaseScreen() {
         descriptionLabel.setFontScale(.25f)
 
         val upperTable = Table()
-        upperTable.add(titleLabel).expandX().center()
-        upperTable.add(exitButton).row()
-        upperTable.add(loveLabel)
-        upperTable.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
-        upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+        upperTable.add(titleImage).width(Gdx.graphics.width * .95f).height(Gdx.graphics.height * .08f).row()
+        upperTable.add(loveLabel).row()
+        upperTable.add(subtitleLabel).row()
+        upperTable.add(descriptionLabel)
+        // upperTable.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
+        // upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
         // upperTable.debug = true
+
+        val table = Table()
+        table.setFillParent(true)
+        table.add(exitButton).top().right().pad(Gdx.graphics.width * .01f)
+        uiTable.add(table)
 
         // upgrades table
         upgradesTable = Table()
@@ -105,7 +112,7 @@ class UpgradesScreen : BaseScreen() {
 
         val scroll = ScrollPane(upgradesTable)
         val scrollableTable = Table()
-        scrollableTable.add(scroll)
+        scrollableTable.add(scroll).padTop(Gdx.graphics.height * .015f)
 
         // table layout
         val mainTable = Table()
@@ -165,15 +172,13 @@ class UpgradesScreen : BaseScreen() {
 
     private fun initializeUpgrades() {
         upgradesTable.reset()
-        upgradesTable.add(subtitleLabel).padTop(25f).row()
-        upgradesTable.add(descriptionLabel).padBottom(25f).row()
         upgradesTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
         for (i in 0 until BaseGame.upgrades.size) {
             if (BaseGame.resourceGenerators[BaseGame.upgrades[i].id].isVisible && !BaseGame.upgrades[i].remove) {
                 BaseGame.upgrades[i].isVisible = true
                 BaseGame.upgrades[i].checkAffordable()
-                upgradesTable.add(BaseGame.upgrades[i]).padBottom(Gdx.graphics.height * .07f).row()
+                upgradesTable.add(BaseGame.upgrades[i]).padBottom(Gdx.graphics.height * .03f).row()
 
                 if (!BaseGame.resourceGenerators[BaseGame.upgrades[i].id].hideTable.isVisible)
                     BaseGame.upgrades[i].hideTable.isVisible = false

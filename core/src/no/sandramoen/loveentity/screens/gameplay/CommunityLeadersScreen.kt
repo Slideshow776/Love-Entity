@@ -16,7 +16,7 @@ import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.GameUtils
 
 class CommunityLeadersScreen : BaseScreen() {
-    private lateinit var titleLabel: Label
+    private lateinit var titleImage: Image
     private lateinit var loveLabel: Label
     private lateinit var subtitleLabel: Label
     private lateinit var descriptionLabel: Label
@@ -28,10 +28,9 @@ class CommunityLeadersScreen : BaseScreen() {
 
     override fun initialize() {
         if (BaseGame.english)
-            titleLabel = Label("Community Leaders", BaseGame.labelStyle)
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerCommunityLeaders"))
         else
-            titleLabel = Label("Organisasjonsledere", BaseGame.labelStyle)
-        titleLabel.setFontScale(.7f)
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerOrganisasjonsledere"))
 
         if (BaseGame.english)
             if (BaseGame.longScale)
@@ -49,7 +48,7 @@ class CommunityLeadersScreen : BaseScreen() {
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
         exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
-        exitButton.scaleBy(-.5f)
+        exitButton.scaleBy(-.25f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
@@ -73,7 +72,7 @@ class CommunityLeadersScreen : BaseScreen() {
         val whiteInfoTable = Table()
         whiteInfoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(1f, 1f, 1f, 1f))
         whiteInfoTable.add(infoLabel).expand().fill().pad(20f)
-        infoTable.add(whiteInfoTable).width(Gdx.graphics.width * .5f).height(Gdx.graphics.height * .5f)
+        infoTable.add(whiteInfoTable).width(Gdx.graphics.width * .5f)//.height(Gdx.graphics.height * .3f)
         infoTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
         infoTable.isVisible = false
         infoTable.addListener(object : ActorGestureListener() {
@@ -98,9 +97,9 @@ class CommunityLeadersScreen : BaseScreen() {
 
         // upper table
         if (BaseGame.english)
-            subtitleLabel = Label("Community Leaders Make Compassion Easier!", BaseGame.labelStyle)
+            subtitleLabel = Label("Community leaders make compassion easier", BaseGame.labelStyle)
         else
-            subtitleLabel = Label("Organisasjonsledere Gjør Medølelse Enklere!", BaseGame.labelStyle)
+            subtitleLabel = Label("Organisasjonsledere gjør medølelse enklere", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.3f)
         if (BaseGame.english)
             descriptionLabel = Label("Recruit one to act as a continuous love hub for you when you're away!", BaseGame.labelStyle)
@@ -109,24 +108,32 @@ class CommunityLeadersScreen : BaseScreen() {
         descriptionLabel.setFontScale(.25f)
 
         val upperTable = Table()
-        upperTable.add(titleLabel).expandX().center()
-        upperTable.add(exitButton).row()
-        upperTable.add(loveLabel)
-        upperTable.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
-        upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+        // upperTable.add(titleLabel).expandX().center().row()
+        upperTable.add(titleImage).width(Gdx.graphics.width * .95f).height(Gdx.graphics.height * .1f).row()
+        upperTable.add(loveLabel).row()
+        upperTable.add(subtitleLabel).row()
+        upperTable.add(descriptionLabel)
+        // upperTable.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
+        // upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+
+        val table = Table()
+        table.setFillParent(true)
+        table.add(exitButton).top().right().pad(Gdx.graphics.width * .01f)
+        uiTable.add(table)
 
         // community leaders table
         communityLeadersTable = Table()
         initializeCommunityLeaders()
 
         val scroll = ScrollPane(communityLeadersTable)
+
         val scrollableTable = Table()
-        scrollableTable.add(scroll)
+        scrollableTable.add(scroll).padTop(Gdx.graphics.height * .015f)
 
         // table layout
         val mainTable = Table()
 
-        mainTable.add(upperTable)
+        mainTable.add(upperTable).fillX()
         mainTable.row()
         mainTable.add(scrollableTable)
 
@@ -184,8 +191,6 @@ class CommunityLeadersScreen : BaseScreen() {
 
     private fun initializeCommunityLeaders() {
         communityLeadersTable.reset()
-        communityLeadersTable.add(subtitleLabel).padTop(25f).row()
-        communityLeadersTable.add(descriptionLabel).padBottom(25f).row()
         communityLeadersTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
 
         for (i in 0 until BaseGame.resourceGenerators.size) { // assumes BaseGame.resourceGenerators.size == communityLeaders.size
@@ -195,7 +200,7 @@ class CommunityLeadersScreen : BaseScreen() {
 
                 BaseGame.communityLeaders[i].isVisible = true
                 BaseGame.communityLeaders[i].checkAffordable()
-                communityLeadersTable.add(BaseGame.communityLeaders[i]).padBottom(Gdx.graphics.height * .07f).row()
+                communityLeadersTable.add(BaseGame.communityLeaders[i]).padBottom(Gdx.graphics.height * .03f).row()
 
                 if (!BaseGame.resourceGenerators[i].hideTable.isVisible)
                     BaseGame.communityLeaders[i].hideTable.isVisible = false

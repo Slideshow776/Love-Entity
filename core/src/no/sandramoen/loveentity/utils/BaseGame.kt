@@ -139,7 +139,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         val buttonPatch = NinePatch(buttonTex, 24, 24, 24, 24)
         textButtonStyle!!.up = NinePatchDrawable(buttonPatch)
         textButtonStyle!!.font = buttonCustomFont
-        textButtonStyle!!.fontColor = Color.PINK
+        textButtonStyle!!.fontColor = Color.WHITE
     }
 
     override fun resume() {

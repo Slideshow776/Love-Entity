@@ -19,13 +19,12 @@ import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.GameUtils
 import java.math.BigInteger
 
-class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: String, descriptionEN: String, descriptionNO: String, price: BigInteger) : BaseActor(0f, 0f, s) {
+class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: String, descriptionNO: String, price: BigInteger) : BaseActor(0f, 0f, s) {
     var remove = false
     var hideTable: Table
     var id = id
     var button: TextButton
     var price: BigInteger = price
-
 
     private var selfWidth = Gdx.graphics.width * .9f
     private var selfHeight = Gdx.graphics.height * .1f
@@ -36,21 +35,21 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
     private var heartIcon: BaseActor
     private var costLabel: Label
 
-    private var nameEN = nameEN
-    private var nameNO = nameNO
-    private var descriptionEN = descriptionEN
-    private var descriptionNO = descriptionNO
+    private var descriptionEN: String
+    private var descriptionNO: String
 
     init {
         this.isVisible = false // solves a visibility bug
         loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
-        color = Color(com.badlogic.gdx.math.MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, 1f)
+        color = Color(MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, 1f)
         width = selfWidth
         height = selfHeight
+        this.descriptionEN = descriptionEN
+        this.descriptionNO = descriptionNO
 
         // image
         image = BaseActor(0f, 0f, s)
-        image.loadAnimation(BaseGame.textureAtlas!!.findRegion(upgradeImage))
+        image.loadAnimation(BaseGame.textureAtlas!!.findRegion("potion${MathUtils.random(0, 4)}"))
         image.width = image.width * (selfHeight / image.height) // ensure aspect ratio
         image.height = selfHeight
 
@@ -68,7 +67,7 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
         else
             descriptionLabel = Label(descriptionNO, BaseGame.labelStyle)
         descriptionLabel.setFontScale(.25f)
-        descriptionLabel.color = Color.GRAY
+        descriptionLabel.color = Color.LIGHT_GRAY
 
         // cost image
         heartIcon = BaseActor(0f, 0f, s)
@@ -97,12 +96,13 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
             button = TextButton("Invest!", BaseGame.textButtonStyle)
         else
             button = TextButton("Invester!", BaseGame.textButtonStyle)
+        button.label.setFontScale(.72f)
         button.isTransform = true
         if (!BaseGame.love >= price)
-            button.color = Color.DARK_GRAY
+            button.color = Color.GRAY
         else
-            button.color = Color.WHITE
-        button.scaleBy(-.2f)
+            button.color = Color.ORANGE
+        button.scaleBy(-.05f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -134,7 +134,6 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
         hideTable.isVisible = true
         hideTable.isTransform = true
         hideTable.setOrigin(0f, Gdx.graphics.height * .058f)
-        hideTable.scaleBy(0f, .355f)
 
         hideTable.add(hideLabel).colspan(2).row()
         // hideTable.debug = true
@@ -144,9 +143,9 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
         table.width = Gdx.graphics.width.toFloat() * 1.0f
         table.height = selfHeight
 
-        table.add(image).padRight(20f)
-        table.add(infoTable)
-        table.add(button).padLeft(-40f)
+        table.add(image).width(Gdx.graphics.width * .16f).height(Gdx.graphics.height * .095f).padLeft(Gdx.graphics.width * .035f)
+        table.add(infoTable).width(Gdx.graphics.width * .44f)
+        table.add(button).width(Gdx.graphics.width * .3f).padRight(Gdx.graphics.width * .025f)
         // table.debug = true
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
@@ -160,9 +159,26 @@ class Upgrade(s: Stage, id: Int, upgradeImage: String, nameEN: String, nameNO: S
 
     fun checkAffordable() {
         if (BaseGame.love >= price)
-            button.color = Color.WHITE
+            button.color = Color.ORANGE
         else
-            button.color = Color.DARK_GRAY
+            button.color = Color.GRAY
+    }
+
+    fun checkLanguage() {
+        if (BaseGame.english) {
+            descriptionLabel.setText(descriptionEN)
+            button.label.setText("Invest!")
+        } else {
+            descriptionLabel.setText(descriptionNO)
+            button.label.setText("Invester!")
+        }
+    }
+
+    fun checkScale() {
+        if (BaseGame.longScale)
+            costLabel.setText("${GameUtils.presentLongScale(BigInteger(price.toString()))}")
+        else
+            costLabel.setText("${GameUtils.presentShortScale(BigInteger(price.toString()))}")
     }
 
     override fun act(dt: Float) {

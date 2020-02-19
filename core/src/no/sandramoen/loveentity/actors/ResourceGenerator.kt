@@ -341,7 +341,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                 ownedLabel = Label("${GameUtils.presentShortScale(owned)}", BaseGame.labelStyle)
         }
         ownedLabel.setFontScale(.4f)
-        ownedLabel.color = Color.YELLOW
+        // ownedLabel.color = Color.YELLOW
 
         unlockProgress = BaseActor(0f, 0f, s)
         unlockProgress.loadAnimation(BaseGame.textureAtlas!!.findRegion("longButton"))
