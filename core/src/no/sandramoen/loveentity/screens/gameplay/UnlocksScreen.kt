@@ -20,19 +20,20 @@ import no.sandramoen.loveentity.utils.GameUtils
 class UnlocksScreen : BaseScreen() {
     private lateinit var infoTable: Table
     private lateinit var exitButton: Button
+    private lateinit var titleImage: Image
 
     override fun initialize() {
-        val titleLabel = Label("Unlocks", BaseGame.labelStyle)
-        if (!BaseGame.english)
-            titleLabel.setText("Oppnåelser")
-        titleLabel.setFontScale(.7f)
+        if (BaseGame.english)
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerUnlocks"))
+        else
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerOppnåelser"))
 
         // main exit button
         val exitButtonStyle = Button.ButtonStyle()
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
         exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
-        exitButton.scaleBy(-.5f)
+        exitButton.scaleBy(-.25f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
@@ -83,16 +84,20 @@ class UnlocksScreen : BaseScreen() {
         subtitleLabel.setFontScale(.4f)
         subtitleLabel.color = Color.PURPLE
         val descriptionLabel = Label("Want to maximize your love? Unlock these for a sweet lovin' bonus", BaseGame.labelStyle)
-        if (!BaseGame.english) descriptionLabel.setText("Har du lyst å maksimere din kjærllighet? Oppnå disse for en ekstra bonus!")
+        if (!BaseGame.english) descriptionLabel.setText("Har du lyst å maksimere din kjærlighet? Oppnå disse for en ekstra bonus!")
         descriptionLabel.setWrap(true)
         descriptionLabel.setFontScale(.3f)
         descriptionLabel.setAlignment(Align.center)
 
         val upperTable = Table()
-        upperTable.add(titleLabel).expandX().center()
-        upperTable.add(exitButton).row()
-        upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+        upperTable.add(titleImage).width(Gdx.graphics.width * .95f).height(Gdx.graphics.height * .1f)
+        // upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
         // upperTable.debug = true
+
+        val exitTable = Table()
+        exitTable.setFillParent(true)
+        exitTable.add(exitButton).top().right().pad(Gdx.graphics.width * .01f)
+        uiTable.add(exitTable)
 
         // unlocks table
         val unlocksTable = Table()
@@ -140,11 +145,10 @@ class UnlocksScreen : BaseScreen() {
         }
 
         val table = Table()
-        table.add(subtitleLabel).padTop(25f).align(Align.right)
-        table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
-        table.add(descriptionLabel).right().padBottom(10f).width(Gdx.graphics.width * .85f).colspan(2).row()
+        // table.add(subtitleLabel).padTop(25f).align(Align.right)
+        // table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
+        table.add(descriptionLabel).padBottom(10f).width(Gdx.graphics.width * .85f).colspan(2).row()
         table.add(unlocksTable).align(Align.center).colspan(2)
-        table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
         // table.debug = true
 
         // table layout

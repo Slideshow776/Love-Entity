@@ -198,35 +198,49 @@ filter: Nearest,Nearest
 repeat: none
 avatar-9
   rotate: false
-  xy: 2, 2
+  xy: 2, 66
   size: 682, 954
   orig: 682, 954
   offset: 0, 0
   index: -1
+bannerOppnåelser
+  rotate: false
+  xy: 2, 2
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
+bannerUnlocks
+  rotate: false
+  xy: 328, 2
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
 classicRainbowFlag
   rotate: false
-  xy: 686, 255
+  xy: 686, 319
   size: 320, 131
   orig: 320, 131
   offset: 0, 0
   index: -1
 lesbianFlag
   rotate: false
-  xy: 686, 388
+  xy: 686, 452
   size: 320, 180
   orig: 320, 180
   offset: 0, 0
   index: -1
 pansexualityFlag
   rotate: false
-  xy: 686, 764
+  xy: 686, 828
   size: 320, 192
   orig: 320, 192
   offset: 0, 0
   index: -1
 transFlag
   rotate: false
-  xy: 686, 570
+  xy: 686, 634
   size: 320, 192
   orig: 320, 192
   offset: 0, 0
