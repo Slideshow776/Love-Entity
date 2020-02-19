@@ -26,7 +26,7 @@ class AscensionScreen : BaseScreen() {
     private lateinit var infoTable: Table
     private lateinit var warningTable: Table
 
-    private lateinit var titleLabel: Label
+    private lateinit var titleImage: Image
     private lateinit var infoLabel: Label
     private lateinit var warningLabel: Label
     private lateinit var warningButton: TextButton
@@ -38,15 +38,17 @@ class AscensionScreen : BaseScreen() {
     private lateinit var restartLabel: Label
 
     override fun initialize() {
-        titleLabel = Label("Ascension", BaseGame.labelStyle)
-        titleLabel.setFontScale(.7f)
+        if (BaseGame.english)
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerAscension"))
+        else
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerOppløftning"))
 
         // main exit button
         val exitButtonStyle = Button.ButtonStyle()
         exitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-white")))
         exitButton = Button(exitButtonStyle)
         exitButton.isTransform = true
-        exitButton.scaleBy(-.5f)
+        exitButton.scaleBy(-.25f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
@@ -89,7 +91,7 @@ class AscensionScreen : BaseScreen() {
 
         // warning table
         warningLabel = Label("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!", BaseGame.labelStyle)
-        if (BaseGame.claimAscensionPoints > 0) {
+        if (BaseGame.currentAscensionPoints > 0) {
             if (BaseGame.english)
                 warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points ready to boost your love! To claim them you will need to reset your progress.")
             else
@@ -97,18 +99,28 @@ class AscensionScreen : BaseScreen() {
         }
         warningLabel.color = Color.PURPLE
         warningLabel.setWrap(true)
-        warningLabel.setFontScale(.3f)
+        warningLabel.setFontScale(.4f)
+        warningLabel.setAlignment(Align.center)
 
         warningButton = TextButton("Reset now!", BaseGame.textButtonStyle)
         warningButton.isTransform = true
-        warningButton.scaleBy(-.2f)
+        // warningButton.scaleBy(-.2f)
+        if (BaseGame.claimAscensionPoints > 0)
+            warningButton.color = Color.ORANGE
+        else
+            warningButton.color = Color.LIGHT_GRAY
         warningButton.setOrigin(Align.center)
         warningButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                BaseGame.currentAscensionPoints += BaseGame.claimAscensionPoints
-                currentAscensionPointsLabel.setText("${BaseGame.currentAscensionPoints}")
-                claimAscensionPointsLabel.setText("${BaseGame.claimAscensionPoints}")
-                GameUtils.reset()
+                if (BaseGame.claimAscensionPoints > 0) {
+                    BaseGame.currentAscensionPoints += BaseGame.claimAscensionPoints
+                    BaseGame.claimAscensionPoints = 0
+                    currentAscensionPointsLabel.setText("${BaseGame.currentAscensionPoints}")
+                    claimAscensionPointsLabel.setText("${BaseGame.claimAscensionPoints}")
+                    GameUtils.reset()
+                    warningTable.isVisible = !warningTable.isVisible
+                    checkLanguage()
+                }
             }
             false
         }
@@ -117,33 +129,33 @@ class AscensionScreen : BaseScreen() {
         warningExitButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("cross-black")))
         val warningExitButton = Button(warningExitButtonStyle)
         warningExitButton.isTransform = true
-        warningExitButton.scaleBy(-.5f)
+        warningExitButton.scaleBy(-.25f)
         warningExitButton.setOrigin(Align.bottomRight)
-
-        val whiteWarningTable = Table()
-        whiteWarningTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(1f, 1f, 1f, 1f))
-        whiteWarningTable.add(warningExitButton).right().row()
-        whiteWarningTable.add(warningLabel).expandX().fillX().pad(20f).row()
-        whiteWarningTable.add(warningButton)
-        whiteWarningTable.align(Align.bottom)
-        // whiteWarningTable.debug = true
-
-        warningTable = Table()
-        warningTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .9f))
-        warningTable.isVisible = false
-        warningTable.add(whiteWarningTable).width(Gdx.graphics.width * .6f).height(Gdx.graphics.height * .25f).row()
-        warningTable.addListener(object : ActorGestureListener() {
+        warningExitButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 warningTable.isVisible = !warningTable.isVisible
             }
         })
+
+        val whiteWarningTable = Table()
+        whiteWarningTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.95f, .95f, .95f, 1f))
+        whiteWarningTable.add(warningExitButton).padLeft(Gdx.graphics.width * .6f).row()
+        whiteWarningTable.add(warningLabel).width(Gdx.graphics.width * .6f).row()
+        whiteWarningTable.add(warningButton).padBottom(Gdx.graphics.height * .025f)
+        whiteWarningTable.align(Align.bottom)
+        // whiteWarningTable.debug = true
+
+        warningTable = Table()
+        warningTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .8f))
+        warningTable.isVisible = false
+        warningTable.add(whiteWarningTable).width(Gdx.graphics.width * .75f).height(Gdx.graphics.height * .32f).row()
         // warningTable.debug = true
 
         // upper table
         subtitleLabel = Label("Ascend to a greater compassion level!", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.4f)
         subtitleLabel.color = Color.PURPLE
-        descriptionLabel = Label("The more love you earn, the more Ascension points you realize! When claimed increase your capacity for love, but you'll need to start over. (Psst! It's worth it!)", BaseGame.labelStyle)
+        descriptionLabel = Label("The more love you earn, the more Ascension points you realize! When claimed increases your capacity for love, but you'll need to start over. (Psst! It's worth it!)", BaseGame.labelStyle)
         descriptionLabel.setWrap(true)
         descriptionLabel.setFontScale(.3f)
         descriptionLabel.setAlignment(Align.center)
@@ -151,22 +163,26 @@ class AscensionScreen : BaseScreen() {
         ascensionDescriptionLabel.setFontScale(.55f)
         ascensionDescriptionLabel.color = Color.PURPLE
         currentAscensionPointsLabel = Label("${BaseGame.currentAscensionPoints}", BaseGame.labelStyle)
-        currentAscensionPointsLabel.setFontScale(.55f)
+        currentAscensionPointsLabel.setFontScale(.75f)
 
         val table = Table()
-        table.add(subtitleLabel).padTop(25f)
-        table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
-        table.add(descriptionLabel).right().padBottom(100f).width(Gdx.graphics.width * .85f).row()
+        table.add(subtitleLabel).padTop(Gdx.graphics.height * .01f).row()
+        // table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
+        table.add(descriptionLabel).right().padBottom(Gdx.graphics.height * .05f).width(Gdx.graphics.width * .85f).row()
         table.add(ascensionDescriptionLabel).row()
-        table.add(currentAscensionPointsLabel).padBottom(25f).row()
-        table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
+        table.add(currentAscensionPointsLabel).padBottom(Gdx.graphics.height * .01f).row()
+        // table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.05f, .05f, .05f, 1f))
         // table.debug = true
 
         val upperTable = Table()
-        upperTable.add(titleLabel).expandX().center()
-        upperTable.add(exitButton).row()
-        upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
+        upperTable.add(titleImage).width(Gdx.graphics.width * .95f).height(Gdx.graphics.height * .1f).row()
+        // upperTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, 1f))
         // upperTable.debug = true
+
+        val exitTable = Table()
+        exitTable.setFillParent(true)
+        exitTable.add(exitButton).top().right().pad(Gdx.graphics.width * .01f)
+        uiTable.add(exitTable)
 
         val lowerLeftTable = Table()
         lowerLeftTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, .9f))
@@ -182,7 +198,7 @@ class AscensionScreen : BaseScreen() {
         val lowerRightTable = Table()
         lowerRightTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(.2f, .2f, .2f, .9f))
         claimAscensionPointsLabel = Label("${BaseGame.currentAscensionPoints}", BaseGame.labelStyle)
-        claimAscensionPointsLabel.setFontScale(.5f)
+        claimAscensionPointsLabel.setFontScale(.75f)
         claimedDescriptionLabel = Label("Ascension points claimed when restart", BaseGame.labelStyle)
         claimedDescriptionLabel.setFontScale(.25f)
         claimedDescriptionLabel.setWrap(true)
@@ -192,6 +208,7 @@ class AscensionScreen : BaseScreen() {
         claimButton.isTransform = true
         claimButton.scaleBy(-.2f)
         claimButton.setOrigin(Align.center)
+        claimButton.color = Color.ORANGE
         claimButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
                 warningTable.isVisible = !warningTable.isVisible
@@ -199,13 +216,13 @@ class AscensionScreen : BaseScreen() {
         }
 
         restartLabel = Label("Restart your love", BaseGame.labelStyle)
-        restartLabel.setFontScale(.3f)
+        restartLabel.setFontScale(.4f)
         restartLabel.setWrap(true)
         restartLabel.setAlignment(Align.center)
         lowerRightTable.add(claimAscensionPointsLabel).row()
         lowerRightTable.add(claimedDescriptionLabel).width(Gdx.graphics.width * .3f).row()
         lowerRightTable.add(claimButton).row()
-        lowerRightTable.add(restartLabel)
+        lowerRightTable.add(restartLabel).padTop(Gdx.graphics.height * .01f)
 
         // table layout
         val mainTable = Table()
@@ -215,8 +232,8 @@ class AscensionScreen : BaseScreen() {
         mainTable.row()
         mainTable.add(table).colspan(2)
         mainTable.row()
-        mainTable.add(lowerLeftTable).height(Gdx.graphics.height * .3f)
-        mainTable.add(lowerRightTable).height(Gdx.graphics.height * .3f)
+        mainTable.add(lowerLeftTable).height(Gdx.graphics.height * .3f).width(Gdx.graphics.width * .45f)
+        mainTable.add(lowerRightTable).height(Gdx.graphics.height * .3f).width(Gdx.graphics.width * .45f)
         // mainTable.debug = true
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
@@ -272,23 +289,35 @@ class AscensionScreen : BaseScreen() {
 
     private fun checkLanguage() {
         if (BaseGame.english) {
-            titleLabel.setText("Ascension")
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerAscension"))
             infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
                     "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
-            warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!")
+            if (BaseGame.claimAscensionPoints > 0) {
+                warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points ready to boost your love! To claim them you will need to reset your progress.")
+                warningButton.color = Color.ORANGE
+            } else {
+                warningLabel.setText("You have ${BaseGame.claimAscensionPoints} ascension points! Resetting now is a bad idea. Just keep earning love!")
+                warningButton.color = Color.LIGHT_GRAY
+            }
             warningButton.setText("Reset now!")
             subtitleLabel.setText("Ascend to a greater compassion level!")
-            descriptionLabel.setText("The more love you earn, the more Ascension points you realize! When claimed increase your capacity for love, but you'll need to start over. (Psst! It's worth it!)")
+            descriptionLabel.setText("The more love you earn, the more Ascension points you realize! When claimed increases your capacity for love, but you'll need to start over. (Psst! It's worth it!)")
             ascensionDescriptionLabel.setText("Your Total Ascension Points")
             bonusDescriptionLabel.setText("Compassion bonus per ascension point")
             claimedDescriptionLabel.setText("Ascension points claimed when restart")
             claimButton.setText("Claim")
             restartLabel.setText("Restart your love")
         } else {
-            titleLabel.setText("Oppløftning")
+            titleImage = Image(BaseGame.textureAtlas!!.findRegion("bannerOppløftning"))
             infoLabel.setText("Cupcake ipsum dolor sit amet. Gingerbread marshmallow sugar plum pastry dragée gingerbread candy cookie. Bonbon dessert tiramisu dragée.\n" +
                     "\n" + "Powder jelly-o lollipop. Cookie chupa chups powder cake muffin pudding. Soufflé cupcake chocolate apple pie danish toffee dessert powder. Cake pudding jelly cake jelly tootsie roll.")
-            warningLabel.setText("Du har ${BaseGame.claimAscensionPoints} oppløftningspoeng! En omstart nå er en dårlig idé. Fortsett å tjen mer kjærlighet!")
+            if (BaseGame.currentAscensionPoints > 0) {
+                warningLabel.setText("Du har ${BaseGame.claimAscensionPoints} oppløftningspoeng klar til å øke din kjærlighet! For å innfri disse må du starte på nytt igjen.")
+                warningButton.color = Color.ORANGE
+            } else {
+                warningLabel.setText("Du har ${BaseGame.claimAscensionPoints} oppløftningspoeng! En omstart nå er en dårlig idé. Fortsett å tjen mer kjærlighet!")
+                warningButton.color = Color.LIGHT_GRAY
+            }
             warningButton.setText("Omstart nå!")
             subtitleLabel.setText("Løft deg opp til et høyere medfølelsenivå")
             descriptionLabel.setText("Jo mer du tjener, jo mere oppløftningspoeng får du! Når du innfrir dem øker du din kapasitet for kjærlighet, men du må starte helt omigjen. (Psst! Det er verdt det!)")

@@ -203,44 +203,58 @@ avatar-9
   orig: 682, 954
   offset: 0, 0
   index: -1
-bannerOppnåelser
+bannerAscension
   rotate: false
   xy: 2, 2
   size: 324, 62
   orig: 324, 62
   offset: 0, 0
   index: -1
-bannerUnlocks
+bannerOppløftning
   rotate: false
   xy: 328, 2
   size: 324, 62
   orig: 324, 62
   offset: 0, 0
   index: -1
+bannerOppnåelser
+  rotate: false
+  xy: 654, 2
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
+bannerUnlocks
+  rotate: false
+  xy: 686, 958
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
 classicRainbowFlag
   rotate: false
-  xy: 686, 319
+  xy: 686, 255
   size: 320, 131
   orig: 320, 131
   offset: 0, 0
   index: -1
 lesbianFlag
   rotate: false
-  xy: 686, 452
+  xy: 686, 388
   size: 320, 180
   orig: 320, 180
   offset: 0, 0
   index: -1
 pansexualityFlag
   rotate: false
-  xy: 686, 828
+  xy: 686, 764
   size: 320, 192
   orig: 320, 192
   offset: 0, 0
   index: -1
 transFlag
   rotate: false
-  xy: 686, 634
+  xy: 686, 570
   size: 320, 192
   orig: 320, 192
   offset: 0, 0

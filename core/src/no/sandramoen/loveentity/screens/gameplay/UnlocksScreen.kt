@@ -82,6 +82,7 @@ class UnlocksScreen : BaseScreen() {
         val subtitleLabel = Label("Unlocking your potential!", BaseGame.labelStyle)
         if (!BaseGame.english) subtitleLabel.setText("Oppnå ditt potensial!")
         subtitleLabel.setFontScale(.4f)
+        subtitleLabel.setAlignment(Align.center)
         subtitleLabel.color = Color.PURPLE
         val descriptionLabel = Label("Want to maximize your love? Unlock these for a sweet lovin' bonus", BaseGame.labelStyle)
         if (!BaseGame.english) descriptionLabel.setText("Har du lyst å maksimere din kjærlighet? Oppnå disse for en ekstra bonus!")
@@ -145,7 +146,7 @@ class UnlocksScreen : BaseScreen() {
         }
 
         val table = Table()
-        // table.add(subtitleLabel).padTop(25f).align(Align.right)
+        table.add(subtitleLabel).padTop(25f).width(Gdx.graphics.width * .85f).colspan(2).row()
         // table.add(infoButton).width(Gdx.graphics.width * .06f).height(Gdx.graphics.width * .06f).row()
         table.add(descriptionLabel).padBottom(10f).width(Gdx.graphics.width * .85f).colspan(2).row()
         table.add(unlocksTable).align(Align.center).colspan(2)
