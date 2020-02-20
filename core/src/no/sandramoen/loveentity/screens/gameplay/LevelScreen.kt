@@ -437,14 +437,19 @@ class LevelScreen : BaseScreen() {
         heartTable.add(heart).padBottom(Gdx.graphics.height * .06f)
         val veilTable = Table().top()
         veilTable.add(veil).expand().fill().bottom()
+        val swirlTable1 = Table()
+        val glowSwirl1 = GlowSwirl(0f, 0f, mainStage)
+        glowSwirl1.addAction(Actions.forever(Actions.rotateBy(.15f)))
+        swirlTable1.add(glowSwirl1).padBottom(Gdx.graphics.height * .1f)
 
         val heartStack = Stack()
+        heartStack.add(swirlTable1)
         heartStack.add(heartTable)
         heartStack.add(veilTable)
 
         table = Table()
         table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("starBackground")))
-        table.add(heartStack).padBottom(Gdx.graphics.height * .1f).padTop(Gdx.graphics.height * .2f).row()
+        table.add(heartStack).padBottom(Gdx.graphics.height * .05f).padTop(Gdx.graphics.height * .15f).row()
         if (BaseGame.revealNextGeneratorIndex < 1) {
             for (i in 0 until 2) {
                 table.add(BaseGame.resourceGenerators[i]).padBottom(Gdx.graphics.height * .1f).row()
