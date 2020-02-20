@@ -55,11 +55,11 @@ class LevelScreen : BaseScreen() {
     private var allyUnlocks = Array<Unlock>()
 
     private lateinit var heart: Heart
-    private lateinit var veil: Veil
+    private lateinit var rainbowVeil: RainbowVeil
 
     override fun initialize() {
         heart = Heart(0f, 0f, mainStage)
-        veil = Veil(0f, 0f, mainStage)
+        rainbowVeil = RainbowVeil(0f, 0f, mainStage)
 
         if (BaseGame.resourceGenerators.size != 10) {
             initializeAssets()
@@ -130,7 +130,7 @@ class LevelScreen : BaseScreen() {
                 val heartTable = Table()
                 heartTable.add(heart).padBottom(Gdx.graphics.height * .06f)
                 val veilTable = Table().top()
-                veilTable.add(veil).expand().fill().bottom()
+                veilTable.add(rainbowVeil).expand().fill().bottom()
 
                 val stack = Stack()
                 stack.add(heartTable)
@@ -435,8 +435,8 @@ class LevelScreen : BaseScreen() {
         // gameplay table
         val heartTable = Table()
         heartTable.add(heart).padBottom(Gdx.graphics.height * .06f)
-        val veilTable = Table().top()
-        veilTable.add(veil).expand().fill().bottom()
+        val rainbowVeilTable = Table().top()
+        rainbowVeilTable.add(rainbowVeil).expand().fill().bottom().padBottom(Gdx.graphics.height * .035f)
         val swirlTable1 = Table()
         val glowSwirl1 = GlowSwirl(0f, 0f, mainStage)
         glowSwirl1.addAction(Actions.forever(Actions.rotateBy(.15f)))
@@ -445,7 +445,7 @@ class LevelScreen : BaseScreen() {
         val heartStack = Stack()
         heartStack.add(swirlTable1)
         heartStack.add(heartTable)
-        heartStack.add(veilTable)
+        heartStack.add(rainbowVeilTable)
 
         table = Table()
         table.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("starBackground")))

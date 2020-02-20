@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
 
-class Veil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
+class RainbowVeil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
     var time = 0f
     var label: Label
 
@@ -58,7 +58,7 @@ class Veil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         when (BaseGame.heartBonus) {
             5 -> {
                 label.setText("x5")
-                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .4f, 2f))
+                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * 1.3f, 2f))
                 waveBackground.addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .34f, 2f))
                     label.addAction(Actions.fadeIn(.25f))
                     label.addAction(Actions.color(Color.FIREBRICK, 2f))
@@ -69,7 +69,7 @@ class Veil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             }
             4 -> {
                 label.setText("x4")
-                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .35f, 2f))
+                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .9f, 2f))
                 waveBackground.addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .29f, 2f))
                     label.addAction(Actions.fadeIn(.25f))
                     label.addAction(Actions.color(Color.RED, 2f))
@@ -80,7 +80,7 @@ class Veil(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             }
             3 -> {
                 label.setText("x3")
-                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .3f, 2f))
+                addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .5f, 2f))
                 waveBackground.addAction(Actions.sizeTo(Gdx.graphics.width.toFloat(), Gdx.graphics.height * .24f, 2f))
                     label.addAction(Actions.fadeIn(.25f))
                     label.addAction(Actions.color(Color.ORANGE, 2f))
