@@ -2,13 +2,16 @@ package no.sandramoen.loveentity.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import no.sandramoen.loveentity.utils.BaseActor
 import no.sandramoen.loveentity.utils.BaseGame
+import no.sandramoen.loveentity.utils.GameUtils
 import java.math.BigInteger
 
 class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
@@ -31,17 +34,22 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                     clicks++
                     BaseGame.heartTouched = true
 
+                    var loveEarned = BigInteger.ONE
                     if (BaseGame.currentAscensionPoints > 0) {
-                        BaseGame.love = BaseGame.love.add(BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString()))
-                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString()))
+                        loveEarned = BigInteger((income * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus) * BaseGame.heartBonus).toString())
+                        BaseGame.love = BaseGame.love.add(loveEarned)
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(loveEarned)
                     } else {
-                        BaseGame.love = BaseGame.love.add(BigInteger((income * BaseGame.heartBonus).toString()))
-                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger((income * BaseGame.heartBonus).toString()))
+                        loveEarned = BigInteger((income * BaseGame.heartBonus).toString())
+                        BaseGame.love = BaseGame.love.add(loveEarned)
+                        BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(loveEarned)
                     }
 
                     addAction(Actions.scaleTo(1.4f, 1.4f, .25f, Interpolation.pow2Out))
                     addAction(Actions.delay(.25f))
                     addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
+
+                    createFloatingLabelAndRemove(x, y, loveEarned)
                 }
                 return true
             }
@@ -73,5 +81,20 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
             time = 0f
             BaseGame.heartTouched = false
         }
+    }
+
+    private fun createFloatingLabelAndRemove(x: Float, y: Float, loveEarned: BigInteger) {
+        val temp = Label("", BaseGame.labelStyle)
+        if (BaseGame.longScale)
+            temp.setText("+${GameUtils.presentLongScale(loveEarned)}")
+        else
+            temp.setText("+${GameUtils.presentShortScale(loveEarned)}")
+        temp.setFontScale(.4f)
+        temp.x = MathUtils.random(x - Gdx.graphics.width * .01f, x + Gdx.graphics.width * .01f)
+        temp.y = y
+        addActor(temp)
+        temp.addAction(Actions.moveBy(0f, Gdx.graphics.height * .2f, 5f))
+        temp.addAction(Actions.fadeOut(2f))
+        temp.addAction(Actions.after(Actions.run { temp.remove() }))
     }
 }
