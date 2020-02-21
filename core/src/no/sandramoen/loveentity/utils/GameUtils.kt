@@ -116,8 +116,8 @@ class GameUtils {
             BaseGame.communityLeaders.clear()
             BaseGame.upgrades.clear()
             BaseGame.wiggleAscension = true
-            BaseGame.english = true
-            BaseGame.longScale = true
+            /*BaseGame.english = true
+            BaseGame.longScale = true*/
             saveGameState()
         }
 

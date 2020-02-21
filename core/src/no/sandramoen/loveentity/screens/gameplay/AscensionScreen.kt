@@ -120,6 +120,7 @@ class AscensionScreen : BaseScreen() {
                     GameUtils.reset()
                     warningTable.isVisible = !warningTable.isVisible
                     checkLanguage()
+                    warningButton.color = Color.LIGHT_GRAY
                 }
             }
             false
@@ -284,7 +285,7 @@ class AscensionScreen : BaseScreen() {
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Input.Keys.BACK)
             BaseGame.setActiveScreen(LevelScreen())
-        return false;
+        return false
     }
 
     private fun checkLanguage() {
