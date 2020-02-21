@@ -1,6 +1,7 @@
 package no.sandramoen.loveentity.actors
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -50,6 +51,7 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
                     addAction(Actions.scaleTo(1.0f, 1.0f, .5f, Interpolation.fade))
 
                     createFloatingLabelAndRemove(x, y, loveEarned)
+                    createAndStartEffect(x, y)
                 }
                 return true
             }
@@ -83,13 +85,21 @@ class Heart(x: Float, y: Float, s: Stage) : BaseActor(x, y, s) {
         }
     }
 
+    private fun createAndStartEffect(x: Float, y: Float) {
+        val heartEffect = HeartEffect()
+        heartEffect.setPosition(x, y)
+        heartEffect.scaleBy(2f)
+        addActor(heartEffect)
+        heartEffect.start()
+    }
+
     private fun createFloatingLabelAndRemove(x: Float, y: Float, loveEarned: BigInteger) {
         val temp = Label("", BaseGame.labelStyle)
         if (BaseGame.longScale)
             temp.setText("+${GameUtils.presentLongScale(loveEarned)}")
         else
             temp.setText("+${GameUtils.presentShortScale(loveEarned)}")
-        temp.setFontScale(.4f)
+        temp.setFontScale(.6f)
         temp.x = MathUtils.random(x - Gdx.graphics.width * .01f, x + Gdx.graphics.width * .01f)
         temp.y = y
         addActor(temp)

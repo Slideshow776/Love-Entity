@@ -13,16 +13,51 @@ avatar-5
   index: -1
 border
   rotate: false
-  xy: 924, 927
+  xy: 924, 573
   size: 78, 78
   orig: 78, 78
   offset: 0, 0
   index: -1
 button
   rotate: false
-  xy: 924, 847
+  xy: 924, 493
   size: 78, 78
   orig: 78, 78
+  offset: 0, 0
+  index: -1
+heartEffect2
+  rotate: false
+  xy: 924, 735
+  size: 90, 81
+  orig: 90, 81
+  offset: 0, 0
+  index: -1
+heartEffect3
+  rotate: false
+  xy: 924, 818
+  size: 90, 83
+  orig: 90, 83
+  offset: 0, 0
+  index: -1
+heartEffect4
+  rotate: false
+  xy: 924, 653
+  size: 90, 80
+  orig: 90, 80
+  offset: 0, 0
+  index: -1
+heartEffect5
+  rotate: false
+  xy: 924, 903
+  size: 90, 102
+  orig: 90, 102
+  offset: 0, 0
+  index: -1
+heartEffect6
+  rotate: false
+  xy: 924, 441
+  size: 90, 50
+  orig: 90, 50
   offset: 0, 0
   index: -1
 whitePixel
@@ -102,16 +137,9 @@ bannerUpgrades
   index: -1
 burger
   rotate: false
-  xy: 799, 356
+  xy: 799, 280
   size: 150, 85
   orig: 150, 85
-  offset: 0, 0
-  index: -1
-buyBanner
-  rotate: false
-  xy: 799, 141
-  size: 130, 63
-  orig: 130, 63
   offset: 0, 0
   index: -1
 cross-black
@@ -128,9 +156,23 @@ cross-white
   orig: 150, 152
   offset: 0, 0
   index: -1
+heartEffect0
+  rotate: false
+  xy: 799, 119
+  size: 100, 85
+  orig: 100, 85
+  offset: 0, 0
+  index: -1
+heartEffect1
+  rotate: false
+  xy: 901, 119
+  size: 100, 85
+  orig: 100, 85
+  offset: 0, 0
+  index: -1
 longButton
   rotate: false
-  xy: 799, 280
+  xy: 799, 367
   size: 196, 74
   orig: 196, 74
   offset: 0, 0
@@ -167,6 +209,13 @@ bannerOrganisasjonsledere
   xy: 404, 844
   size: 550, 78
   orig: 550, 78
+  offset: 0, 0
+  index: -1
+buyBanner
+  rotate: false
+  xy: 763, 265
+  size: 130, 63
+  orig: 130, 63
   offset: 0, 0
   index: -1
 heart
