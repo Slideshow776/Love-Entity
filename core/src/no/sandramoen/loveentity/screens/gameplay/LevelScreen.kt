@@ -320,8 +320,15 @@ class LevelScreen : BaseScreen() {
                         highest = generator.incomeTime
                     }
                 }
-                if (generatorToBeActivated != null)
+                if (generatorToBeActivated != null) {
                     generatorToBeActivated!!.activated = true
+                    generatorToBeActivated.createAndStartStarEffect(
+                            generatorToBeActivated.activateButton.x,
+                            generatorToBeActivated.activateButton.y,
+                            generatorToBeActivated.activateButton.width,
+                            generatorToBeActivated.activateButton.height
+                    )
+                }
             }
             false
         }

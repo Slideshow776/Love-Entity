@@ -2,7 +2,6 @@ package no.sandramoen.loveentity.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
@@ -57,7 +55,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
     private var originalIncomeTime: Float = incomeTime
     private var time: Float = 0f
 
-    private lateinit var activateButton: Button
+    lateinit var activateButton: Button
     private lateinit var ownedLabel: Label
     private lateinit var timeLabel: Label
     private lateinit var buyNameLabel: Label
@@ -321,6 +319,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             baseCostLabel.setText("${GameUtils.presentShortScale(BigInteger(baseCost.toString()))}")
     }
 
+    fun createAndStartStarEffect(x: Float, y: Float, width: Float, height: Float) {
+        val starEffect = StarEffect()
+        starEffect.setPosition(x + width / 2, y + height / 2)
+        starEffect.scaleBy(2f)
+        activateButton.addActor(starEffect)
+        starEffect.start()
+    }
+
     private fun leftTable(s: Stage): Table {
         val buttonStyle = Button.ButtonStyle()
         var buttonTex = BaseGame.textureAtlas!!.findRegion(avatar)
@@ -371,6 +377,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         activateButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 if (owned > BigInteger.ZERO) {
+                    if (!activated)
+                        createAndStartStarEffect(activateButton.x, activateButton.y, activateButton.width, activateButton.height)
+
                     activated = true
                     BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
                 }
@@ -485,6 +494,13 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                         unlockProgression.width = (selfWidth * .27f)
                         ownedLabel.setPosition((unlockProgress.width / 2) - (ownedLabel.width / 20), -unlockProgress.height * .8f)
                     }
+
+                    // particle effect
+                    val simpleHeartEffect = SimpleHeartEffect()
+                    simpleHeartEffect.setPosition(activateButton.x + activateButton.width / 2, activateButton.y + activateButton.height / 2)
+                    simpleHeartEffect.scaleBy(4f)
+                    addActor(simpleHeartEffect)
+                    simpleHeartEffect.start()
                 }
             }
         })
