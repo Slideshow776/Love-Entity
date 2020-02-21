@@ -132,7 +132,13 @@ class LevelScreen : BaseScreen() {
                 val veilTable = Table().top()
                 veilTable.add(rainbowVeil).expand().fill().bottom()
 
+                val swirlTable1 = Table()
+                val glowSwirl1 = GlowSwirl(0f, 0f, mainStage)
+                glowSwirl1.addAction(Actions.forever(Actions.rotateBy(.15f)))
+                swirlTable1.add(glowSwirl1).padBottom(Gdx.graphics.height * .1f)
+
                 val stack = Stack()
+                stack.add(swirlTable1)
                 stack.add(heartTable)
                 stack.add(veilTable)
 

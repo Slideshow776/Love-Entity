@@ -158,16 +158,23 @@ bannerUpgrades
   index: -1
 heartEffect0
   rotate: false
-  xy: 895, 97
+  xy: 918, 691
   size: 100, 85
   orig: 100, 85
   offset: 0, 0
   index: -1
 heartEffect1
   rotate: false
-  xy: 895, 10
+  xy: 918, 604
   size: 100, 85
   orig: 100, 85
+  offset: 0, 0
+  index: -1
+heartEffect7
+  rotate: false
+  xy: 895, 76
+  size: 125, 106
+  orig: 125, 106
   offset: 0, 0
   index: -1
 info
