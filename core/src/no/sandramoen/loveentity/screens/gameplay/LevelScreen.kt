@@ -149,6 +149,10 @@ class LevelScreen : BaseScreen() {
                 }
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
                 GameUtils.saveGameState()
+
+                buyButton.isVisible = false
+                buyButton.addAction(Actions.fadeOut(0f))
+                buyButton.touchable = Touchable.enabled
             }
             false
         }
@@ -275,10 +279,12 @@ class LevelScreen : BaseScreen() {
                     burgerTable.isVisible = false
                     for (generator in BaseGame.resourceGenerators)
                         generator.enable()
-                    buyButton.touchable = Touchable.enabled
-                    buyButton.color.a = 1f
-                    buyButtonLabel.color.a = 1f
-                    buyAmountLabel.color.a = 1f
+                    if (buyButton.isVisible) {
+                        buyButton.touchable = Touchable.enabled
+                        buyButton.color.a = 1f
+                        buyButtonLabel.color.a = 1f
+                        buyAmountLabel.color.a = 1f
+                    }
                     quickLoveButton.touchable = Touchable.enabled
                     quickLoveButton.color.a = 1f
                     quickLoveLabel.color.a = 1f
@@ -292,10 +298,13 @@ class LevelScreen : BaseScreen() {
                     burgerButton.rotation = 0f
                     for (generator in BaseGame.resourceGenerators)
                         generator.disable()
-                    buyButton.touchable = Touchable.disabled
-                    buyButton.color.a = .75f
-                    buyButtonLabel.color.a = .75f
-                    buyAmountLabel.color.a = .75f
+
+                    if (buyButton.isVisible) {
+                        buyButton.touchable = Touchable.disabled
+                        buyButton.color.a = .75f
+                        buyButtonLabel.color.a = .75f
+                        buyAmountLabel.color.a = .75f
+                    }
                     quickLoveButton.touchable = Touchable.disabled
                     quickLoveButton.color.a = .75f
                     quickLoveLabel.color.a = .75f
@@ -359,7 +368,16 @@ class LevelScreen : BaseScreen() {
         val buyButtonStyle = Button.ButtonStyle()
         buyButtonStyle.up = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("button")))
         buyButton = Button(buyButtonStyle)
+        buyButton.isTransform = true
+        buyButton.setOrigin(Align.center)
         buyButton.color = Color.PURPLE
+        if (BaseGame.love >= BigInteger(BaseGame.resourceGenerators[0].baseCost.toString()).multiply(BigInteger("5"))) {
+            buyButton.addAction(Actions.fadeIn(0f))
+            buyButton.addAction(Actions.after(Actions.run { buyButton.isVisible = true }))
+        } else {
+            buyButton.addAction(Actions.fadeOut(0f))
+            buyButton.addAction(Actions.after(Actions.run { buyButton.isVisible = false }))
+        }
         buyButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 var label = ""
@@ -530,6 +548,7 @@ class LevelScreen : BaseScreen() {
         checkBuyNextAndMaxUpdate()
         burgerMenuUpdate()
         quickLoveUpdate()
+        buyButtonAppearance()
     }
 
     override fun keyDown(keycode: Int): Boolean {
@@ -770,6 +789,22 @@ class LevelScreen : BaseScreen() {
                 scaleButton.label.setText("Bytt til kort skala")
             else
                 scaleButton.label.setText("Bytt til lang skala")
+        }
+    }
+
+    private fun buyButtonAppearance() {
+        if (!buyButton.isVisible && buyButton.actions.size == 0 && BaseGame.love >= BigInteger(BaseGame.resourceGenerators[0].baseCost.toString()).multiply(BigInteger("5"))) {
+            buyButton.isVisible = true
+            buyButton.addAction(Actions.sequence(
+                    Actions.fadeOut(0f),
+                    Actions.fadeIn(2f),
+                    Actions.rotateBy(4f, .25f),
+                    Actions.rotateBy(-4f, .25f),
+                    Actions.rotateBy(4f, .25f),
+                    Actions.rotateBy(-4f, .25f),
+                    Actions.rotateBy(4f, .25f),
+                    Actions.rotateBy(-4f, .25f)
+            ))
         }
     }
 }
