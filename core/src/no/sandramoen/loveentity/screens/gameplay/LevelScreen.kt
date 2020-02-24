@@ -427,7 +427,7 @@ class LevelScreen : BaseScreen() {
             }
             false
         }
-        buyButtonLabel = Label("Acquire", BaseGame.labelStyle)
+        buyButtonLabel = Label("Buy", BaseGame.labelStyle)
         buyButtonLabel.setFontScale(.3f)
         var buyTemp = ""
         when (BaseGame.buyIndex) {
@@ -742,7 +742,7 @@ class LevelScreen : BaseScreen() {
             ascensionButton.setText("Ascension")
             unlocksButton.setText("Unlocks")
             quickLoveLabel.setText("Quick Love!")
-            buyButtonLabel.setText("Acquire")
+            buyButtonLabel.setText("Buy")
             languageButton.setText("Change to Norwegian")
             if (buyAmountLabel.textEquals("maks"))
                 buyAmountLabel.setText("max")
@@ -764,7 +764,7 @@ class LevelScreen : BaseScreen() {
             ascensionButton.setText("Oppløftning")
             unlocksButton.setText("Oppnåelser")
             quickLoveLabel.setText("Ta en Kjappis!")
-            buyButtonLabel.setText("Erverv")
+            buyButtonLabel.setText("Kjøp")
             languageButton.setText("Bytt til Engelsk")
             if (buyAmountLabel.textEquals("max"))
                 buyAmountLabel.setText("maks")

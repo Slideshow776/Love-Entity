@@ -225,9 +225,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
             buyAmountLabel.setText("x${GameUtils.presentShortScale(BigInteger(nextPurchaseAmount.toString()))}")
 
         if (BaseGame.english)
-            buyNameLabel.setText("Acquire")
+            buyNameLabel.setText("Buy")
         else
-            buyNameLabel.setText("Erverv")
+            buyNameLabel.setText("Kjøp")
 
         time = 0f
         timeLabel.setText("?")
@@ -286,10 +286,10 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         labelBuyButton()
 
         if (BaseGame.english) {
-            buyNameLabel.setText("Acquire")
+            buyNameLabel.setText("Buy")
             nameLabel.setText(resourceName)
         } else {
-            buyNameLabel.setText("Erverv")
+            buyNameLabel.setText("Kjøp")
             nameLabel.setText(norwegianName)
         }
         infoLabel.setText(GameUtils.getInformationText(resourceName))
@@ -399,9 +399,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         // buy
         if (BaseGame.english)
-            buyNameLabel = Label("Acquire", BaseGame.labelStyle)
+            buyNameLabel = Label("Buy", BaseGame.labelStyle)
         else
-            buyNameLabel = Label("Erverv", BaseGame.labelStyle)
+            buyNameLabel = Label("Kjøp", BaseGame.labelStyle)
 
         buyAmountLabel = Label("x1", BaseGame.labelStyle)
         var split: List<String>
@@ -465,9 +465,9 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     labelBuyButton()
 
                     if (BaseGame.english)
-                        buyNameLabel.setText("Acquire")
+                        buyNameLabel.setText("Buy")
                     else
-                        buyNameLabel.setText("Erverv")
+                        buyNameLabel.setText("Kjøp")
 
                     while (unlocks.size > unlockIndex && owned >= BigInteger((unlocks[unlockIndex].goal).toString())) {
                         applyEffect(unlocks[unlockIndex].effect)
