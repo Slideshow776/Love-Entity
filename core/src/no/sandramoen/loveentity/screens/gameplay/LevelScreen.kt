@@ -77,6 +77,7 @@ class LevelScreen : BaseScreen() {
         debugButton5 = TextButton("Restart", BaseGame.textButtonStyle)
 
         debugButton1.label.color = Color.GREEN
+        debugButton1.color = Color.GRAY
         debugButton1.label.setFontScale(.6f)
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -87,6 +88,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton2.label.color = Color.GREEN
+        debugButton2.color = Color.GRAY
         debugButton2.label.setFontScale(.6f)
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -97,6 +99,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton3.label.color = Color.GREEN
+        debugButton3.color = Color.GRAY
         debugButton3.label.setFontScale(.6f)
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -107,6 +110,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton4.label.color = Color.GREEN
+        debugButton4.color = Color.GRAY
         debugButton4.label.setFontScale(.6f)
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -117,6 +121,7 @@ class LevelScreen : BaseScreen() {
             false
         }
         debugButton5.label.color = Color.GREEN
+        debugButton5.color = Color.GRAY
         debugButton5.label.setFontScale(.6f)
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) { // the restart button
@@ -172,7 +177,8 @@ class LevelScreen : BaseScreen() {
 
         // language ui setup
         languageButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
-        languageButton.label.color = Color(135 / 255f, 200 / 255f, 255 / 255f, 1f)
+        languageButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        languageButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
         languageButton.isTransform = true
         languageButton.setOrigin(Align.center)
         languageButton.label.setFontScale(.8f)
@@ -199,7 +205,8 @@ class LevelScreen : BaseScreen() {
 
         // scale ui setup
         scaleButton = TextButton("Change to short scale", BaseGame.textButtonStyle)
-        scaleButton.label.color = Color(135 / 255f, 200 / 255f, 255 / 255f, 1f)
+        scaleButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        scaleButton.label.color = Color.BLUE // Color(135 / 255f, 200 / 255f, 255 / 255f, 1f)
         scaleButton.isTransform = true
         scaleButton.setOrigin(Align.center)
         scaleButton.label.setFontScale(.8f)
@@ -218,28 +225,35 @@ class LevelScreen : BaseScreen() {
         burgerTable.add(scaleButton).padBottom(20f).row()
 
         communityLeadersButton = TextButton("Community Leaders", BaseGame.textButtonStyle)
+        communityLeadersButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        communityLeadersButton.label.color = Color.PURPLE //(255/255f, 204/255f, 255/255f, 1f) // light pink
         communityLeadersButton.isTransform = true
         communityLeadersButton.setOrigin(Align.center)
         communityLeadersButton.label.setFontScale(.8f)
         communityLeadersButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
-                BaseGame.setActiveScreen(CommunityLeadersScreen())
+                fadeToScreen(CommunityLeadersScreen())
             false
         }
+
         burgerTable.add(communityLeadersButton).row()
 
         upgradesButton = TextButton("Upgrades", BaseGame.textButtonStyle)
+        upgradesButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        upgradesButton.label.color = Color.PURPLE //(255/255f, 204/255f, 255/255f, 1f) // light pink
         upgradesButton.isTransform = true
         upgradesButton.setOrigin(Align.center)
         upgradesButton.label.setFontScale(.8f)
         upgradesButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
-                BaseGame.setActiveScreen(UpgradesScreen())
+                fadeToScreen(UpgradesScreen())
             false
         }
         burgerTable.add(upgradesButton).row()
 
         ascensionButton = TextButton("Ascension", BaseGame.textButtonStyle)
+        ascensionButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        ascensionButton.label.color = Color.PURPLE //(255/255f, 204/255f, 255/255f, 1f) // light pink
         ascensionButton.isTransform = true
         ascensionButton.setOrigin(Align.center)
         ascensionButton.label.setFontScale(.8f)
@@ -247,17 +261,19 @@ class LevelScreen : BaseScreen() {
             if (GameUtils.isTouchDownEvent(e)) {
                 if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f)
                     BaseGame.wiggleAscension = false
-                BaseGame.setActiveScreen(AscensionScreen())
+                fadeToScreen(AscensionScreen())
             }
             false
         }
         burgerTable.add(ascensionButton).row()
 
         unlocksButton = TextButton("Unlocks", BaseGame.textButtonStyle)
+        unlocksButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        unlocksButton.label.color = Color.PURPLE //Color(255/255f, 204/255f, 255/255f, 1f) // light pink
         unlocksButton.label.setFontScale(.8f)
         unlocksButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e))
-                BaseGame.setActiveScreen(UnlocksScreen())
+                fadeToScreen(UnlocksScreen())
             false
         }
         burgerTable.add(unlocksButton)
@@ -276,7 +292,10 @@ class LevelScreen : BaseScreen() {
                 if (burgerMenuActive) {
                     burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("burger"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .0f))
-                    burgerTable.isVisible = false
+                    burgerTable.addAction(Actions.sequence(
+                            Actions.fadeOut(.125f),
+                            Actions.run { burgerTable.isVisible = false }
+                    ))
                     for (generator in BaseGame.resourceGenerators)
                         generator.enable()
                     if (buyButton.isVisible) {
@@ -293,6 +312,10 @@ class LevelScreen : BaseScreen() {
                     burgerButtonStyle.up = TextureRegionDrawable(BaseGame.textureAtlas!!.findRegion("cross-white"))
                     uiTable.background = TextureRegionDrawable(TextureRegion(BaseGame.textureAtlas!!.findRegion("whitePixel"))).tint(Color(0f, 0f, 0f, .75f))
                     burgerTable.isVisible = true
+                    burgerTable.addAction(Actions.sequence(
+                            Actions.fadeOut(0f),
+                            Actions.fadeIn(.125f)
+                    ))
                     burgerButton.clearActions()
                     burgerButton.color = Color.WHITE
                     burgerButton.rotation = 0f
@@ -526,6 +549,7 @@ class LevelScreen : BaseScreen() {
 
         checkScale()
         checkLanguage()
+        GameUtils.fadeOut(uiStage)
     }
 
     override fun update(dt: Float) {
@@ -601,8 +625,8 @@ class LevelScreen : BaseScreen() {
                     BaseGame.love >= BaseGame.communityLeaders[i].price) {
                 BaseGame.communityLeadersWiggleIndex++ // seen, but not clicked on
                 BaseGame.prefs!!.putInteger("communityLeadersWiggleIndex", BaseGame.communityLeadersWiggleIndex)
-                if (!burgerTable.isVisible) wiggleButton(burgerButton)
-                wiggleButton(communityLeadersButton)
+                if (!burgerTable.isVisible) wiggleButton(burgerButton, true)
+                wiggleButton(communityLeadersButton, false)
                 break
             }
         }
@@ -613,15 +637,15 @@ class LevelScreen : BaseScreen() {
                     BaseGame.love >= BaseGame.upgrades[i].price) {
                 BaseGame.upgradesWiggleIndex++ // seen, but not clicked on
                 BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.communityLeadersWiggleIndex)
-                if (!burgerTable.isVisible) wiggleButton(burgerButton)
-                wiggleButton(upgradesButton)
+                if (!burgerTable.isVisible) wiggleButton(burgerButton, true)
+                wiggleButton(upgradesButton, false)
                 break
             }
         }
 
         if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f) {
-            if (BaseGame.wiggleAscension && !burgerTable.isVisible) wiggleButton(burgerButton)
-            wiggleButton(ascensionButton)
+            if (BaseGame.wiggleAscension && !burgerTable.isVisible) wiggleButton(burgerButton, true)
+            wiggleButton(ascensionButton, false)
         }
     }
 
@@ -668,9 +692,9 @@ class LevelScreen : BaseScreen() {
         }
     }
 
-    private fun wiggleButton(button: Button) {
+    private fun wiggleButton(button: Button, changeColor: Boolean) {
         if (button.actions.size == 0) {
-            button.addAction(Actions.color(Color.ORANGE, 1f))
+            if (changeColor) button.addAction(Actions.color(Color.ORANGE, 1f))
             button.addAction(Actions.after(Actions.forever(
                     Actions.sequence(
                             Actions.rotateBy(4f, .25f),
@@ -806,5 +830,13 @@ class LevelScreen : BaseScreen() {
                     Actions.rotateBy(-4f, .25f)
             ))
         }
+    }
+
+    private fun fadeToScreen(baseScreen: BaseScreen) {
+        burgerTable.addAction(Actions.fadeOut(.125f))
+        burgerTable.addAction(Actions.sequence(
+                Actions.delay(.125f),
+                Actions.run { BaseGame.setActiveScreen(baseScreen) }
+        ))
     }
 }

@@ -517,7 +517,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
 
         // info table
         infoLabel = Label(GameUtils.getInformationText(resourceName), BaseGame.labelStyle)
-        infoLabel.color = Color(150 / 255f, 92 / 255f, 209 / 255f, 1f)
+        infoLabel.color = Color(201 / 255f, 184 / 255f, 219 / 255f, 1f)
         infoLabel.setWrap(true)
         infoLabel.setFontScale(.25f)
 

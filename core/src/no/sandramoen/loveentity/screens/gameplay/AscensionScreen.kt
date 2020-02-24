@@ -246,6 +246,7 @@ class AscensionScreen : BaseScreen() {
 
         mainStage.addActor(stack)
         checkLanguage()
+        GameUtils.fadeOut(uiStage)
     }
 
     override fun update(dt: Float) {

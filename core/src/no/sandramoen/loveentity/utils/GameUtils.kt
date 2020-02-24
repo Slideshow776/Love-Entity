@@ -1,7 +1,12 @@
 package no.sandramoen.loveentity.utils
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import java.math.BigInteger
 import java.util.Date
 import kotlin.math.sqrt
@@ -199,6 +204,15 @@ class GameUtils {
                 }
             }
             return label
+        }
+
+        fun fadeOut(stage: Stage) {
+            val fade = BaseActor(0f, 0f, stage)
+            fade.loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
+            fade.color = Color.BLACK
+            fade.touchable = Touchable.childrenOnly
+            fade.setSize(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+            fade.addAction(Actions.fadeOut(.125f))
         }
 
         private fun labelBigNumber(number: String, name: String, current: Int): String {

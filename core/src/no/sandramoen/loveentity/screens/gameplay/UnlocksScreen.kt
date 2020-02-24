@@ -168,6 +168,7 @@ class UnlocksScreen : BaseScreen() {
         mainTable.align(Align.top)
 
         mainStage.addActor(stack)
+        GameUtils.fadeOut(uiStage)
     }
 
     override fun update(dt: Float) {

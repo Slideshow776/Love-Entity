@@ -1,6 +1,6 @@
 # Love Entity
 
-My very own incremental game. Heavily Based on AdVenture Capitalist and Cookie Clicker.
+My very own incremental game. Heavily Based on [AdVenture Capitalist](https://store.steampowered.com/app/346900/AdVenture_Capitalist/) and [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/).
 
 ![Screenshot_2020-02-17-12-29-05](https://user-images.githubusercontent.com/4059636/74650145-5c561d80-5181-11ea-809e-e5270834dc0d.png)
 
