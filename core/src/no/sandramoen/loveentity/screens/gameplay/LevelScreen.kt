@@ -724,7 +724,7 @@ class LevelScreen : BaseScreen() {
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "avatar-3", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "avatar-4", "Name Nameson", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "avatar-2", "Name Nameson", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "avatar-6", "Name Nameson", "runs Queers", "administrerer Queers", BigInteger("10000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "avatar-6", "Name Nameson", "runs Queers", "administrerer Skeive", BigInteger("10000000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "avatar-7", "Name Nameson", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "avatar-8", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "avatar-9", "Name Nameson", "runs Pansexuals", "administrerer de Panseksuelle", BigInteger("10000000000")))
@@ -732,25 +732,25 @@ class LevelScreen : BaseScreen() {
 
         // this system assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,
-            BaseGame.upgrades.add(Upgrade(mainStage, 0, "Upgrade #1", "Oppgradering #1", "Ally love x3", "Alliert kjærlighet x3", BigInteger("250")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 0, "Ally Upgrade", "Alliert Oppgradering", "Ally love x3", "Alliert kjærlighet x3", BigInteger("250")))
         if (BaseGame.resourceGenerators[1].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 1, "Upgrade #2", "Oppgradering #2", "Bisexual love x3", "Biseksuell kjærlighet x3", BigInteger("500")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 1, "Bisexual Upgrade", "Biseksuell Oppgradering", "Bisexual love x3", "Biseksuell kjærlighet x3", BigInteger("500")))
         if (BaseGame.resourceGenerators[2].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 2, "Upgrade #3", "Oppgradering #3", "Gay love x3", "Homofil kjærlighet x3", BigInteger("1000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 2, "Gay Upgrade", "Homofil Oppgradering", "Gay love x3", "Homofil kjærlighet x3", BigInteger("1000000")))
         if (BaseGame.resourceGenerators[3].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 3, "Upgrade #4", "Oppgradering #4", "Lesbian love x3", "Lesbisk kjærlighet x3", BigInteger("5000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 3, "Lesbian Upgrade", "Lesbisk Oppgradering", "Lesbian love x3", "Lesbisk kjærlighet x3", BigInteger("5000000")))
         if (BaseGame.resourceGenerators[4].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 4, "Upgrade #5", "Oppgradering #5", "Cisgender love x3", "Ciskjønnet kjærlighet x3", BigInteger("10000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 4, "Cisgender Upgrade", "Ciskjønnet Oppgradering", "Cisgender love x3", "Ciskjønnet kjærlighet x3", BigInteger("10000000")))
         if (BaseGame.resourceGenerators[5].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 5, "Upgrade #6", "Oppgradering #6", "Queer love x3", "Queer kjærlighet x3", BigInteger("25000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 5, "Queer Upgrade", "Skeiv Oppgradering", "Queer love x3", "Skeiv kjærlighet x3", BigInteger("25000000")))
         if (BaseGame.resourceGenerators[6].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 6, "Upgrade #7", "Oppgradering #7", "Transgender love x3", "Transkjønnet kjærlighet x3", BigInteger("500000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 6, "Transgender Upgrade", "Transkjønnet Oppgradering", "Transgender love x3", "Transkjønnet kjærlighet x3", BigInteger("500000000")))
         if (BaseGame.resourceGenerators[7].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 7, "Upgrade #8", "Oppgradering #8", "Intersex love x3", "Interkjønnet kjærlighet x3", BigInteger("10000000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 7, "Intersex Upgrade", "Interkjønnet Oppgradering", "Intersex love x3", "Interkjønnet kjærlighet x3", BigInteger("10000000000")))
         if (BaseGame.resourceGenerators[8].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 8, "Upgrade #9", "Oppgradering #9", "Pansexual love x3", "Panseksuell kjærlighet x3", BigInteger("250000000000")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 8, "Pansexual Upgrade", "Panseksuell Oppgradering", "Pansexual love x3", "Panseksuell kjærlighet x3", BigInteger("250000000000")))
         if (BaseGame.resourceGenerators[9].upgrade / 3 == (1 / 3)) // first upgrade
-            BaseGame.upgrades.add(Upgrade(mainStage, 9, "Upgrade #10", "Oppgradering #10", "Asexual love x3", "Aseksuell kjærlighet x3", BigInteger("999999999999999999")))
+            BaseGame.upgrades.add(Upgrade(mainStage, 9, "Asexual Upgrade", "Aseksuell Oppgradering", "Asexual love x3", "Aseksuell kjærlighet x3", BigInteger("999999999999999999")))
     }
 
     private fun checkLanguage() {
