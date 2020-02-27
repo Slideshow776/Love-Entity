@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
 import no.sandramoen.loveentity.actors.*
+import no.sandramoen.loveentity.screens.shell.IntroScreen
 import no.sandramoen.loveentity.utils.BaseGame
 import no.sandramoen.loveentity.utils.BaseScreen
 import no.sandramoen.loveentity.utils.GameUtils
@@ -50,6 +51,7 @@ class LevelScreen : BaseScreen() {
     private lateinit var debugButton5: TextButton
     private lateinit var debugLabel: Label
 
+    private lateinit var viewIntroButton: TextButton
     private lateinit var languageButton: TextButton
     private lateinit var scaleButton: TextButton
     private var allyUnlocks = Array<Unlock>()
@@ -176,6 +178,18 @@ class LevelScreen : BaseScreen() {
         /* ------------------------------------------------------------------------------------------------------- */
 
         // language ui setup
+        viewIntroButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
+        viewIntroButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        viewIntroButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
+        viewIntroButton.isTransform = true
+        viewIntroButton.setOrigin(Align.center)
+        viewIntroButton.label.setFontScale(.8f)
+        viewIntroButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e))
+                BaseGame.setActiveScreen(IntroScreen())
+            false
+        }
+
         languageButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
         languageButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
         languageButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
@@ -221,6 +235,7 @@ class LevelScreen : BaseScreen() {
         }
 
         // burger table
+        burgerTable.add(viewIntroButton).row()
         burgerTable.add(languageButton).row()
         burgerTable.add(scaleButton).padBottom(20f).row()
 
@@ -768,6 +783,7 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Quick Love!")
             buyButtonLabel.setText("Buy")
             languageButton.setText("Change to Norwegian")
+            viewIntroButton.setText("View Intro video")
             if (buyAmountLabel.textEquals("maks"))
                 buyAmountLabel.setText("max")
             else if (buyAmountLabel.textEquals("neste"))
@@ -790,6 +806,7 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Ta en Kjappis!")
             buyButtonLabel.setText("Kjøp")
             languageButton.setText("Bytt til Engelsk")
+            viewIntroButton.setText("Se intro video")
             if (buyAmountLabel.textEquals("max"))
                 buyAmountLabel.setText("maks")
             else if (buyAmountLabel.textEquals("next"))

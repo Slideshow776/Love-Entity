@@ -73,53 +73,32 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-asexualFlag
-  rotate: false
-  xy: 204, 3
-  size: 320, 192
-  orig: 320, 192
-  offset: 0, 0
-  index: -1
 bearBrotherhoodFlag
   rotate: false
-  xy: 2, 197
+  xy: 2, 204
   size: 1000, 384
   orig: 1000, 384
   offset: 0, 0
   index: -1
-bisexualFlag
+colorWheelGradient
   rotate: false
-  xy: 526, 3
-  size: 320, 192
-  orig: 320, 192
+  xy: 804, 2
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
-burger
+heartBackground0
   rotate: false
-  xy: 848, 36
-  size: 150, 85
-  orig: 150, 85
+  xy: 2, 2
+  size: 800, 200
+  orig: 800, 200
   offset: 0, 0
   index: -1
 intersexFlag
   rotate: false
-  xy: 2, 583
+  xy: 2, 590
   size: 1000, 427
   orig: 1000, 427
-  offset: 0, 0
-  index: -1
-longButton2
-  rotate: false
-  xy: 848, 123
-  size: 168, 72
-  orig: 168, 72
-  offset: 0, 0
-  index: -1
-roundStar
-  rotate: false
-  xy: 2, 2
-  size: 200, 193
-  orig: 200, 193
   offset: 0, 0
   index: -1
 
@@ -128,79 +107,79 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+asexualFlag
+  rotate: false
+  xy: 606, 68
+  size: 320, 192
+  orig: 320, 192
+  offset: 0, 0
+  index: -1
+bannerAscension
+  rotate: false
+  xy: 536, 3
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
 bannerCommunityLeaders
   rotate: false
-  xy: 404, 938
+  xy: 404, 936
   size: 550, 78
   orig: 550, 78
   offset: 0, 0
   index: -1
 bannerOppgraderinger
   rotate: false
-  xy: 404, 858
+  xy: 404, 856
   size: 550, 78
   orig: 550, 78
   offset: 0, 0
   index: -1
 bannerOrganisasjonsledere
   rotate: false
-  xy: 404, 778
+  xy: 404, 776
   size: 550, 78
   orig: 550, 78
   offset: 0, 0
   index: -1
-bannerUpgrades
+buyBanner
   rotate: false
-  xy: 573, 184
-  size: 435, 78
-  orig: 435, 78
+  xy: 404, 2
+  size: 130, 63
+  orig: 130, 63
   offset: 0, 0
   index: -1
 heartEffect0
   rotate: false
-  xy: 918, 691
+  xy: 918, 689
   size: 100, 85
   orig: 100, 85
   offset: 0, 0
   index: -1
 heartEffect1
   rotate: false
-  xy: 918, 604
+  xy: 918, 602
   size: 100, 85
   orig: 100, 85
   offset: 0, 0
   index: -1
-heartEffect7
-  rotate: false
-  xy: 895, 76
-  size: 125, 106
-  orig: 125, 106
-  offset: 0, 0
-  index: -1
 info
   rotate: false
-  xy: 404, 264
+  xy: 404, 262
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
-lesbianFlag
+roundStar
   rotate: false
-  xy: 573, 2
-  size: 320, 180
-  orig: 320, 180
-  offset: 0, 0
-  index: -1
-pixelAvatarTest
-  rotate: false
-  xy: 404, 21
-  size: 167, 241
-  orig: 167, 241
+  xy: 404, 67
+  size: 200, 193
+  orig: 200, 193
   offset: 0, 0
   index: -1
 starBackground
   rotate: false
-  xy: 2, 16
+  xy: 2, 14
   size: 400, 1000
   orig: 400, 1000
   offset: 0, 0
@@ -211,81 +190,88 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-avatar-9
-  rotate: false
-  xy: 2, 67
-  size: 682, 954
-  orig: 682, 954
-  offset: 0, 0
-  index: -1
-bannerAscension
-  rotate: false
-  xy: 134, 3
-  size: 324, 62
-  orig: 324, 62
-  offset: 0, 0
-  index: -1
 bannerOppløftning
   rotate: false
-  xy: 460, 3
+  xy: 2, 34
   size: 324, 62
   orig: 324, 62
   offset: 0, 0
   index: -1
-bannerOppnåelser
+bisexualFlag
   rotate: false
-  xy: 686, 959
-  size: 324, 62
-  orig: 324, 62
+  xy: 404, 2
+  size: 320, 192
+  orig: 320, 192
   offset: 0, 0
   index: -1
-bannerUnlocks
+burger
   rotate: false
-  xy: 686, 895
-  size: 324, 62
-  orig: 324, 62
-  offset: 0, 0
-  index: -1
-buyBanner
-  rotate: false
-  xy: 2, 2
-  size: 130, 63
-  orig: 130, 63
-  offset: 0, 0
-  index: -1
-classicRainbowFlag
-  rotate: false
-  xy: 686, 180
-  size: 320, 131
-  orig: 320, 131
+  xy: 763, 246
+  size: 150, 85
+  orig: 150, 85
   offset: 0, 0
   index: -1
 cross-black
   rotate: false
-  xy: 786, 26
+  xy: 856, 561
   size: 150, 152
   orig: 150, 152
   offset: 0, 0
   index: -1
-genderqueerFlag
+cross-white
   rotate: false
-  xy: 686, 701
-  size: 320, 192
-  orig: 320, 192
+  xy: 856, 407
+  size: 150, 152
+  orig: 150, 152
   offset: 0, 0
   index: -1
-pansexualityFlag
+glowSwirl
   rotate: false
-  xy: 686, 507
-  size: 320, 192
-  orig: 320, 192
+  xy: 2, 98
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1
-transFlag
+heart
   rotate: false
-  xy: 686, 313
-  size: 320, 192
-  orig: 320, 192
+  xy: 404, 196
+  size: 357, 302
+  orig: 357, 302
+  offset: 0, 0
+  index: -1
+heartEffect7
+  rotate: false
+  xy: 726, 88
+  size: 125, 106
+  orig: 125, 106
+  offset: 0, 0
+  index: -1
+longButton
+  rotate: false
+  xy: 726, 12
+  size: 196, 74
+  orig: 196, 74
+  offset: 0, 0
+  index: -1
+longButton2
+  rotate: false
+  xy: 763, 333
+  size: 168, 72
+  orig: 168, 72
+  offset: 0, 0
+  index: -1
+prism
+  rotate: false
+  xy: 2, 715
+  size: 1000, 299
+  orig: 1000, 299
+  offset: 0, 0
+  index: -1
+straightAllyFlag
+  rotate: false
+  xy: 2, 500
+  size: 852, 213
+  orig: 852, 213
   offset: 0, 0
   index: -1
 
@@ -294,29 +280,111 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-avatar-10
+avatar-9
   rotate: false
-  xy: 2, 78
-  size: 795, 910
-  orig: 795, 910
+  xy: 2, 66
+  size: 682, 954
+  orig: 682, 954
   offset: 0, 0
   index: -1
-cross-white
-  rotate: false
-  xy: 799, 836
-  size: 150, 152
-  orig: 150, 152
-  offset: 0, 0
-  index: -1
-longButton
+bannerOppnåelser
   rotate: false
   xy: 2, 2
-  size: 196, 74
-  orig: 196, 74
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
+bannerUnlocks
+  rotate: false
+  xy: 328, 2
+  size: 324, 62
+  orig: 324, 62
+  offset: 0, 0
+  index: -1
+classicRainbowFlag
+  rotate: false
+  xy: 686, 125
+  size: 320, 131
+  orig: 320, 131
+  offset: 0, 0
+  index: -1
+genderqueerFlag
+  rotate: false
+  xy: 686, 828
+  size: 320, 192
+  orig: 320, 192
+  offset: 0, 0
+  index: -1
+lesbianFlag
+  rotate: false
+  xy: 686, 258
+  size: 320, 180
+  orig: 320, 180
+  offset: 0, 0
+  index: -1
+pansexualityFlag
+  rotate: false
+  xy: 686, 634
+  size: 320, 192
+  orig: 320, 192
+  offset: 0, 0
+  index: -1
+transFlag
+  rotate: false
+  xy: 686, 440
+  size: 320, 192
+  orig: 320, 192
   offset: 0, 0
   index: -1
 
 loveEntity.pack6.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+avatar-3
+  rotate: false
+  xy: 2, 82
+  size: 682, 923
+  orig: 682, 923
+  offset: 0, 0
+  index: -1
+bannerUpgrades
+  rotate: false
+  xy: 2, 2
+  size: 435, 78
+  orig: 435, 78
+  offset: 0, 0
+  index: -1
+loveEntity
+  rotate: false
+  xy: 686, 389
+  size: 296, 314
+  orig: 296, 314
+  offset: 0, 0
+  index: -1
+triangle
+  rotate: false
+  xy: 686, 705
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack7.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+avatar-10
+  rotate: false
+  xy: 2, 2
+  size: 795, 910
+  orig: 795, 910
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack8.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -329,7 +397,7 @@ avatar-6
   offset: 0, 0
   index: -1
 
-loveEntity.pack7.png
+loveEntity.pack9.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -342,7 +410,20 @@ avatar-4
   offset: 0, 0
   index: -1
 
-loveEntity.pack8.png
+loveEntity.pack10.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+colorGradient2
+  rotate: false
+  xy: 2, 2
+  size: 815, 800
+  orig: 815, 800
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack11.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -355,20 +436,7 @@ avatar-7
   offset: 0, 0
   index: -1
 
-loveEntity.pack9.png
-size: 1024,1024
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-avatar-3
-  rotate: false
-  xy: 2, 2
-  size: 682, 923
-  orig: 682, 923
-  offset: 0, 0
-  index: -1
-
-loveEntity.pack10.png
+loveEntity.pack12.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -381,7 +449,7 @@ avatar-8
   offset: 0, 0
   index: -1
 
-loveEntity.pack11.png
+loveEntity.pack13.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -391,60 +459,6 @@ avatar-2
   xy: 2, 2
   size: 682, 893
   orig: 682, 893
-  offset: 0, 0
-  index: -1
-
-loveEntity.pack12.png
-size: 1024,1024
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-colorGradient
-  rotate: false
-  xy: 2, 2
-  size: 800, 550
-  orig: 800, 550
-  offset: 0, 0
-  index: -1
-straightAllyFlag
-  rotate: false
-  xy: 2, 554
-  size: 852, 213
-  orig: 852, 213
-  offset: 0, 0
-  index: -1
-
-loveEntity.pack13.png
-size: 1024,1024
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-glowSwirl
-  rotate: false
-  xy: 361, 516
-  size: 400, 400
-  orig: 400, 400
-  offset: 0, 0
-  index: -1
-heart
-  rotate: false
-  xy: 2, 614
-  size: 357, 302
-  orig: 357, 302
-  offset: 0, 0
-  index: -1
-potion0
-  rotate: false
-  xy: 2, 2
-  size: 379, 512
-  orig: 379, 512
-  offset: 0, 0
-  index: -1
-potion1
-  rotate: false
-  xy: 383, 2
-  size: 379, 512
-  orig: 379, 512
   offset: 0, 0
   index: -1
 
@@ -466,18 +480,11 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-potion2
-  rotate: false
-  xy: 516, 2
-  size: 379, 512
-  orig: 379, 512
-  offset: 0, 0
-  index: -1
-question
+colorGradient
   rotate: false
   xy: 2, 2
-  size: 512, 512
-  orig: 512, 512
+  size: 800, 550
+  orig: 800, 550
   offset: 0, 0
   index: -1
 
@@ -486,16 +493,69 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-potion3
+question
+  rotate: false
+  xy: 2, 38
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+starChild
+  rotate: false
+  xy: 516, 2
+  size: 445, 548
+  orig: 445, 548
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack17.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+potion0
   rotate: false
   xy: 2, 2
   size: 379, 512
   orig: 379, 512
   offset: 0, 0
   index: -1
-potion4
+potion1
   rotate: false
   xy: 383, 2
+  size: 379, 512
+  orig: 379, 512
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack18.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+potion2
+  rotate: false
+  xy: 2, 2
+  size: 379, 512
+  orig: 379, 512
+  offset: 0, 0
+  index: -1
+potion3
+  rotate: false
+  xy: 383, 2
+  size: 379, 512
+  orig: 379, 512
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack19.png
+size: 512,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+potion4
+  rotate: false
+  xy: 2, 2
   size: 379, 512
   orig: 379, 512
   offset: 0, 0
