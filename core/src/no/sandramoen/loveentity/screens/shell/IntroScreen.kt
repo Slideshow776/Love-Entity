@@ -124,10 +124,10 @@ class IntroScreen : BaseScreen() {
                 Actions.run {
                     if (BaseGame.english) {
                         mainLabel.setText("How much can you")
-                        mainLabel.setPosition(width * .15f, height * .8f)
+                        mainLabel.setPosition(width * .16f, height * .8f)
                     } else {
                         mainLabel.setText("Hvor mye kan du")
-                        mainLabel.setPosition(width * .18f, height * .8f)
+                        mainLabel.setPosition(width * .19f, height * .8f)
                     }
                 },
                 fadeIn(1f),
@@ -161,10 +161,10 @@ class IntroScreen : BaseScreen() {
                 Actions.run {
                     if (BaseGame.english) {
                         colorLabel.setText("love?")
-                        colorLabel.setPosition(width * .4f, height * .74f)
+                        colorLabel.setPosition(width * .41f, height * .74f)
                     } else {
                         colorLabel.setText("elske?")
-                        colorLabel.setPosition(width * .38f, height * .74f)
+                        colorLabel.setPosition(width * .39f, height * .74f)
                     }
                 }
         ))

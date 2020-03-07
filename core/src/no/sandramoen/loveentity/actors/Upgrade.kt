@@ -35,15 +35,19 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
     private var heartIcon: BaseActor
     private var costLabel: Label
 
+    private var nameEN: String
+    private var nameNO: String
     private var descriptionEN: String
     private var descriptionNO: String
 
     init {
         this.isVisible = false // solves a visibility bug
         loadAnimation(BaseGame.textureAtlas!!.findRegion("whitePixel"))
-        color = Color(MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, MathUtils.random(0, 100) / 255f, 1f)
+        color = Color(MathUtils.random(0, 80) / 255f, MathUtils.random(0, 80) / 255f, MathUtils.random(0, 80) / 255f, 1f)
         width = selfWidth
         height = selfHeight
+        this.nameEN = nameEN
+        this.nameNO = nameNO
         this.descriptionEN = descriptionEN
         this.descriptionNO = descriptionNO
 
@@ -58,8 +62,8 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
             nameLabel = Label(nameEN, BaseGame.labelStyle)
         else
             nameLabel = Label(nameNO, BaseGame.labelStyle)
-        nameLabel.setFontScale(.5f)
-        nameLabel.color = Color(MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, MathUtils.random(100, 255) / 255f, 1f)
+        nameLabel.setFontScale(.35f)
+        nameLabel.color = Color(MathUtils.random(120, 255) / 255f, MathUtils.random(120, 255) / 255f, MathUtils.random(120, 255) / 255f, 1f)
 
         // description
         if (BaseGame.english)
@@ -93,16 +97,16 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
 
         // button
         if (BaseGame.english)
-            button = TextButton("Invest!", BaseGame.textButtonStyle)
+            button = TextButton("Buy!", BaseGame.textButtonStyle)
         else
-            button = TextButton("Invester!", BaseGame.textButtonStyle)
-        button.label.setFontScale(.72f)
+            button = TextButton("Kjøp!", BaseGame.textButtonStyle)
+        button.label.setFontScale(.7f)
         button.isTransform = true
         if (!BaseGame.love >= price)
             button.color = Color.GRAY
         else
             button.color = Color.ORANGE
-        button.scaleBy(-.05f)
+        button.scaleBy(-.2f)
         button.setOrigin(Align.center)
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
@@ -145,7 +149,7 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
 
         table.add(image).width(Gdx.graphics.width * .16f).height(Gdx.graphics.height * .095f).padLeft(Gdx.graphics.width * .035f)
         table.add(infoTable).width(Gdx.graphics.width * .44f)
-        table.add(button).width(Gdx.graphics.width * .3f).padRight(Gdx.graphics.width * .025f)
+        table.add(button).width(Gdx.graphics.width * .3f).padRight(Gdx.graphics.width * -.01f)
         // table.debug = true
 
         val stack = Stack() // stack allows for scene2d elements to overlap each other
@@ -166,11 +170,13 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
 
     fun checkLanguage() {
         if (BaseGame.english) {
+            nameLabel.setText(nameEN)
             descriptionLabel.setText(descriptionEN)
-            button.label.setText("Invest!")
+            button.label.setText("Buy!")
         } else {
+            nameLabel.setText(nameNO)
             descriptionLabel.setText(descriptionNO)
-            button.label.setText("Invester!")
+            button.label.setText("Kjøp!")
         }
     }
 

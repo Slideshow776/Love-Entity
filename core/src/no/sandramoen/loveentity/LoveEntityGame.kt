@@ -8,8 +8,8 @@ import no.sandramoen.loveentity.screens.shell.SplashScreen
 class LoveEntityGame : BaseGame() {
     override fun create() {
         super.create()
-        setActiveScreen(IntroScreen())
+        // setActiveScreen(IntroScreen())
         // setActiveScreen(SplashScreen()) // TODO: @release: uncomment this
-        // setActiveScreen(LevelScreen()) // TODO: @release: comment this
+        setActiveScreen(LevelScreen()) // TODO: @release: comment this
     }
 }
