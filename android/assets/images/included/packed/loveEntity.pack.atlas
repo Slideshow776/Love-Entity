@@ -342,11 +342,11 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-avatar-3
+VeroNika
   rotate: false
   xy: 2, 82
-  size: 682, 923
-  orig: 682, 923
+  size: 682, 926
+  orig: 682, 926
   offset: 0, 0
   index: -1
 bannerUpgrades
@@ -358,14 +358,14 @@ bannerUpgrades
   index: -1
 loveEntity
   rotate: false
-  xy: 686, 389
+  xy: 686, 392
   size: 296, 314
   orig: 296, 314
   offset: 0, 0
   index: -1
 triangle
   rotate: false
-  xy: 686, 705
+  xy: 686, 708
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
@@ -441,6 +441,32 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+avatar-3
+  rotate: false
+  xy: 2, 2
+  size: 682, 923
+  orig: 682, 923
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack13.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+sandra
+  rotate: false
+  xy: 2, 2
+  size: 682, 899
+  orig: 682, 899
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack14.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 avatar-8
   rotate: false
   xy: 2, 2
@@ -449,7 +475,7 @@ avatar-8
   offset: 0, 0
   index: -1
 
-loveEntity.pack13.png
+loveEntity.pack15.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -462,7 +488,7 @@ avatar-2
   offset: 0, 0
   index: -1
 
-loveEntity.pack14.png
+loveEntity.pack16.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -475,7 +501,7 @@ avatar-1
   offset: 0, 0
   index: -1
 
-loveEntity.pack15.png
+loveEntity.pack17.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -488,7 +514,7 @@ colorGradient
   offset: 0, 0
   index: -1
 
-loveEntity.pack16.png
+loveEntity.pack18.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -508,7 +534,7 @@ starChild
   offset: 0, 0
   index: -1
 
-loveEntity.pack17.png
+loveEntity.pack19.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -528,7 +554,7 @@ potion1
   offset: 0, 0
   index: -1
 
-loveEntity.pack18.png
+loveEntity.pack20.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -548,7 +574,7 @@ potion3
   offset: 0, 0
   index: -1
 
-loveEntity.pack19.png
+loveEntity.pack21.png
 size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
