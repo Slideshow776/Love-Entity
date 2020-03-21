@@ -454,6 +454,19 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+luckyLuca
+  rotate: false
+  xy: 2, 2
+  size: 682, 913
+  orig: 682, 913
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack14.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 sandra
   rotate: false
   xy: 2, 2
@@ -462,7 +475,7 @@ sandra
   offset: 0, 0
   index: -1
 
-loveEntity.pack14.png
+loveEntity.pack15.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -475,7 +488,7 @@ avatar-8
   offset: 0, 0
   index: -1
 
-loveEntity.pack15.png
+loveEntity.pack16.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -488,7 +501,20 @@ avatar-2
   offset: 0, 0
   index: -1
 
-loveEntity.pack16.png
+loveEntity.pack17.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+victorErheim
+  rotate: false
+  xy: 2, 2
+  size: 682, 866
+  orig: 682, 866
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack18.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -501,7 +527,7 @@ avatar-1
   offset: 0, 0
   index: -1
 
-loveEntity.pack17.png
+loveEntity.pack19.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -514,7 +540,7 @@ colorGradient
   offset: 0, 0
   index: -1
 
-loveEntity.pack18.png
+loveEntity.pack20.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -534,7 +560,7 @@ starChild
   offset: 0, 0
   index: -1
 
-loveEntity.pack19.png
+loveEntity.pack21.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -554,7 +580,7 @@ potion1
   offset: 0, 0
   index: -1
 
-loveEntity.pack20.png
+loveEntity.pack22.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -574,7 +600,7 @@ potion3
   offset: 0, 0
   index: -1
 
-loveEntity.pack21.png
+loveEntity.pack23.png
 size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
