@@ -101,7 +101,7 @@ class CommunityLeadersScreen : BaseScreen() {
         if (BaseGame.english)
             subtitleLabel = Label("Community leaders make compassion easier", BaseGame.labelStyle)
         else
-            subtitleLabel = Label("Organisasjonsledere gjør medølelse enklere", BaseGame.labelStyle)
+            subtitleLabel = Label("Organisasjonsledere gjør medfølelse enklere", BaseGame.labelStyle)
         subtitleLabel.setFontScale(.3f)
         if (BaseGame.english)
             descriptionLabel = Label("Recruit one to act as a continuous love hub for you when you're away!", BaseGame.labelStyle)

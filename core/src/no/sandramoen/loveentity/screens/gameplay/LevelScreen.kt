@@ -738,7 +738,7 @@ class LevelScreen : BaseScreen() {
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "avatar-5", "Name Nameson", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "avatar-3", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "avatar-4", "Name Nameson", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "avatar-2", "Name Nameson", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "Remethep", "Remethep", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "VeroNika", "Vero Nika", "runs Queers", "administrerer de Skeive", BigInteger("10000000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "luckyLuca", "Lucky Luca", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "avatar-8", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))

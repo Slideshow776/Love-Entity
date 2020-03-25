@@ -532,6 +532,19 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Remethep
+  rotate: false
+  xy: 2, 2
+  size: 682, 832
+  orig: 682, 832
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack20.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 colorGradient
   rotate: false
   xy: 2, 2
@@ -540,7 +553,7 @@ colorGradient
   offset: 0, 0
   index: -1
 
-loveEntity.pack20.png
+loveEntity.pack21.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -560,7 +573,7 @@ starChild
   offset: 0, 0
   index: -1
 
-loveEntity.pack21.png
+loveEntity.pack22.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -580,7 +593,7 @@ potion1
   offset: 0, 0
   index: -1
 
-loveEntity.pack22.png
+loveEntity.pack23.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -600,7 +613,7 @@ potion3
   offset: 0, 0
   index: -1
 
-loveEntity.pack23.png
+loveEntity.pack24.png
 size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
