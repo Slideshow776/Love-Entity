@@ -27,6 +27,7 @@ class GameUtils {
             BaseGame.prefs!!.putInteger("upgradesWiggleIndex", BaseGame.upgradesWiggleIndex)
             BaseGame.prefs!!.putBoolean("wiggleAscension", BaseGame.wiggleAscension)
             BaseGame.prefs!!.putBoolean("english", BaseGame.english)
+            BaseGame.prefs!!.putBoolean("muteAudio", BaseGame.muteAudio)
             BaseGame.prefs!!.putBoolean("longScale", BaseGame.longScale)
             BaseGame.prefs!!.flush()
         }

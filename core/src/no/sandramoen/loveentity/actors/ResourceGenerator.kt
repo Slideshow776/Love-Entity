@@ -380,6 +380,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
                     if (!activated)
                         createAndStartStarEffect(activateButton.x, activateButton.y, activateButton.width, activateButton.height)
 
+                    if (!BaseGame.muteAudio && !activated) BaseGame.powerupSound!!.play(.5f)
                     activated = true
                     BaseGame.prefs!!.putBoolean(resourceName + "Activated", true)
                 }
@@ -434,6 +435,7 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         buyButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
                 if (BaseGame.love >= nextPurchase) {
+                    if (!BaseGame.muteAudio) BaseGame.piingSound!!.play(.25f)
                     BaseGame.love = BaseGame.love.subtract(nextPurchase)
                     owned = owned.add(nextPurchaseAmount)
                     GameUtils.putBigNumber(resourceName + "Owned", owned)

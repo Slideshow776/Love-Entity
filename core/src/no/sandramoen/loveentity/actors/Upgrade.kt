@@ -111,6 +111,7 @@ class Upgrade(s: Stage, id: Int, nameEN: String, nameNO: String, descriptionEN: 
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 if (BaseGame.love >= price) {
+                    if (!BaseGame.muteAudio) BaseGame.piingSound!!.play(.25f)
                     BaseGame.love = BaseGame.love.subtract(price)
                     GameUtils.saveGameState()
                     BaseGame.resourceGenerators[id].upgrade *= 3 // this systems assumes all upgrades are multiplicable of 3's

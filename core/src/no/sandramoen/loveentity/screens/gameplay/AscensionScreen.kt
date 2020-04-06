@@ -51,8 +51,10 @@ class AscensionScreen : BaseScreen() {
         exitButton.scaleBy(-.25f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.clickSound!!.play(.25f)
                 BaseGame.setActiveScreen(LevelScreen())
+            }
             false
         }
 
@@ -113,6 +115,7 @@ class AscensionScreen : BaseScreen() {
         warningButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 if (BaseGame.claimAscensionPoints > 0) {
+                    if (!BaseGame.muteAudio) BaseGame.clickSound!!.play(.25f)
                     BaseGame.currentAscensionPoints += BaseGame.claimAscensionPoints
                     BaseGame.claimAscensionPoints = 0
                     currentAscensionPointsLabel.setText("${BaseGame.currentAscensionPoints}")
@@ -134,6 +137,7 @@ class AscensionScreen : BaseScreen() {
         warningExitButton.setOrigin(Align.bottomRight)
         warningExitButton.addListener(object : ActorGestureListener() {
             override fun tap(event: InputEvent?, x: Float, y: Float, count: Int, button: Int) {
+                if (!BaseGame.muteAudio) BaseGame.clickSound!!.play(.25f)
                 warningTable.isVisible = !warningTable.isVisible
             }
         })
@@ -211,8 +215,10 @@ class AscensionScreen : BaseScreen() {
         claimButton.setOrigin(Align.center)
         claimButton.color = Color.ORANGE
         claimButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.clickSound!!.play(.25f)
                 warningTable.isVisible = !warningTable.isVisible
+            }
             false
         }
 

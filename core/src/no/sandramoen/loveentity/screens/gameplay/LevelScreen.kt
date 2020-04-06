@@ -52,6 +52,7 @@ class LevelScreen : BaseScreen() {
     private lateinit var debugLabel: Label
 
     private lateinit var viewIntroButton: TextButton
+    private lateinit var muteButton: TextButton
     private lateinit var languageButton: TextButton
     private lateinit var scaleButton: TextButton
     private var allyUnlocks = Array<Unlock>()
@@ -83,6 +84,7 @@ class LevelScreen : BaseScreen() {
         debugButton1.label.setFontScale(.6f)
         debugButton1.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.love = BaseGame.love.add(BigInteger("1000"))
                 BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("1000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
@@ -94,6 +96,7 @@ class LevelScreen : BaseScreen() {
         debugButton2.label.setFontScale(.6f)
         debugButton2.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.love = BaseGame.love.add(BigInteger("100000"))
                 BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("100000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
@@ -105,6 +108,7 @@ class LevelScreen : BaseScreen() {
         debugButton3.label.setFontScale(.6f)
         debugButton3.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.love = BaseGame.love.add(BigInteger("1000000"))
                 BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger("1000000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
@@ -116,6 +120,7 @@ class LevelScreen : BaseScreen() {
         debugButton4.label.setFontScale(.6f)
         debugButton4.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.love = BaseGame.love.add(BigInteger("1000000000000000000"))
                 BaseGame.lifeTimeLove = BaseGame.love.add(BigInteger("1000000000000000000"))
                 update(Gdx.graphics.deltaTime) // updates hidetable visibilities
@@ -127,6 +132,7 @@ class LevelScreen : BaseScreen() {
         debugButton5.label.setFontScale(.6f)
         debugButton5.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) { // the restart button
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.currentAscensionPoints = 0
                 GameUtils.reset() // resets a bunch of stuff
                 quickLoveList.clear()
@@ -177,7 +183,27 @@ class LevelScreen : BaseScreen() {
         burgerTable.add(debugButton5).colspan(3).padBottom(50f).row()
         /* ------------------------------------------------------------------------------------------------------- */
 
-        // language ui setup
+        //mute button
+        muteButton = TextButton("Mute all audio", BaseGame.textButtonStyle)
+        muteButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
+        muteButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
+        muteButton.isTransform = true
+        muteButton.setOrigin(Align.center)
+        muteButton.label.setFontScale(.8f)
+        muteButton.addListener { e: Event ->
+            if (GameUtils.isTouchDownEvent(e)) {
+                BaseGame.muteAudio = !BaseGame.muteAudio
+                if (!BaseGame.muteAudio) {
+                    BaseGame.blipSound!!.play(.25f)
+                    BaseGame.levelMusic!!.play()
+                } else {
+                    BaseGame.levelMusic!!.stop()
+                }
+                checkLanguage()
+            }
+            false
+        }
+
         viewIntroButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
         viewIntroButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
         viewIntroButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
@@ -185,11 +211,14 @@ class LevelScreen : BaseScreen() {
         viewIntroButton.setOrigin(Align.center)
         viewIntroButton.label.setFontScale(.8f)
         viewIntroButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.setActiveScreen(IntroScreen())
+            }
             false
         }
 
+        // language ui setup
         languageButton = TextButton("Change to Norwegian", BaseGame.textButtonStyle)
         languageButton.color = Color(224 / 255f, 224 / 255f, 224 / 255f, 1f) // light light gray
         languageButton.label.color = Color.BLUE // (135 / 255f, 200 / 255f, 255 / 255f, 1f)
@@ -198,6 +227,7 @@ class LevelScreen : BaseScreen() {
         languageButton.label.setFontScale(.8f)
         languageButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.english = !BaseGame.english
                 checkLanguage()
                 checkScale()
@@ -226,6 +256,7 @@ class LevelScreen : BaseScreen() {
         scaleButton.label.setFontScale(.8f)
         scaleButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 BaseGame.longScale = !BaseGame.longScale
                 checkScale()
                 for (generator in BaseGame.resourceGenerators)
@@ -235,6 +266,7 @@ class LevelScreen : BaseScreen() {
         }
 
         // burger table
+        burgerTable.add(muteButton).row()
         burgerTable.add(viewIntroButton).row()
         burgerTable.add(languageButton).row()
         burgerTable.add(scaleButton).padBottom(20f).row()
@@ -246,8 +278,10 @@ class LevelScreen : BaseScreen() {
         communityLeadersButton.setOrigin(Align.center)
         communityLeadersButton.label.setFontScale(.8f)
         communityLeadersButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 fadeToScreen(CommunityLeadersScreen())
+            }
             false
         }
 
@@ -260,8 +294,10 @@ class LevelScreen : BaseScreen() {
         upgradesButton.setOrigin(Align.center)
         upgradesButton.label.setFontScale(.8f)
         upgradesButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 fadeToScreen(UpgradesScreen())
+            }
             false
         }
         burgerTable.add(upgradesButton).row()
@@ -274,6 +310,7 @@ class LevelScreen : BaseScreen() {
         ascensionButton.label.setFontScale(.8f)
         ascensionButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 if (BaseGame.claimAscensionPoints > BaseGame.currentAscensionPoints * 2f)
                     BaseGame.wiggleAscension = false
                 fadeToScreen(AscensionScreen())
@@ -287,8 +324,10 @@ class LevelScreen : BaseScreen() {
         unlocksButton.label.color = Color.PURPLE //Color(255/255f, 204/255f, 255/255f, 1f) // light pink
         unlocksButton.label.setFontScale(.8f)
         unlocksButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 fadeToScreen(UnlocksScreen())
+            }
             false
         }
         burgerTable.add(unlocksButton)
@@ -365,6 +404,7 @@ class LevelScreen : BaseScreen() {
         quickLoveButton = Button(quickLoveButtonStyle)
         quickLoveButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.powerupSound!!.play(.25f)
                 var highest = 0f
                 var generatorToBeActivated: ResourceGenerator? = null
                 for (generator in quickLoveList) {
@@ -418,6 +458,7 @@ class LevelScreen : BaseScreen() {
         }
         buyButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.blipSound!!.play(.25f)
                 var label = ""
                 var amount = -1L
                 when (BaseGame.buyIndex) {
@@ -783,6 +824,10 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Quick Love!")
             buyButtonLabel.setText("Buy")
             languageButton.setText("Change to Norwegian")
+            if (BaseGame.muteAudio)
+                muteButton.setText("Unmute all audio")
+            else
+                muteButton.setText("Mute all audio")
             viewIntroButton.setText("View Intro video")
             if (buyAmountLabel.textEquals("maks"))
                 buyAmountLabel.setText("max")
@@ -806,6 +851,10 @@ class LevelScreen : BaseScreen() {
             quickLoveLabel.setText("Ta en Kjappis!")
             buyButtonLabel.setText("Kjøp")
             languageButton.setText("Bytt til Engelsk")
+            if (BaseGame.muteAudio)
+                muteButton.setText("Skru på all lyd")
+            else
+                muteButton.setText("Skru av all lyd")
             viewIntroButton.setText("Se intro video")
             if (buyAmountLabel.textEquals("max"))
                 buyAmountLabel.setText("maks")

@@ -42,8 +42,10 @@ class UpgradesScreen : BaseScreen() {
         exitButton.scaleBy(-.5f)
         exitButton.setOrigin(Align.top)
         exitButton.addListener { e: Event ->
-            if (GameUtils.isTouchDownEvent(e))
+            if (GameUtils.isTouchDownEvent(e)) {
+                if (!BaseGame.muteAudio) BaseGame.clickSound!!.play(.25f)
                 BaseGame.setActiveScreen(LevelScreen())
+            }
             false
         }
 

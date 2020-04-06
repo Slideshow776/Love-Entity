@@ -100,6 +100,7 @@ class CommunityLeader(s: Stage, id: Int, avatarImage: String, name: String, desc
         button.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
                 if (BaseGame.love >= price) {
+                    if (!BaseGame.muteAudio) BaseGame.piingSound!!.play(.25f)
                     BaseGame.love = BaseGame.love.subtract(price)
                     GameUtils.saveGameState()
                     BaseGame.resourceGenerators[id].hasCommunityLeader = true

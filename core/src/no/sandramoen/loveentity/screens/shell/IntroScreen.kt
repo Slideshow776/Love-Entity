@@ -24,6 +24,9 @@ class IntroScreen : BaseScreen() {
         val width = Gdx.graphics.width.toFloat()
         val height = Gdx.graphics.height.toFloat()
 
+        BaseGame.levelMusic!!.pause()
+        BaseGame.introMusic!!.play()
+
         val background = BaseActor(0f, 0f, mainStage)
         background.loadAnimation(BaseGame.textureAtlas!!.findRegion("starBackground"))
         background.width = width
@@ -229,7 +232,9 @@ class IntroScreen : BaseScreen() {
         ))
         mainLabel.addAction(sequence(
                 delay(28f),
-                Actions.run { setLevelScreen() })
+                Actions.run {
+                    setLevelScreen()
+                })
         )
     }
 
@@ -258,6 +263,8 @@ class IntroScreen : BaseScreen() {
     }
 
     private fun setLevelScreen() {
+        BaseGame.introMusic!!.stop()
+        BaseGame.levelMusic!!.play()
         BaseGame.prefs!!.putBoolean("skipIntro", true)
         BaseGame.setActiveScreen(LevelScreen())
     }

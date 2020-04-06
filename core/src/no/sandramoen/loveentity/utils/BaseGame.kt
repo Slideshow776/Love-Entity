@@ -8,6 +8,8 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter
@@ -45,6 +47,13 @@ abstract class BaseGame : Game(), AssetErrorListener {
         var splashTexture: Texture? = null
         var english = true
         var longScale = true
+        var levelMusic: Music? = null
+        var introMusic: Music? = null
+        var piingSound: Sound? = null
+        var clickSound: Sound? = null
+        var blipSound: Sound? = null
+        var powerupSound: Sound? = null
+        var muteAudio = false
 
         // game state
         var prefs: Preferences? = null
@@ -91,11 +100,18 @@ abstract class BaseGame : Game(), AssetErrorListener {
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
         english = prefs!!.getBoolean("english")
+        muteAudio = prefs!!.getBoolean("muteAudio")
         longScale = prefs!!.getBoolean("longScale")
 
         // asset manager
         assetManager = AssetManager()
         assetManager.setErrorListener(this)
+        assetManager.load("audio/511067__gregorquendel__cinematic-piano-ident-logo.wav", Music::class.java)
+        assetManager.load("audio/airtone_-_reCreation.mp3", Music::class.java)
+        assetManager.load("audio/Pickup_Coin6.wav", Sound::class.java)
+        assetManager.load("audio/Pickup_Coin18.wav", Sound::class.java)
+        assetManager.load("audio/Powerup41.wav", Sound::class.java)
+        assetManager.load("audio/268825__kwahmah-02__clip.wav", Sound::class.java)
         assetManager.load("images/included/packed/loveEntity.pack.atlas", TextureAtlas::class.java)
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
@@ -107,6 +123,17 @@ abstract class BaseGame : Game(), AssetErrorListener {
         splashTexture = Texture(Gdx.files.internal("images/excluded/splash.jpg"))
         splashTexture!!.setFilter(TextureFilter.Nearest, TextureFilter.Nearest)
         splashAnim = Animation(1f, TextureRegion(splashTexture))
+
+        // audio
+        piingSound = assetManager.get("audio/Pickup_Coin6.wav", Sound::class.java)
+        blipSound = assetManager.get("audio/Pickup_Coin18.wav", Sound::class.java)
+        powerupSound = assetManager.get("audio/Powerup41.wav", Sound::class.java)
+        clickSound = assetManager.get("audio/268825__kwahmah-02__clip.wav", Sound::class.java)
+
+        introMusic = assetManager.get("audio/511067__gregorquendel__cinematic-piano-ident-logo.wav", Music::class.java)
+        levelMusic = assetManager.get("audio/airtone_-_reCreation.mp3", Music::class.java)
+        levelMusic!!.isLooping = true
+        levelMusic!!.play()
 
         // fonts
         FreeTypeFontGenerator.setMaxTextureSize(2048) // solves font bug that won't show some characters like "." and "," in android
