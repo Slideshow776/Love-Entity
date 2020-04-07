@@ -404,7 +404,7 @@ class LevelScreen : BaseScreen() {
         quickLoveButton = Button(quickLoveButtonStyle)
         quickLoveButton.addListener { e: Event ->
             if (GameUtils.isTouchDownEvent(e)) {
-                if (!BaseGame.muteAudio) BaseGame.powerupSound!!.play(.25f)
+                if (!BaseGame.muteAudio) BaseGame.powerupSound!!.play(.5f)
                 var highest = 0f
                 var generatorToBeActivated: ResourceGenerator? = null
                 for (generator in quickLoveList) {
