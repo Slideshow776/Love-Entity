@@ -97,7 +97,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         communityLeadersWiggleIndex = prefs!!.getInteger("communityLeadersWiggleIndex")
         upgrades = Array()
         upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
-        currentAscensionPoints = 99999999999999999 //prefs!!.getLong("currentAscensionPoints")
+        currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
         english = prefs!!.getBoolean("english")
         muteAudio = prefs!!.getBoolean("muteAudio")
@@ -190,12 +190,12 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         assetManager.dispose()
         fontGenerator.dispose()
-        /*try { // TODO: uncomment this when development is done
+        try { // TODO: uncomment this when development is done
             assetManager.dispose()
             fontGenerator.dispose()
         } catch (error: UninitializedPropertyAccessException) {
             Gdx.app.error("BaseGame", "Error $error")
-        }*/
+        }
     }
 
     override fun error(asset: AssetDescriptor<*>, throwable: Throwable) {
