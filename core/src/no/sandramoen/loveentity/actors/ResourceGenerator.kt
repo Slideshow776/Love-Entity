@@ -151,10 +151,14 @@ class ResourceGenerator(x: Float, y: Float, s: Stage,
         if (time >= incomeTime) {
             val product = owned.multiply(BigInteger(income.toLong().toString()))
             val totalIncome = if (BaseGame.currentAscensionPoints > 0)
-                product.toLong() * upgrade * (BaseGame.currentAscensionPoints * BaseGame.ascensionBonus * BaseGame.heartBonus)
+                product
+                        .multiply(BigInteger(upgrade.toString()))
+                        .multiply(BigInteger(BaseGame.currentAscensionPoints.toString()))
+                        .multiply(BigInteger(BaseGame.ascensionBonus.toString()))
+                        .multiply(BigInteger(BaseGame.heartBonus.toString()))
             else
-                product.toLong() * upgrade * BaseGame.heartBonus
-            BaseGame.love = BaseGame.love.add(BigInteger(totalIncome.toString()))
+                product.multiply(BigInteger(upgrade.toString())).multiply(BigInteger(BaseGame.heartBonus.toString()))
+            BaseGame.love = BaseGame.love.add(totalIncome)
             BaseGame.lifeTimeLove = BaseGame.lifeTimeLove.add(BigInteger(totalIncome.toString()))
 
             activated = hasCommunityLeader

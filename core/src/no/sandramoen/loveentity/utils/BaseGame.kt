@@ -97,7 +97,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         communityLeadersWiggleIndex = prefs!!.getInteger("communityLeadersWiggleIndex")
         upgrades = Array()
         upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
-        currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
+        currentAscensionPoints = 99999999999999999 //prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
         english = prefs!!.getBoolean("english")
         muteAudio = prefs!!.getBoolean("muteAudio")
