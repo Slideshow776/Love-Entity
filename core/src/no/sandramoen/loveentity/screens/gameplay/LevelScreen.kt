@@ -777,14 +777,14 @@ class LevelScreen : BaseScreen() {
 
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 0, "victorErheim", "Victor Erheim", "runs Allies", "administrerer de Allierte", BigInteger("1000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 1, "Barbarella ", "Barbarella ", "runs Bisexuals", "administrerer de Biseksuelle", BigInteger("15000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "avatar-3", "Name Nameson", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 2, "JThomasToget", "J. Thomas 'Toget'", "runs Gays", "administrerer de Homofile", BigInteger("100000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 3, "KathinkaJean", "Kathinka Jean", "runs Lesbians", "administrerer de Lesbiske", BigInteger("500000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 4, "Remethep", "Remethep", "runs Cisgenders", "administrerer de Ciskjønnede", BigInteger("1200000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 5, "VeroNika", "Vero Nika", "runs Queers", "administrerer de Skeive", BigInteger("10000000")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 6, "luckyLuca", "Lucky Luca", "runs Transgenders", "administrerer de Transkjønnede", BigInteger("111111111")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "avatar-8", "Name Nameson", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 7, "avatar-8", "Ola Nordmann", "runs Intersexs", "administrerer de Interkjønnede", BigInteger("555555555")))
         BaseGame.communityLeaders.add(CommunityLeader(mainStage, 8, "ArtigeAud", "Artige Aud", "runs Pansexuals", "administrerer de Panseksuelle", BigInteger("10000000000")))
-        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "avatar-10", "Name Nameson", "runs Asexuals", "administrerer de Aseksuelle", BigInteger("100000000000")))
+        BaseGame.communityLeaders.add(CommunityLeader(mainStage, 9, "avatar-10", "Kari Nordmann", "runs Asexuals", "administrerer de Aseksuelle", BigInteger("100000000000")))
 
         // this system assumes all upgrades are multiplicable of 3's
         if (BaseGame.resourceGenerators[0].upgrade / 3 == (1 / 3)) // first upgrade,

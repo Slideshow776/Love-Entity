@@ -506,11 +506,11 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-ArtigeAud
+JThomasToget
   rotate: false
   xy: 2, 2
-  size: 682, 893
-  orig: 682, 893
+  size: 682, 896
+  orig: 682, 896
   offset: 0, 0
   index: -1
 
@@ -519,7 +519,7 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-KathinkaJean
+ArtigeAud
   rotate: false
   xy: 2, 2
   size: 682, 893
@@ -532,7 +532,7 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-avatar-2
+KathinkaJean
   rotate: false
   xy: 2, 2
   size: 682, 893
@@ -545,6 +545,19 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+avatar-2
+  rotate: false
+  xy: 2, 2
+  size: 682, 893
+  orig: 682, 893
+  offset: 0, 0
+  index: -1
+
+loveEntity.pack21.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 victorErheim
   rotate: false
   xy: 2, 2
@@ -553,7 +566,7 @@ victorErheim
   offset: 0, 0
   index: -1
 
-loveEntity.pack21.png
+loveEntity.pack22.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -566,7 +579,7 @@ avatar-1
   offset: 0, 0
   index: -1
 
-loveEntity.pack22.png
+loveEntity.pack23.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -579,7 +592,7 @@ Remethep
   offset: 0, 0
   index: -1
 
-loveEntity.pack23.png
+loveEntity.pack24.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -592,7 +605,7 @@ colorGradient
   offset: 0, 0
   index: -1
 
-loveEntity.pack24.png
+loveEntity.pack25.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -612,7 +625,7 @@ starChild
   offset: 0, 0
   index: -1
 
-loveEntity.pack25.png
+loveEntity.pack26.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -632,7 +645,7 @@ potion1
   offset: 0, 0
   index: -1
 
-loveEntity.pack26.png
+loveEntity.pack27.png
 size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
@@ -652,7 +665,7 @@ potion3
   offset: 0, 0
   index: -1
 
-loveEntity.pack27.png
+loveEntity.pack28.png
 size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
