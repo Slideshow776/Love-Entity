@@ -16,6 +16,8 @@ class SplashScreen : BaseScreen() {
     private lateinit var shock: ShockwaveBackground
 
     override fun initialize() {
+        BaseGame.levelMusic!!.stop()
+
         // image with effect
         shock = ShockwaveBackground(0f, 0f, "images/excluded/splash.jpg", mainStage)
         shock.addListener { e: Event ->

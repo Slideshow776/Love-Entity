@@ -99,7 +99,9 @@ abstract class BaseGame : Game(), AssetErrorListener {
         upgradesWiggleIndex = prefs!!.getInteger("upgradesWiggleIndex")
         currentAscensionPoints = prefs!!.getLong("currentAscensionPoints")
         wiggleAscension = prefs!!.getBoolean("wiggleAscension")
-        english = prefs!!.getBoolean("english")
+        english = if (prefs!!.contains("english"))
+            prefs!!.getBoolean("english")
+        else true
         muteAudio = prefs!!.getBoolean("muteAudio")
         longScale = prefs!!.getBoolean("longScale")
 
