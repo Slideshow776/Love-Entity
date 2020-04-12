@@ -175,12 +175,12 @@ class LevelScreen : BaseScreen() {
         debugLabel.setFontScale(.25f)
 
         burgerTable = Table()
-        burgerTable.add(debugLabel).colspan(3).row()
+        /*burgerTable.add(debugLabel).colspan(3).row()
         burgerTable.add(debugButton1).colspan(3).row()
         burgerTable.add(debugButton2).colspan(3).row()
         burgerTable.add(debugButton3).colspan(3).row()
         burgerTable.add(debugButton4).colspan(3).row()
-        burgerTable.add(debugButton5).colspan(3).padBottom(50f).row()
+        burgerTable.add(debugButton5).colspan(3).padBottom(50f).row()*/
         /* ------------------------------------------------------------------------------------------------------- */
 
         //mute button
