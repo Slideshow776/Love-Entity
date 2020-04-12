@@ -2,8 +2,8 @@
 
 My very own incremental game. Heavily Based on [AdVenture Capitalist](https://store.steampowered.com/app/346900/AdVenture_Capitalist/) and [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/).
 
-![Screenshot_2020-02-17-12-29-05](https://user-images.githubusercontent.com/4059636/74650145-5c561d80-5181-11ea-809e-e5270834dc0d.png)
-
+![Screenshot_2020-04-12-20-55-08](https://user-images.githubusercontent.com/4059636/79077821-5c4b4780-7d04-11ea-880f-2da2480a4a72.png)
+[Trailer](https://www.youtube.com/watch?v=rtc8UDO2WyU)
 
 # Game Design Document
 
