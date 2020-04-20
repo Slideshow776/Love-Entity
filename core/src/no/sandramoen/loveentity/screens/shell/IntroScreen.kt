@@ -24,8 +24,10 @@ class IntroScreen : BaseScreen() {
         val width = Gdx.graphics.width.toFloat()
         val height = Gdx.graphics.height.toFloat()
 
-        BaseGame.levelMusic!!.pause()
-        BaseGame.introMusic!!.play()
+        if (!BaseGame.muteAudio) {
+            BaseGame.levelMusic!!.pause()
+            BaseGame.introMusic!!.play()
+        }
 
         val background = BaseActor(0f, 0f, mainStage)
         background.loadAnimation(BaseGame.textureAtlas!!.findRegion("starBackground"))
@@ -47,12 +49,12 @@ class IntroScreen : BaseScreen() {
 
         mainLabel = Label("Først var det lys", BaseGame.labelStyle)
         mainLabel.color.a = 0f
-        mainLabel.setFontScale(.8f)
-        mainLabel.setPosition(width * .15f, height / 2f)
+        mainLabel.setFontScale(.7f)
+        mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height / 2f)
         mainStage.addActor(mainLabel)
         if (BaseGame.english) {
             mainLabel.setText("First there was light")
-            mainLabel.setPosition(width * .07f, height / 2f)
+            mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height / 2f)
         }
 
         val prism = BaseActor(0f, 0f, mainStage)
@@ -102,8 +104,9 @@ class IntroScreen : BaseScreen() {
                         mainLabel.setText("Så var det ")
                     mainLabel.setFontScale(.7f)
                     mainLabel.color.a = 0f
+                    mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height * .7f)
                 },
-                moveTo(width * .1f, height * .65f),
+                /*moveTo(width / 2 - mainLabel.prefWidth / 2, height * .65f),*/
                 fadeIn(2f),
                 delay(1.5f),
                 moveBy(0f, -height * .8f, 3f),
@@ -114,10 +117,10 @@ class IntroScreen : BaseScreen() {
                     mainLabel.color.a = 0f
                     if (BaseGame.english) {
                         mainLabel.setText("You are a ")
-                        mainLabel.setPosition(width * .32f, height * .8f)
+                        mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height * .8f)
                     } else {
                         mainLabel.setText("Du er en ")
-                        mainLabel.setPosition(width * .35f, height * .8f)
+                        mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height * .8f)
                     }
                 },
                 fadeIn(3f),
@@ -127,10 +130,10 @@ class IntroScreen : BaseScreen() {
                 Actions.run {
                     if (BaseGame.english) {
                         mainLabel.setText("How much can you")
-                        mainLabel.setPosition(width * .16f, height * .8f)
+                        mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height * .8f)
                     } else {
                         mainLabel.setText("Hvor mye kan du")
-                        mainLabel.setPosition(width * .19f, height * .8f)
+                        mainLabel.setPosition(width / 2 - mainLabel.prefWidth / 2, height * .8f)
                     }
                 },
                 fadeIn(1f),
@@ -140,34 +143,39 @@ class IntroScreen : BaseScreen() {
         colorLabel.addAction(sequence(
                 delay(3f),
                 // Scene 2
-                delay(2.9f),
+                delay(3.2f),
                 Actions.run {
-                    if (BaseGame.english) colorLabel.setText("love")
-                    else colorLabel.setText("kjærlighet")
+                    if (BaseGame.english) {
+                        colorLabel.setText("love")
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
+                    } else {
+                        colorLabel.setText("kjærlighet")
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
+                    }
                 },
                 color(Color.PINK, 2f),
                 // Scene 3
-                delay(5f),
+                delay(4.7f),
                 Actions.run {
                     colorLabel.color = Color.WHITE
                     if (BaseGame.english) {
                         colorLabel.setText("love entity")
-                        colorLabel.setPosition(width * .3f, height * .74f)
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
                     } else {
                         colorLabel.setText("kjærlighets-entitet")
-                        colorLabel.setPosition(width * .16f, height * .74f)
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
                     }
                 },
-                delay(1.0f),
+                delay(1.2f),
                 color(Color.PINK, 4f),
                 // Scene 4
                 Actions.run {
                     if (BaseGame.english) {
                         colorLabel.setText("love?")
-                        colorLabel.setPosition(width * .41f, height * .74f)
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
                     } else {
                         colorLabel.setText("elske?")
-                        colorLabel.setPosition(width * .39f, height * .74f)
+                        colorLabel.setPosition(width / 2 - colorLabel.prefWidth / 2, height * .74f)
                     }
                 }
         ))
@@ -240,15 +248,17 @@ class IntroScreen : BaseScreen() {
 
     override fun update(dt: Float) {
         if (labelFollow) {
-            colorLabel.y = mainLabel.y
-            if (BaseGame.english)
-                colorLabel.x = mainLabel.x + Gdx.graphics.width * .6f
+            colorLabel.y = mainLabel.y - Gdx.graphics.height * .07f
+            /*if (BaseGame.english)
+                colorLabel.x = (mainLabel.x + mainLabel.prefWidth) / 2
             else
-                colorLabel.x = mainLabel.x + Gdx.graphics.width * .4f
+                colorLabel.x = (mainLabel.x + mainLabel.prefWidth) / 2*/
         }
         halo.y = loveEntity.y + Gdx.graphics.height * .27f
         halo.color.a = loveEntity.color.a
         colorLabel.color.a = mainLabel.color.a
+
+        Gdx.app.log("IntroScreen", "${mainLabel.prefWidth}") // TODO: remove, debug
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
@@ -263,8 +273,10 @@ class IntroScreen : BaseScreen() {
     }
 
     private fun setLevelScreen() {
-        BaseGame.introMusic!!.stop()
-        BaseGame.levelMusic!!.play()
+        if (!BaseGame.muteAudio) {
+            BaseGame.introMusic!!.stop()
+            BaseGame.levelMusic!!.play()
+        }
         BaseGame.prefs!!.putBoolean("skipIntro", true)
         BaseGame.setActiveScreen(LevelScreen())
     }

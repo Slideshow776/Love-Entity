@@ -135,7 +135,8 @@ abstract class BaseGame : Game(), AssetErrorListener {
         introMusic = assetManager.get("audio/511067__gregorquendel__cinematic-piano-ident-logo.wav", Music::class.java)
         levelMusic = assetManager.get("audio/airtone_-_reCreation.mp3", Music::class.java)
         levelMusic!!.isLooping = true
-        levelMusic!!.play()
+        if (!muteAudio)
+            levelMusic!!.play()
 
         // fonts
         FreeTypeFontGenerator.setMaxTextureSize(2048) // solves font bug that won't show some characters like "." and "," in android
