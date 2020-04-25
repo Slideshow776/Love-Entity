@@ -35,15 +35,19 @@ class ShockwaveBackground(x: Float, y: Float, texturePath: String, s: Stage) : B
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
-        if (disabled)
+        try {
+            if (disabled)
+                super.draw(batch, parentAlpha)
+            else {
+                batch.shader = shaderProgram
+                shaderProgram.setUniformf("time", time)
+                shaderProgram.setUniformf("center", Vector2(shockWavePositionX, shockWavePositionY))
+                shaderProgram.setUniformf("shockParams", Vector3(10f, .8f, .1f))
+                super.draw(batch, parentAlpha)
+                batch.shader = null
+            }
+        } catch (error: Error) {
             super.draw(batch, parentAlpha)
-        else {
-            batch.shader = shaderProgram
-            shaderProgram.setUniformf("time", time)
-            shaderProgram.setUniformf("center", Vector2(shockWavePositionX, shockWavePositionY))
-            shaderProgram.setUniformf("shockParams", Vector3(10f, .8f, .1f))
-            super.draw(batch, parentAlpha)
-            batch.shader = null
         }
     }
 

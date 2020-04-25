@@ -28,14 +28,18 @@ class WaveBackground(x: Float, y: Float, texturePath: String, s: Stage) : BaseAc
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
-        batch.shader = shaderProgram
-        shaderProgram.setUniformf("u_time", time)
-        shaderProgram.setUniformf("u_imageSize", Vector2(width, height))
-        shaderProgram.setUniformf("u_amplitude", Vector2(2f, 3f))
-        shaderProgram.setUniformf("u_wavelength", Vector2(170f, 400f))
-        shaderProgram.setUniformf("u_velocity", Vector2(0f, 30f))
-        super.draw(batch, parentAlpha)
-        batch.shader = null
+        try {
+            batch.shader = shaderProgram
+            shaderProgram.setUniformf("u_time", time)
+            shaderProgram.setUniformf("u_imageSize", Vector2(width, height))
+            shaderProgram.setUniformf("u_amplitude", Vector2(2f, 3f))
+            shaderProgram.setUniformf("u_wavelength", Vector2(170f, 400f))
+            shaderProgram.setUniformf("u_velocity", Vector2(0f, 30f))
+            super.draw(batch, parentAlpha)
+            batch.shader = null
+        } catch (error: Error) {
+            super.draw(batch, parentAlpha)
+        }
     }
 
     override fun act(dt: Float) {
