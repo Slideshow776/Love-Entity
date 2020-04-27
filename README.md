@@ -2,7 +2,7 @@
 
 My very own incremental game. Heavily Based on [AdVenture Capitalist](https://store.steampowered.com/app/346900/AdVenture_Capitalist/) and [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/).
 
-[Google Play](https://play.google.com/store/apps/details?id=no.sandramoen.loveentity), [trainer](https://www.youtube.com/watch?v=rtc8UDO2WyU).
+[Google Play](https://play.google.com/store/apps/details?id=no.sandramoen.loveentity), [trailer](https://www.youtube.com/watch?v=rtc8UDO2WyU).
 
 ![Screenshot_2020-04-12-20-55-08](https://user-images.githubusercontent.com/4059636/79077821-5c4b4780-7d04-11ea-880f-2da2480a4a72.png)
 
