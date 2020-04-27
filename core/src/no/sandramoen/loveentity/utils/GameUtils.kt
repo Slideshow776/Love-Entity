@@ -105,8 +105,8 @@ class GameUtils {
         }
 
         fun calculateAscension() {
-            val quotient = BaseGame.lifeTimeLove.divide(BigInteger("1000000000000000")).toDouble()
-            BaseGame.claimAscensionPoints = 150 * sqrt(quotient).toLong()
+            val quotient = BaseGame.lifeTimeLove.toString().toFloat() / 1000000000000000
+            BaseGame.claimAscensionPoints = (150 * sqrt(quotient)).toLong()
         }
 
         fun reset() {
