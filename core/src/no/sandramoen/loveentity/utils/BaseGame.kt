@@ -91,7 +91,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
         if (lifeTimeLove == BigInteger.ZERO) lifeTimeLove = BigInteger("0")
         revealNextGeneratorIndex = BaseGame.prefs!!.getInteger("revealNextGeneratorIndex")
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
-        if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
+        GameUtils.calculateLastTimePlayedDifference()
         resourceGenerators = Array()
         communityLeaders = Array()
         communityLeadersWiggleIndex = prefs!!.getInteger("communityLeadersWiggleIndex")
@@ -177,7 +177,7 @@ abstract class BaseGame : Game(), AssetErrorListener {
 
         // add love generated since pausing
         lastTimePlayed = prefs!!.getLong("lastTimePlayed")
-        if (lastTimePlayed != 0L) secondsSinceLastPlayed = (Date().time - lastTimePlayed) / 1000
+        GameUtils.calculateLastTimePlayedDifference()
         for (generator in resourceGenerators)
             generator.addLoveSinceLastTimedPlayed()
     }

@@ -104,6 +104,12 @@ class GameUtils {
             }
         }
 
+        fun calculateLastTimePlayedDifference() {
+            if (BaseGame.lastTimePlayed != 0L) {
+                BaseGame.secondsSinceLastPlayed = (Date().time - BaseGame.lastTimePlayed) / 1000
+            }
+        }
+
         fun calculateAscension() {
             val quotient = BaseGame.lifeTimeLove.toString().toFloat() / 1000000000000000
             BaseGame.claimAscensionPoints = (150 * sqrt(quotient)).toLong()
